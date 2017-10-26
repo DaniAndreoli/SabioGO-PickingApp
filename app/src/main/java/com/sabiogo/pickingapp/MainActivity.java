@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             // Solicitamos un request de tipo string a la url provista por la configuracion
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, "192.168.0.105/api/session/login/" + this.txtUserID.getText(),
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.0.105/api/session/login/" + this.txtUserID.getText(),
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
