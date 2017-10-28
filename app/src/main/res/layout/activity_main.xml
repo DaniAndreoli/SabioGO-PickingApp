@@ -40,17 +40,18 @@
                 android:scaleType="fitXY"/>
 
             <EditText
+                android:id="@+id/txtUserID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="User Id"
                 android:gravity="center"
-                android:id="@+id/txtUserID"/>
+                android:hint="User Id"
+                android:singleLine="true" />
 
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/iniciar_sesion"/>
+                android:text="@string/iniciar_sesion" />
 
 
         </LinearLayout>

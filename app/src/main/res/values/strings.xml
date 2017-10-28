@@ -8,4 +8,8 @@
     <string name="api_url">Direccion URL</string>
 
     <string name="iniciar_sesion">Iniciar Sesion</string>
+    <string name="cerrar_sesion">Cerrar sesion</string>
+    <string name="stock">Stock</string>
+    <string name="salidas">Salidas</string>
+    <string name="entradas">Entradas</string>
 </resources>
