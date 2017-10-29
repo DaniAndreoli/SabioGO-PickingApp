@@ -12,4 +12,6 @@
     <string name="stock">Stock</string>
     <string name="salidas">Salidas</string>
     <string name="entradas">Entradas</string>
+    <string name="grabar">Grabar</string>
+    <string name="salir">Salir</string>
 </resources>

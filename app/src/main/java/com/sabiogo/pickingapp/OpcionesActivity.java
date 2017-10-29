@@ -2,6 +2,7 @@ package com.sabiogo.pickingapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,6 +47,12 @@ public class OpcionesActivity extends Activity {
                 logout();
             }
         });
+
+        btn_stock.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                stock();
+            }
+        });
     }
 
     private void logout(){
@@ -78,5 +85,11 @@ public class OpcionesActivity extends Activity {
         }catch (Exception ex){
             throw ex;
         }
+    }
+
+    public void stock(){
+        Log.d(TAG, "stock: avanzando a la vista stock");
+        Intent intent = new Intent(getApplicationContext(), StockActivity.class);
+        startActivity(intent);
     }
 }
