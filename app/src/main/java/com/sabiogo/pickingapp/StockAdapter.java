@@ -24,6 +24,6 @@ public class StockAdapter {
         //public RecyclerView.ViewHolder(View view){
             //rv_articulos = (RecyclerView)view.findViewById(R.id.rv_articulosStock);
 
-        }
-    }
+        //}
+    //}
 }

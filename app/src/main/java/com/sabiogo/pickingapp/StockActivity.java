@@ -99,7 +99,7 @@ public class StockActivity extends Activity {
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         if(!input.getText().toString().equals("")){
-                            serial = Long.parseLong(input.getText().toString());
+                            //serial = Long.parseLong(input.getText().toString());
                             //AGREGAR EL LLAMADO A LA VERIFICACION SI EL SERIAL INGRESADO ES CORRECTO O NO.
                         }
                     }

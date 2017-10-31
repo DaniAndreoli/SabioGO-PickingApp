@@ -7,7 +7,6 @@ package entities;
 public class Serial {
     private long numero;
 
-
     public long getNumero() {
         return numero;
     }

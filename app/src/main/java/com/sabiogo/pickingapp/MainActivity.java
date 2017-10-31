@@ -3,14 +3,12 @@ package com.sabiogo.pickingapp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import data_access.UserConfigDAO;
 import entities.UserConfig;
 
 public class MainActivity extends AppCompatActivity {
@@ -122,14 +121,16 @@ public class MainActivity extends AppCompatActivity {
             return;
         }else{
             try {
-                final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this,
-                        R.style.AppTheme);
+                final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this, R.style.AppTheme);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setMessage("Autenticando...");
                 progressDialog.show();
 
+                //Obtenemos la direccion URL de la API desde la base de datos local
+                this.userConfig = UserConfigDAO.getUserConfig(getApplicationContext());
+
                 // Solicitamos un request de tipo string a la url provista por la configuracion
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.1.5/api/session/login/" + id_usuario,
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://" + userConfig.getApiUrl() + "/api/session/login/" + id_usuario,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -205,6 +206,6 @@ public class MainActivity extends AppCompatActivity {
     public void nextActivity(){
         Log.d(TAG, "nextActivity: avanzando a la vista opciones");
         Intent intent = new Intent(getApplicationContext(), OpcionesActivity.class);
-        startActivityForResult(intent,0);
+        startActivity(intent);
     }
 }
