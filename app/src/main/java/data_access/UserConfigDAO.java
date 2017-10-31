@@ -24,7 +24,7 @@ public abstract class UserConfigDAO extends DAO {
             UserConfig userConfig = UserConfigMapper.mapObject(cursor);
 
             //Closes the connection and makes a backup of db file
-            db.close();
+            close();
             return userConfig;
 
         }catch (Exception e) {

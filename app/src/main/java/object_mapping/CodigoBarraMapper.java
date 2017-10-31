@@ -2,6 +2,9 @@ package object_mapping;
 
 import android.database.Cursor;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,4 +71,55 @@ public abstract class CodigoBarraMapper implements List<CodigoBarra> {
             return lsCodigosBarra;
         }
     }
+
+    //Constructor de Lista de Codigos de Barra a partir de un JSONArray
+    public static List<CodigoBarra> mapList(JSONArray jsonArray) {
+        //Declaramos Lista de Codigos de Barra
+        List<CodigoBarra> lsCodigosBarra = new ArrayList<>();
+
+        try {
+            //Nos aseguramos de que el cursor traiga datos
+            if (jsonArray != null && jsonArray.length() != 0) {
+
+                //Recorremos el objeto JSONArray para obtener cada codigo de barra por separado
+                for (int i=0; i<jsonArray.length(); i++) {
+
+                    JSONObject jsonObj = jsonArray.getJSONObject(i);
+                    CodigoBarra codBarra = new CodigoBarra();
+
+                    //Seteamos los datos del objeto codBarra
+                    codBarra.setNumero(jsonObj.getInt("numero"));
+                    codBarra.setNombre(jsonObj.getString("numero"));
+                    codBarra.setDescripcion(jsonObj.getString("descripcion"));
+                    codBarra.setLargoTotal(jsonObj.getInt("largoTotal"));
+                    codBarra.setUbicacionCodProd(jsonObj.getInt("ubicacionCodProd"));
+                    codBarra.setLargoCodProd(jsonObj.getInt("largoCodProd"));
+                    codBarra.setUbicacionCantidad(jsonObj.getInt("ubicacionCantidad"));
+                    codBarra.setLargoCantidad(jsonObj.getInt("largoCantidad"));
+                    codBarra.setUbicacionPrecio(jsonObj.getInt("ubicacionPeso"));
+                    codBarra.setLargoPeso(jsonObj.getInt("largoPeso"));
+                    codBarra.setUbicacionPrecio(jsonObj.getInt("ubicacionPrecio"));
+                    codBarra.setLargoPrecio(jsonObj.getInt("largoPrecio"));
+                    codBarra.setUbicacionFechaElab(jsonObj.getInt("ubicacionFechaElab"));
+                    codBarra.setLargoFechaElab(jsonObj.getInt("largoFechaElab"));
+                    codBarra.setUbicacionFechaVenc(jsonObj.getInt("ubicacionFechaVenc"));
+                    codBarra.setLargoFechaVenc(jsonObj.getInt("largoFechaVenc"));
+                    codBarra.setUbicacionDigitoVer(jsonObj.getInt("ubicacionDigitoVer"));
+                    codBarra.setLargoDigitoVer(jsonObj.getInt("largoDigitoVer"));
+                    codBarra.setUbicacionIdUsuario(jsonObj.getInt("ubicacionIdUsuario"));
+                    codBarra.setLargoIdUsuario(jsonObj.getInt("largoIdUsuario"));
+                    codBarra.setCantidadDecPeso(jsonObj.getInt("cantidadDecPeso"));
+
+                    //Agregamos el codigo a la lista
+                    lsCodigosBarra.add(codBarra);
+                }
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        finally {
+            return lsCodigosBarra;
+        }
+    }
+
 }

@@ -20,4 +20,8 @@ public abstract class DAO {
         //Open Database Connection and set database object value
         db = helper.open();
     }
+
+    public static void close() {
+        helper.close();
+    }
 }

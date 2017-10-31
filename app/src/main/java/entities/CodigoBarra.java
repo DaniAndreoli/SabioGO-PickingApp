@@ -198,4 +198,6 @@ public class CodigoBarra {
     public void setCantidadDecPeso(int cantidadDecPeso) {
         this.cantidadDecPeso = cantidadDecPeso;
     }
+
+    //TODO Agregar metodos get para atributos: codArt, cantidad, kilos, unidades, obteniendo un numero de serie como parametro
 }

@@ -12,8 +12,22 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.List;
+
+import data_access.CodigoBarraDAO;
+import data_access.UserConfigDAO;
+import entities.CodigoBarra;
+import entities.UserConfig;
+import helpers.WSHelper;
+import object_mapping.CodigoBarraMapper;
 
 /**
  * Created by Federico on 27/10/2017.
@@ -26,7 +40,6 @@ public class OpcionesActivity extends Activity {
     private final String ID_USUARIO = "id_usuario";
     private final String DefaultID = "";
     private String id_usuario;
-
 
     Button btn_entradas, btn_salidas, btn_stock, btn_logout;
 
@@ -53,12 +66,15 @@ public class OpcionesActivity extends Activity {
                 stock();
             }
         });
+
+        //Una vez logueado el usuario, obtenemos los codigos de barra desde el WS
+        this.getCodigosBarra();
     }
 
     private void logout(){
         RequestQueue queue = Volley.newRequestQueue(this);
         try{
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.1.5/api/session/logout/" + id_usuario,
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + "/api/session/logout/" + id_usuario,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -91,5 +107,25 @@ public class OpcionesActivity extends Activity {
         Log.d(TAG, "stock: avanzando a la vista stock");
         Intent intent = new Intent(getApplicationContext(), StockActivity.class);
         startActivity(intent);
+    }
+
+    public void getCodigosBarra(){
+        //Realizamos la consulta al web service para obtener el listado de codigos de barra
+        JsonArrayRequest jsObjRequest = new JsonArrayRequest
+                (Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + "/api/codigos/get/" + id_usuario, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        CodigoBarraDAO.insertCodigosBarra(getApplicationContext(), CodigoBarraMapper.mapList(response));
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+        // Add the request to the RequestQueue.
+        WSHelper.getInstance(this).addToRequestQueue(jsObjRequest);
     }
 }

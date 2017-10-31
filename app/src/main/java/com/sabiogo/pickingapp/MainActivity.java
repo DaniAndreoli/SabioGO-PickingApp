@@ -28,6 +28,7 @@ import com.android.volley.toolbox.Volley;
 
 import data_access.UserConfigDAO;
 import entities.UserConfig;
+import helpers.WSHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
                 login();
             }
         });
+
+        //Hardcodeamos el user por defecto para pruebas
+        this.txtUserID.setText("pistola");
     }
 
     @Override
@@ -112,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         id_usuario = txtUserID.getText().toString();
 
         // Instanciamos el objeto request queue
-        RequestQueue queue = Volley.newRequestQueue(this);
+        //RequestQueue queue = Volley.newRequestQueue(this);
 
         if (id_usuario.isEmpty()){
             Log.d(TAG, "Ingresar: id usuario vacío.");
@@ -126,11 +130,8 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.setMessage("Autenticando...");
                 progressDialog.show();
 
-                //Obtenemos la direccion URL de la API desde la base de datos local
-                this.userConfig = UserConfigDAO.getUserConfig(getApplicationContext());
-
                 // Solicitamos un request de tipo string a la url provista por la configuracion
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://" + userConfig.getApiUrl() + "/api/session/login/" + id_usuario,
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + "/api/session/login/" + id_usuario,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -157,7 +158,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                 // Add the request to the RequestQueue.
-                queue.add(stringRequest);
+                WSHelper.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
