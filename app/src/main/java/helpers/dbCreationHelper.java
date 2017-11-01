@@ -20,21 +20,33 @@ public class dbCreationHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 2;//DATABASE_VERSION
     private static final String DATABASE_NAME = "PICKING_APP.db";
-    private static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));" +
-            "CREATE TABLE IF NOT EXISTS Comprobante (numeroPick INTEGER, orden INTEGER, observaciones TEXT, puedeUsuario INTEGER, codArt INTEGER);" +
-            "CREATE TABLE IF NOT EXISTS Item (codigoArticulo TEXT, descripcion TEXT, unidad INTEGER, cantidad REAL, kilos REAL, puedePickear REAL, saldo REAL);" +
-            "CREATE TABLE IF NOT EXISTS UserConfig (apiURL TEXT);" +
-            "CREATE TABLE IF NOT EXISTS Usuario (idUsuario INTEGER, loginUsuario TEXT, estado INTEGER, nombre TEXT, area INTEGER);" +
-            "CREATE TABLE IF NOT EXISTS Stock(codigoArticulo INTEGER, cantidad REAL, unidad INTEGER, kilos REAL, PRIMARY KEY(codigoArticulo));" +
-            "CREATE TABLE IF NOT EXISTS Seriales(codigoArticulo INTEGER, serial INTEGER)";
+    private static final String SQL_CREATE_CODBARRA = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));";
+    private static final String SQL_CREATE_COMPROBANTE =  "CREATE TABLE IF NOT EXISTS Comprobante (numeroPick INTEGER, orden INTEGER, observaciones TEXT, puedeUsuario INTEGER, codArt INTEGER);";
+    private static final String SQL_CREATE_ITEM = "CREATE TABLE IF NOT EXISTS Item (codigoArticulo TEXT, descripcion TEXT, unidad INTEGER, cantidad REAL, kilos REAL, puedePickear REAL, saldo REAL);";
+    private static final String SQL_CREATE_USERCONFIG = "CREATE TABLE IF NOT EXISTS UserConfig (apiURL TEXT);";
+    private static final String SQL_CREATE_USUARIO = "CREATE TABLE IF NOT EXISTS Usuario (idUsuario INTEGER, loginUsuario TEXT, estado INTEGER, nombre TEXT, area INTEGER);";
+    private static final String SQL_CREATE_STOCK = "CREATE TABLE IF NOT EXISTS Stock(codigoArticulo INTEGER, cantidad REAL, unidad INTEGER, kilos REAL, PRIMARY KEY(codigoArticulo));";
+    private static final String SQL_CREATE_SERIALES ="CREATE TABLE IF NOT EXISTS Seriales(codigoArticulo INTEGER, serial INTEGER)";
 
     public dbCreationHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        getWritableDatabase().execSQL(SQL_CREATE_ENTRIES);
+        getWritableDatabase().execSQL(SQL_CREATE_CODBARRA);
+        getWritableDatabase().execSQL(SQL_CREATE_COMPROBANTE);
+        getWritableDatabase().execSQL(SQL_CREATE_ITEM);
+        getWritableDatabase().execSQL(SQL_CREATE_USERCONFIG);
+        getWritableDatabase().execSQL(SQL_CREATE_USUARIO);
+        getWritableDatabase().execSQL(SQL_CREATE_STOCK);
+        getWritableDatabase().execSQL(SQL_CREATE_SERIALES);
     }
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        getWritableDatabase().execSQL(SQL_CREATE_CODBARRA);
+        getWritableDatabase().execSQL(SQL_CREATE_COMPROBANTE);
+        getWritableDatabase().execSQL(SQL_CREATE_ITEM);
+        getWritableDatabase().execSQL(SQL_CREATE_USERCONFIG);
+        getWritableDatabase().execSQL(SQL_CREATE_USUARIO);
+        getWritableDatabase().execSQL(SQL_CREATE_STOCK);
+        getWritableDatabase().execSQL(SQL_CREATE_SERIALES);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

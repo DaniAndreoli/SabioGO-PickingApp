@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 /**
  * Created by Dani_ on 24/10/2017.
  */
@@ -13,6 +15,7 @@ public class Item {
     private double kilos;
     private double puedePickear;
     private double saldo;
+    private List<Serial> seriales;
 
 
     public Item(){
@@ -73,5 +76,13 @@ public class Item {
 
     public void setSaldo(double saldo) {
         this.saldo = saldo;
+    }
+
+    public List<Serial> getSeriales() {
+        return seriales;
+    }
+
+    public void setSeriales(List<Serial> seriales) {
+        this.seriales = seriales;
     }
 }

@@ -14,4 +14,10 @@
     <string name="entradas">Entradas</string>
     <string name="grabar">Grabar</string>
     <string name="salir">Salir</string>
+    <string name="ingrese_un_codigo_de_barra">Ingrese un codigo de barra</string>
+    <string name="movimiento_stock">Movimiento de Stock</string>
+    <string name="mov_stock">Movimiento de Stock</string>
+    <string name="serial_invalido">Serial no valido</string>
+    <string name="producto_agregado">Producto agregado</string>
+    <string name="api_ingresarStock">/api/comprobantes/ingresar/</string>
 </resources>

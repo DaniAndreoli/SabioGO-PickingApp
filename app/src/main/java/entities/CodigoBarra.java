@@ -1,5 +1,11 @@
 package entities;
 
+import android.content.Context;
+
+import java.util.List;
+
+import data_access.CodigoBarraDAO;
+
 /**
  * Created by Dani_ on 24/10/2017.
  */
@@ -199,5 +205,13 @@ public class CodigoBarra {
         this.cantidadDecPeso = cantidadDecPeso;
     }
 
-    //TODO Agregar metodos get para atributos: codArt, cantidad, kilos, unidades, obteniendo un numero de serie como parametro
+    //TODO Agregar metodos get para atributos: codArt, cantidad, kilos, unidades, obteniendo un numero de serie como
+
+    public Integer getCodigoArticulo(String serial){
+        return Integer.parseInt(serial.substring(this.getUbicacionCodProd(),this.getUbicacionCantidad() -1));
+    }
+
+    public float getKilos(String serial){
+        return Float.parseFloat(serial.substring(this.getUbicacionPeso(), this.getUbicacionPeso() + this.getLargoPeso()));
+    }
 }

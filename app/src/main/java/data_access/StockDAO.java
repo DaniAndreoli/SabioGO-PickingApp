@@ -9,14 +9,12 @@ import java.util.List;
 import entities.ItemStock;
 import object_mapping.StockMapper;
 
-import helpers.dbOperationResponse;
-
 /**
  * Created by Dani_ on 31/10/2017.
  */
 
 public class StockDAO extends DAO {
-
+    //Este metodo se llama si se apaga el celular, o se quiere obtener la lista para cargar la grilla sin ingresar un valor.
     public static List<ItemStock> getStockList(Context context) {
         try {
             //Initialize DAO for using Database (connection opened) and AccessHelper objects
@@ -35,7 +33,7 @@ public class StockDAO extends DAO {
         }
     }
 
-    //Permite leer los datos de un item en un Picking de Stock. El metodo agrega el item si o existe, y si existe, incrementa el campo cantidad en 1
+    //Permite leer los datos de un item en un Picking de Stock. El metodo agrega el item si no existe, y si existe, incrementa el campo cantidad en 1
     //Devuelve el listado de Stock actualizado
     public static List<ItemStock> leerItemStock(Context context, ItemStock item) {
 
@@ -65,10 +63,22 @@ public class StockDAO extends DAO {
 
             //Una vez finalizado el proceso de insercion o actualizacion segun haya correspondido, consultamos nuevamente la tabla stock para traer el listado actualizado
             cursor = db.rawQuery("SELECT * FROM Stock", null, null);
+            close();
             return StockMapper.mapList(cursor);
 
         }catch (Exception e) {
             return null;
+        }
+    }
+
+
+    public static void borrarItemStock(Context context){
+        try{
+            initializeDAO(context);
+            db.execSQL("DELETE FROM Stock");
+            close();
+        }catch (Exception ex){
+            throw ex;
         }
     }
 }

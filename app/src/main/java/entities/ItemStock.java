@@ -6,12 +6,19 @@ package entities;
 
 public class ItemStock {
     private int codigoArticulo;
-    private int cantidad;
-    private int unidad;
-    private int kilos;
+    private float cantidad;
+    private float unidad;
+    private float kilos;
 
     public ItemStock() {
 
+    }
+
+    public ItemStock(int codigoArticulo, float cantidad, float unidad, float kilos){
+        this.codigoArticulo = codigoArticulo;
+        this.cantidad = cantidad;
+        this.unidad = unidad;
+        this.kilos = kilos;
     }
 
     public int getCodigoArticulo() {
@@ -22,7 +29,7 @@ public class ItemStock {
         this.codigoArticulo = codigoArticulo;
     }
 
-    public int getCantidad() {
+    public float getCantidad() {
         return cantidad;
     }
 
@@ -30,7 +37,7 @@ public class ItemStock {
         this.cantidad = cantidad;
     }
 
-    public int getUnidad() {
+    public float getUnidad() {
         return unidad;
     }
 
@@ -38,7 +45,7 @@ public class ItemStock {
         this.unidad = unidad;
     }
 
-    public int getKilos() {
+    public float getKilos() {
         return kilos;
     }
 

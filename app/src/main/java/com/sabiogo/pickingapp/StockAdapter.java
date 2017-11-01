@@ -1,29 +1,80 @@
 package com.sabiogo.pickingapp;
 
-import android.support.v7.widget.RecyclerView;
+import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import entities.Item;
-import entities.Serial;
+import entities.ItemStock;
 
 /**
  * Created by Federico on 28/10/2017.
  */
 
-public class StockAdapter {
-        //extends RecyclerView.Adapter<StockAdapter.ViewHolder> {
+public class StockAdapter extends ArrayAdapter<ItemStock>{
 
-    private List<Serial> seriales;
-    private List<Item> articulos;
 
-   // public static class ViewHolder extends RecyclerView.ViewHolder{
-       // public RecyclerView rv_articulos;
+    private Activity activity;
+    private static LayoutInflater inflater = null;
+    private ArrayList<ItemStock> listaItemStocks;
+    private List<ItemStock> listaItems;
 
-        //public RecyclerView.ViewHolder(View view){
-            //rv_articulos = (RecyclerView)view.findViewById(R.id.rv_articulosStock);
+    public StockAdapter(Activity activity, int textViewResourceId,List<ItemStock> lsItemStocks) {
+        super(activity, textViewResourceId, lsItemStocks);
+        try {
+            this.activity = activity;
+        //    this.listaItemStock = lsItemStocks.toArray(new ItemStock[lsItemStocks.size()]);
+            this.listaItems = lsItemStocks;
+            inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        //}
-    //}
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public int getCount() {
+        return listaItems.size();
+    }
+
+    public ItemStock getItem(ItemStock position) {
+        return position;
+    }
+
+    public long getItemId(int position) {
+        return position;
+    }
+
+    public static class ViewHolder {
+        public TextView codigoArticulo;
+        public TextView cantidad;
+
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View vi = convertView;
+        final ViewHolder holder;
+        try {
+            if (convertView == null) {
+                vi = inflater.inflate(R.layout.listview_row, null);
+                holder = new ViewHolder();
+
+                holder.codigoArticulo = (TextView) vi.findViewById(R.id.tv_descripcionStock);
+                holder.cantidad = (TextView) vi.findViewById(R.id.tv_cantidadStock);
+
+                vi.setTag(holder);
+            } else {
+                holder = (ViewHolder) vi.getTag();
+            }
+            holder.codigoArticulo.setText(listaItemStocks.get(position).getCodigoArticulo());
+            holder.cantidad.setText(Float.toString(listaItemStocks.get(position).getCantidad()));
+        } catch (Exception e) {
+            throw e;
+        }
+        return vi;
+    }
 }

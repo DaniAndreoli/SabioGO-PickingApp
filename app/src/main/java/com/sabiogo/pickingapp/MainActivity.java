@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         this.txtUserID = (EditText) findViewById(R.id.txtUserID);
         this.btnLogin = (Button) findViewById(R.id.btnLogin);
 
+
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
 
