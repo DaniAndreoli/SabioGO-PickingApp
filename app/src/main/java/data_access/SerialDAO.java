@@ -5,4 +5,5 @@ package data_access;
  */
 
 public class SerialDAO {
+
 }

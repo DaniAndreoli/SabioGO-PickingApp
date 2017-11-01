@@ -25,8 +25,8 @@ public class dbCreationHelper extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS Item (codigoArticulo TEXT, descripcion TEXT, unidad INTEGER, cantidad REAL, kilos REAL, puedePickear REAL, saldo REAL);" +
             "CREATE TABLE IF NOT EXISTS UserConfig (apiURL TEXT);" +
             "CREATE TABLE IF NOT EXISTS Usuario (idUsuario INTEGER, loginUsuario TEXT, estado INTEGER, nombre TEXT, area INTEGER);" +
-            "CREATE TABLE IF NOT EXISTS Stock(codigoArticulo INTEGER, cantidad INTEGER, unidad , kilos, PRIMARY KEY(codigoArticulo));" +
-            "CREATE TABLE IF NOT EXISTS Seriales(serial INTEGER, fk codigoArt: CodigoArt)";
+            "CREATE TABLE IF NOT EXISTS Stock(codigoArticulo INTEGER, cantidad REAL, unidad INTEGER, kilos REAL, PRIMARY KEY(codigoArticulo));" +
+            "CREATE TABLE IF NOT EXISTS Seriales(codigoArticulo INTEGER, serial INTEGER)";
 
     public dbCreationHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -48,5 +48,3 @@ public class dbCreationHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 }
-
-
