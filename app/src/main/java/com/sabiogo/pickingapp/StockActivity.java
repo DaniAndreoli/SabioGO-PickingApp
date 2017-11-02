@@ -25,6 +25,9 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +54,7 @@ public class StockActivity extends Activity {
     private final String DefaultID = "";
     private final float UNO = 1;
     public StockAdapter stockAdapter;
+    //public MyItemStockRecyclerViewAdapter adapter;
     private String id_usuario;
 
     Button btn_salir, btn_grabar, btn_agregarProducto;
@@ -68,7 +72,7 @@ public class StockActivity extends Activity {
         btn_salir  = (Button)findViewById(R.id.btn_salirStock);
         btn_agregarProducto = (Button)findViewById(R.id.btn_agregarProductoStock);
         btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualStock);
-        lv_articulos = (ListView)findViewById(R.id.lv_productosStock);
+        lv_articulos = (ListView)findViewById(R.id.lv_itemsStock);
         txt_codigo = (EditText)findViewById(R.id.txt_CodigoStock);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -205,9 +209,12 @@ public class StockActivity extends Activity {
                 listadoItemStock = StockDAO.leerItemStock(getApplicationContext(),item);
 
                 Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_LONG).show();
+                //adapter = new MyItemStockRecyclerViewAdapter(listadoItemStock, null);
+
                 stockAdapter = new StockAdapter(this, R.layout.listview_row,listadoItemStock);
                 lv_articulos.setAdapter(stockAdapter);
 
+                //rv_articulos.setAdapter(adapter);
                 Serial serialNuevo = new Serial(codArt, serial);
                 SerialDAO.grabarSerial(getApplicationContext(), serialNuevo);
             }
@@ -269,10 +276,15 @@ public class StockActivity extends Activity {
     }
 
     public void grabarComprobanteStock(Comprobante comprobante){
+        //VER COMO SE HACE PARA MANDAR UN JSON A LA URL QUE ESTOY METIENDO. EN ESTE CODIGO NO ESTOY CARGANDO EL JSON EN NINGUN MOMENTO
         JSONObject jsonBody;
+/*        URL url = new URL("http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        InputStream is = urlConnection.getInputStream();*/
         try {
             jsonBody = new JSONObject();
             jsonBody.put("", comprobante);
+
 
             StringRequest stringRequest = new StringRequest(1, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario,
                     new Response.Listener<String>() {

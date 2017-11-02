@@ -21,15 +21,13 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
 
     private Activity activity;
     private static LayoutInflater inflater = null;
-    private ArrayList<ItemStock> listaItemStocks;
-    private List<ItemStock> listaItems;
+    private List<ItemStock> listaItemStocks;
 
     public StockAdapter(Activity activity, int textViewResourceId,List<ItemStock> lsItemStocks) {
         super(activity, textViewResourceId, lsItemStocks);
         try {
             this.activity = activity;
-        //    this.listaItemStock = lsItemStocks.toArray(new ItemStock[lsItemStocks.size()]);
-            this.listaItems = lsItemStocks;
+            this.listaItemStocks = lsItemStocks;
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         } catch (Exception e) {
@@ -38,7 +36,7 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
     }
 
     public int getCount() {
-        return listaItems.size();
+        return listaItemStocks.size();
     }
 
     public ItemStock getItem(ItemStock position) {
@@ -52,7 +50,6 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
     public static class ViewHolder {
         public TextView codigoArticulo;
         public TextView cantidad;
-
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -70,7 +67,7 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
             } else {
                 holder = (ViewHolder) vi.getTag();
             }
-            holder.codigoArticulo.setText(listaItemStocks.get(position).getCodigoArticulo());
+            holder.codigoArticulo.setText(Integer.toString(listaItemStocks.get(position).getCodigoArticulo()));
             holder.cantidad.setText(Float.toString(listaItemStocks.get(position).getCantidad()));
         } catch (Exception e) {
             throw e;

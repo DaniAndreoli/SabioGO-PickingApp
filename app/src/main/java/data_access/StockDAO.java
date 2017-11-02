@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import entities.ItemStock;
@@ -36,18 +37,18 @@ public class StockDAO extends DAO {
     //Permite leer los datos de un item en un Picking de Stock. El metodo agrega el item si no existe, y si existe, incrementa el campo cantidad en 1
     //Devuelve el listado de Stock actualizado
     public static List<ItemStock> leerItemStock(Context context, ItemStock item) {
-
+        List<ItemStock> lsItems = new ArrayList<>();
         try {
             initializeDAO(context);
 
             //Realizamos la busqueda en la base de datos por codigo de articulo
-            Cursor cursor = db.rawQuery("SELECT * FROM Stock WHERE codigoArticulo = ?", new String[] { Integer.toString(item.getCodigoArticulo()) });
+            Cursor cursorItemExistente = db.rawQuery("SELECT * FROM Stock WHERE codigoArticulo = ?", new String[] { Integer.toString(item.getCodigoArticulo()) });
 
             //Si el cursor trae datos quiere decir que el item ya existe en el listado
-            if (cursor.getCount() != 0) {
+            if (cursorItemExistente.getCount() != 0) {
 
                 //Por lo tanto realizaremos un update en la base de datos con el nuevo valor de la cantidad, que seria la cantidad anterior +1
-                ItemStock itemExistente = StockMapper.mapObject(cursor);
+                ItemStock itemExistente = StockMapper.mapObject(cursorItemExistente);
                 db.rawQuery("UPDATE Stock set cantidad = " + itemExistente.getCantidad() + 1 + " WHERE codigoArticulo = ?", new String[] { Integer.toString(item.getCodigoArticulo()) });
             } else {
 
@@ -62,12 +63,14 @@ public class StockDAO extends DAO {
             }
 
             //Una vez finalizado el proceso de insercion o actualizacion segun haya correspondido, consultamos nuevamente la tabla stock para traer el listado actualizado
-            cursor = db.rawQuery("SELECT * FROM Stock", null, null);
-            close();
-            return StockMapper.mapList(cursor);
-
+            Cursor cursor = db.rawQuery("SELECT * FROM Stock", null, null);
+            lsItems = StockMapper.mapList(cursor);
         }catch (Exception e) {
             return null;
+        }
+        finally {
+            close();
+            return lsItems;
         }
     }
 
@@ -76,7 +79,6 @@ public class StockDAO extends DAO {
         try{
             initializeDAO(context);
             db.execSQL("DELETE FROM Stock");
-            close();
         }catch (Exception ex){
             throw ex;
         }

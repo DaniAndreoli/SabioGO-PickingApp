@@ -26,6 +26,7 @@ public class SerialMapper {
                     serial.setCodigoArticulo(cursor.getInt(cursor.getColumnIndex("codigoArticulo")));
                     serial.setNumero(cursor.getString(cursor.getColumnIndex("serial")));
                     lsSerial.add(serial);
+                    cursor.moveToNext();
                 }
                 cursor.close();
             }

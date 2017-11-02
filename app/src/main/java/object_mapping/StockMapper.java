@@ -35,6 +35,7 @@ public class StockMapper {
                     item.setKilos(cursor.getInt(cursor.getColumnIndex("kilos")));
 
                     lsItems.add(item);
+                    cursor.moveToNext();
                 }
                 cursor.close();
             }
