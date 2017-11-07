@@ -15,8 +15,6 @@ import object_mapping.SerialMapper;
 
 public class SerialDAO extends DAO {
 
-    //Permite leer los datos de un item en un Picking de Stock. El metodo agrega el item si no existe, y si existe, incrementa el campo cantidad en 1
-    //Devuelve el listado de Stock actualizado
     public static boolean grabarSerial(Context context, Serial serial) {
 
         try {

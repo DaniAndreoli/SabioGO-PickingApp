@@ -2,83 +2,80 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/txt_CodigoStock"
-            android:layout_width="336dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
+            android:layout_weight="1"
             android:ems="10"
             android:inputType="number"
-            android:singleLine="true"
             android:text="@string/ingrese_un_codigo_de_barra" />
 
         <Button
             android:id="@+id/btn_agregarProductoStock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/txt_CodigoStock"
+            android:layout_weight="1"
             android:text="Ok" />
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="474dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_agregarCodBarManualStock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/btn_salirStock"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginEnd="14dp"
-            android:clickable="true"
-            app:fabSize="mini"
-            app:srcCompat="@android:drawable/ic_input_add"
-            tools:visibility="invisible" />
+        <!--<android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_agregarCodBarManualStock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_salirStock"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="14dp"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:visibility="invisible" />-->
 
         <ListView
             android:id="@+id/lv_itemsStock"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
+            android:layout_weight="1"/>
 
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_grabarStock"
-            android:layout_width="188dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_weight="1"
-            android:text="@string/grabar" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_salirStock"
-            android:layout_width="187dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_weight="1"
-            android:text="@string/salir" />
+            <Button
+                android:id="@+id/btn_grabarStock"
+                android:layout_width="188dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:text="@string/grabar" />
+
+            <Button
+                android:id="@+id/btn_salirStock"
+                android:layout_width="187dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_weight="1"
+                android:text="@string/salir" />
+        </LinearLayout>
+
     </LinearLayout>
-
 
 </LinearLayout>

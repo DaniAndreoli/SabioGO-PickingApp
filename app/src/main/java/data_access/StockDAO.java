@@ -49,7 +49,14 @@ public class StockDAO extends DAO {
 
                 //Por lo tanto realizaremos un update en la base de datos con el nuevo valor de la cantidad, que seria la cantidad anterior +1
                 ItemStock itemExistente = StockMapper.mapObject(cursorItemExistente);
-                db.rawQuery("UPDATE Stock set cantidad = " + itemExistente.getCantidad() + 1 + " WHERE codigoArticulo = ?", new String[] { Integer.toString(item.getCodigoArticulo()) });
+                float cantidad = itemExistente.getCantidad() + 1;
+
+                ContentValues content = new ContentValues();
+                content.put("cantidad", cantidad);
+
+                db.update("Stock", content, "codigoArticulo=" + Integer.toString(item.getCodigoArticulo()), null);
+                //db.rawQuery("UPDATE Stock SET cantidad = " + cantidad + " WHERE codigoArticulo = ?", new String[] { Integer.toString(item.getCodigoArticulo()) });
+
             } else {
 
                 //Si el cursor no trae datos significa que el articulo no existe en el listado de stock por lo tanto lo insertamos

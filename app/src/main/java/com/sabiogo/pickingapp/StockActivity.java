@@ -18,8 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
@@ -29,7 +33,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import data_access.CodigoBarraDAO;
 import data_access.SerialDAO;
@@ -54,11 +60,13 @@ public class StockActivity extends Activity {
     private final String DefaultID = "";
     private final float UNO = 1;
     public StockAdapter stockAdapter;
+    List<ItemStock> listadoItemStock;
+
     //public MyItemStockRecyclerViewAdapter adapter;
     private String id_usuario;
 
     Button btn_salir, btn_grabar, btn_agregarProducto;
-    FloatingActionButton btn_agregarManual;
+    //FloatingActionButton btn_agregarManual;
     ListView lv_articulos;
     EditText txt_codigo;
 
@@ -71,7 +79,7 @@ public class StockActivity extends Activity {
         btn_grabar = (Button)findViewById(R.id.btn_grabarStock);
         btn_salir  = (Button)findViewById(R.id.btn_salirStock);
         btn_agregarProducto = (Button)findViewById(R.id.btn_agregarProductoStock);
-        btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualStock);
+        //btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualStock);
         lv_articulos = (ListView)findViewById(R.id.lv_itemsStock);
         txt_codigo = (EditText)findViewById(R.id.txt_CodigoStock);
 
@@ -80,18 +88,17 @@ public class StockActivity extends Activity {
 
         createTextListener();
 
-
         btn_salir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 salir();
             }
         });
 
-        btn_agregarManual.setOnClickListener(new View.OnClickListener(){
+        /*btn_agregarManual.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 agregarManual();
             }
-        });
+        });*/
 
         txt_codigo.setText("12345678911234567891123456");
 
@@ -114,6 +121,12 @@ public class StockActivity extends Activity {
                 }
             }
         });
+
+        //Una vez seteados los valores de la interfaz, verificamos si existe un conteo de stock pendiente y de ser asi lo mostramos en pantalla
+        listadoItemStock = StockDAO.getStockList(getApplicationContext());
+
+        stockAdapter = new StockAdapter(this, R.layout.listview_row,listadoItemStock);
+        lv_articulos.setAdapter(stockAdapter);
     }
 
     private void salir(){
@@ -193,14 +206,14 @@ public class StockActivity extends Activity {
         });
     }
 
-
     public Boolean agregarArticulo(String serial){
         boolean result;
         Float kilos;
         List<CodigoBarra> listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
-        List<ItemStock> listadoItemStock;
+
         if (!serial.equals("")){
             CodigoBarra codigoBarra = verificarCodigoBarra(listadoCodBarra, serial);
+
             if (codigoBarra != null){
                 Integer codArt = codigoBarra.getCodigoArticulo(serial);
                 kilos = codigoBarra.getKilos(serial);
@@ -236,7 +249,6 @@ public class StockActivity extends Activity {
         }
         return null;
     }
-
 
     private Comprobante armarComprobanteStock() {
         Comprobante comprobante = new Comprobante();
@@ -275,38 +287,98 @@ public class StockActivity extends Activity {
         }
     }
 
-    public void grabarComprobanteStock(Comprobante comprobante){
+    public void grabarComprobanteStock(final Comprobante comprobante){
         //VER COMO SE HACE PARA MANDAR UN JSON A LA URL QUE ESTOY METIENDO. EN ESTE CODIGO NO ESTOY CARGANDO EL JSON EN NINGUN MOMENTO
         JSONObject jsonBody;
-/*        URL url = new URL("http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario);
+/*      URL url = new URL("http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         InputStream is = urlConnection.getInputStream();*/
         try {
-            jsonBody = new JSONObject();
-            jsonBody.put("", comprobante);
+            /*jsonBody = new JSONObject();
+            jsonBody.put("", comprobante);*/
 
+            String url = "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario;
 
-            StringRequest stringRequest = new StringRequest(1, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario,
-                    new Response.Listener<String>() {
+            /*Map<String, String> postParam= new HashMap<String, String>();
+            postParam.put("Comprobante", comprobante.toString());
+
+            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(postParam),
+                    new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+
                 @Override
-                public void onResponse(String response) {
-                    if(response.toString().equals("true")){
-                        borrarRegistros();
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
-                        alertDialogBuilder
-                                .setTitle("Comprobante")
-                                .setMessage("Comprobante guardado con éxito")
-                                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
-                                    public void onClick(DialogInterface dialog, int id){
-                                        Intent intent = new Intent(getApplicationContext(), OpcionesActivity.class);
-                                        startActivityForResult(intent,0);
-                                    }
-                                });
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
-                    }
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(TAG, "Error: " + error.getMessage());
                 }
-            }, new Response.ErrorListener() {
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Content-Type", "application/json; charset=utf-8");
+                    return headers;
+                }
+            };
+
+            jsonObjReq.setTag(TAG);*/
+
+    /* if (queue!= null) {
+    queue.cancelAll(TAG);
+    } */
+
+
+            StringRequest strRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>()
+                    {
+                        @Override
+                        public void onResponse(String response)
+                        {
+                            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                        }
+                    },
+                    new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error)
+                        {
+                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+            {
+                @Override
+                protected Map<String, String> getParams()
+                {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("comprobante", comprobante.toString());
+                    return params;
+                }
+            };
+
+            /*StringRequest stringRequest = new StringRequest(1, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if(response.toString().equals("true")){
+                                borrarRegistros();
+                                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+                                alertDialogBuilder
+                                        .setTitle("Comprobante")
+                                        .setMessage("Comprobante guardado con éxito")
+                                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
+                                            public void onClick(DialogInterface dialog, int id){
+                                                Intent intent = new Intent(getApplicationContext(), OpcionesActivity.class);
+                                                startActivityForResult(intent,0);
+                                            }
+                                        });
+                                AlertDialog alertDialog = alertDialogBuilder.create();
+                                alertDialog.show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
@@ -320,9 +392,10 @@ public class StockActivity extends Activity {
                                 }
                             });
                 }
-            });
-            WSHelper.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
-        } catch (JSONException e) {
+            });*/
+
+            WSHelper.getInstance(getApplicationContext()).addToRequestQueue(strRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
