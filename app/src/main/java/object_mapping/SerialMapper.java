@@ -23,7 +23,7 @@ public class SerialMapper {
                 Serial serial;
                 while (!cursor.isAfterLast()) {
                     serial = new Serial();
-                    serial.setCodigoArticulo(cursor.getInt(cursor.getColumnIndex("codigoArticulo")));
+                    //serial.setCodigoArticulo(cursor.getString(cursor.getColumnIndex("codigoArticulo")));
                     serial.setNumero(cursor.getString(cursor.getColumnIndex("serial")));
                     lsSerial.add(serial);
                     cursor.moveToNext();
@@ -51,7 +51,7 @@ public class SerialMapper {
                 //Si el cursor trae la columna 'codigoArticulo' no nula creamos el objeto
                 if (!cursor.isNull(cursor.getColumnIndex("codigoArticulo"))) {
                     serial = new Serial();
-                    serial.setCodigoArticulo(cursor.getInt(cursor.getColumnIndex("codigoArticulo")));
+                    //serial.setCodigoArticulo(cursor.getInt(cursor.getColumnIndex("codigoArticulo")));
                     serial.setNumero(cursor.getString(cursor.getColumnIndex("serial")));
                 }
                 cursor.close();

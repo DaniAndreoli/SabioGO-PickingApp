@@ -42,7 +42,7 @@ public class StockDAO extends DAO {
             initializeDAO(context);
 
             //Realizamos la busqueda en la base de datos por codigo de articulo
-            Cursor cursorItemExistente = db.rawQuery("SELECT * FROM Stock WHERE codigoArticulo = ?", new String[] { Integer.toString(item.getCodigoArticulo()) });
+            Cursor cursorItemExistente = db.rawQuery("SELECT * FROM Stock WHERE codigoArticulo = ?", new String[] { item.getCodigoArticulo() });
 
             //Si el cursor trae datos quiere decir que el item ya existe en el listado
             if (cursorItemExistente.getCount() != 0) {
@@ -54,7 +54,7 @@ public class StockDAO extends DAO {
                 ContentValues content = new ContentValues();
                 content.put("cantidad", cantidad);
 
-                db.update("Stock", content, "codigoArticulo=" + Integer.toString(item.getCodigoArticulo()), null);
+                db.update("Stock", content, "codigoArticulo=" + item.getCodigoArticulo(), null);
                 //db.rawQuery("UPDATE Stock SET cantidad = " + cantidad + " WHERE codigoArticulo = ?", new String[] { Integer.toString(item.getCodigoArticulo()) });
 
             } else {

@@ -57,4 +57,6 @@ public class Comprobante {
     public void setItems(List<Item> items) {
         this.items = items;
     }
+
+
 }

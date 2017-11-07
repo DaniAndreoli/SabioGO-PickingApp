@@ -67,7 +67,7 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
             } else {
                 holder = (ViewHolder) vi.getTag();
             }
-            holder.codigoArticulo.setText(Integer.toString(listaItemStocks.get(position).getCodigoArticulo()));
+            holder.codigoArticulo.setText(listaItemStocks.get(position).getCodigoArticulo());
             holder.cantidad.setText(Float.toString(listaItemStocks.get(position).getCantidad()));
         } catch (Exception e) {
             throw e;

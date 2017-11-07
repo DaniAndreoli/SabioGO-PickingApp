@@ -5,7 +5,7 @@ package entities;
  */
 
 public class ItemStock {
-    private int codigoArticulo;
+    private String codigoArticulo;
     private float cantidad;
     private float unidad;
     private float kilos;
@@ -14,18 +14,18 @@ public class ItemStock {
 
     }
 
-    public ItemStock(int codigoArticulo, float cantidad, float unidad, float kilos){
+    public ItemStock(String codigoArticulo, float cantidad, float unidad, float kilos){
         this.codigoArticulo = codigoArticulo;
         this.cantidad = cantidad;
         this.unidad = unidad;
         this.kilos = kilos;
     }
 
-    public int getCodigoArticulo() {
+    public String getCodigoArticulo() {
         return codigoArticulo;
     }
 
-    public void setCodigoArticulo(int codigoArticulo) {
+    public void setCodigoArticulo(String codigoArticulo) {
         this.codigoArticulo = codigoArticulo;
     }
 

@@ -29,7 +29,7 @@ public class StockMapper {
                 ItemStock item;
                 while (!cursor.isAfterLast()) {
                     item = new ItemStock();
-                    item.setCodigoArticulo(cursor.getInt(cursor.getColumnIndex("codigoArticulo")));
+                    item.setCodigoArticulo(cursor.getString(cursor.getColumnIndex("codigoArticulo")));
                     item.setCantidad(cursor.getInt(cursor.getColumnIndex("cantidad")));
                     item.setUnidad(cursor.getInt(cursor.getColumnIndex("unidad")));
                     item.setKilos(cursor.getInt(cursor.getColumnIndex("kilos")));
@@ -60,7 +60,7 @@ public class StockMapper {
                 //Si el cursor trae la columna 'codigoArticulo' no nula creamos el objeto
                 if (!cursor.isNull(cursor.getColumnIndex("codigoArticulo"))) {
                     item = new ItemStock();
-                    item.setCodigoArticulo(cursor.getInt(cursor.getColumnIndex("codigoArticulo")));
+                    item.setCodigoArticulo(cursor.getString(cursor.getColumnIndex("codigoArticulo")));
                     item.setCantidad(cursor.getInt(cursor.getColumnIndex("cantidad")));
                     item.setUnidad(cursor.getInt(cursor.getColumnIndex("unidad")));
                     item.setKilos(cursor.getInt(cursor.getColumnIndex("kilos")));

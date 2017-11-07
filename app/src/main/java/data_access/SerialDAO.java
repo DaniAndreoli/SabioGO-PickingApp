@@ -15,7 +15,7 @@ import object_mapping.SerialMapper;
 
 public class SerialDAO extends DAO {
 
-    public static boolean grabarSerial(Context context, Serial serial) {
+    public static boolean grabarSerial(Context context, Serial serial, String codigoArticulo) {
 
         try {
             initializeDAO(context);
@@ -28,7 +28,7 @@ public class SerialDAO extends DAO {
             } else {
                 //Si el cursor no trae datos significa que el serial no fue cargado en la tabla Seriales, por lo tanto lo insertamos
                 ContentValues content = new ContentValues();
-                content.put("codigoArticulo", serial.getCodigoArticulo());
+                content.put("codigoArticulo", codigoArticulo);
                 content.put("serial", serial.getNumero());
 
                 db.insert("Seriales", null, content);
@@ -62,7 +62,7 @@ public class SerialDAO extends DAO {
         try{
             initializeDAO(context);
 
-            Cursor cursor = db.rawQuery("SELECT serial FROM Seriales WHERE codigoArticulo = ?", new String[] { nroArt});
+            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE codigoArticulo = ?", new String[] { nroArt});
             List<Serial> seriales = SerialMapper.mapList(cursor);
 
             close();

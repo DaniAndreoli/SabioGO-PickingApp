@@ -217,7 +217,9 @@ public class StockActivity extends Activity {
             if (codigoBarra != null){
                 Integer codArt = codigoBarra.getCodigoArticulo(serial);
                 kilos = codigoBarra.getKilos(serial);
-                ItemStock item = new ItemStock(codArt, UNO, UNO, kilos);
+
+                //TODO Modificar tipo
+                ItemStock item = new ItemStock(Integer.toString(codArt), UNO, UNO, kilos);
 
                 listadoItemStock = StockDAO.leerItemStock(getApplicationContext(),item);
 
@@ -228,8 +230,8 @@ public class StockActivity extends Activity {
                 lv_articulos.setAdapter(stockAdapter);
 
                 //rv_articulos.setAdapter(adapter);
-                Serial serialNuevo = new Serial(codArt, serial);
-                SerialDAO.grabarSerial(getApplicationContext(), serialNuevo);
+                Serial serialNuevo = new Serial(serial);
+                SerialDAO.grabarSerial(getApplicationContext(), serialNuevo, item.getCodigoArticulo());
             }
             result = true;
         }
@@ -259,7 +261,7 @@ public class StockActivity extends Activity {
         if (listadoItemsStock.size() > 0){
             for (ItemStock itemStock: listadoItemsStock) {
                 Item item = new Item();
-                item.setCodigoArticulo(Integer.toString(itemStock.getCodigoArticulo()));
+                item.setCodigoArticulo(itemStock.getCodigoArticulo());
                 item.setDescripcion("");
                 item.setUnidad((int)itemStock.getUnidad());
                 item.setCantidad(itemStock.getCantidad());
@@ -299,8 +301,8 @@ public class StockActivity extends Activity {
 
             String url = "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario;
 
-            /*Map<String, String> postParam= new HashMap<String, String>();
-            postParam.put("Comprobante", comprobante.toString());
+            Map<String, String> postParam= new HashMap<String, String>();
+            postParam.put("comprobante", comprobante.toString());
 
             JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(postParam),
                     new Response.Listener<JSONObject>() {
@@ -319,19 +321,18 @@ public class StockActivity extends Activity {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type", "application/json; charset=utf-8");
+                    headers.put("Content-Type", "application/json");
                     return headers;
                 }
             };
 
-            jsonObjReq.setTag(TAG);*/
+            jsonObjReq.setTag(TAG);
 
     /* if (queue!= null) {
     queue.cancelAll(TAG);
     } */
 
-
-            StringRequest strRequest = new StringRequest(Request.Method.POST, url,
+            /*StringRequest strRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>()
                     {
                         @Override
@@ -356,7 +357,7 @@ public class StockActivity extends Activity {
                     params.put("comprobante", comprobante.toString());
                     return params;
                 }
-            };
+            };*/
 
             /*StringRequest stringRequest = new StringRequest(1, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario,
                     new Response.Listener<String>() {
@@ -394,7 +395,7 @@ public class StockActivity extends Activity {
                 }
             });*/
 
-            WSHelper.getInstance(getApplicationContext()).addToRequestQueue(strRequest);
+            WSHelper.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
         } catch (Exception e) {
             e.printStackTrace();
         }
