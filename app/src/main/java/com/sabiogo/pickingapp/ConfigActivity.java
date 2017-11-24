@@ -27,7 +27,11 @@ public class ConfigActivity extends AppCompatActivity {
         this.btnGuardar = (Button) findViewById(R.id.btnGuardar);
         this.btnCancelar = (Button) findViewById(R.id.btnCancelar);
 
-        this.txtApiUri.setText(UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl());
+        userConfig = UserConfigDAO.getUserConfig(getApplicationContext());
+
+        if (userConfig != null) {
+            this.txtApiUri.setText(UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl());
+        }
 
         //Definimos listener para btnGuardar
         this.btnGuardar.setOnClickListener(new View.OnClickListener() {

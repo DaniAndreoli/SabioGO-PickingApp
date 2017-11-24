@@ -132,12 +132,12 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.show();
 
                 // Solicitamos un request de tipo string a la url provista por la configuracion
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + "/api/session/login/" + id_usuario,
+                StringRequest stringRequest = new StringRequest(Request.Method.GET,  "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + "/api/session/login/" + id_usuario,
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 //Obtenemos el response
-                                if(response.toString().equals("true")){
+                                if(response.equals("true")){
                                     Log.d(TAG, "login: acceso concedido.");
                                     Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                                     savePreferences();
@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 // Add the request to the RequestQueue.
                 WSHelper.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
 
+
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
@@ -168,26 +169,11 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }, 3000);
 
+
             } catch (Exception ex) {
                 throw ex;
             }
         }
-    }
-
-
-    //VER SI onPause y onResume HACE FALTA EN LA MAIN ACTIVITY O EN LAS SIGUIENTES!
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: se minimiza la aplicación.");
-        savePreferences();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: se maximiza la aplicación.");
-        loadPreferences();
     }
 
     private void savePreferences(){
@@ -198,12 +184,6 @@ public class MainActivity extends AppCompatActivity {
         id_usuario = txtUserID.getText().toString();
         editor.putString(ID_USUARIO, id_usuario);
         editor.commit();
-    }
-
-    private void loadPreferences(){
-        Log.d(TAG,"loadPreferences: se leen el id del usuario si existe como 'variable de sesion'.");
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        id_usuario = settings.getString(ID_USUARIO, DefaultID);
     }
 
     public void nextActivity(){

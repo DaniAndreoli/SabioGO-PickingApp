@@ -18,7 +18,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 * */
 public class dbCreationHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;//DATABASE_VERSION
+    private static final int DATABASE_VERSION = 5;//DATABASE_VERSION
     private static final String DATABASE_NAME = "PICKING_APP.db";
     private static final String SQL_CREATE_CODBARRA = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));";
     private static final String SQL_CREATE_COMPROBANTE =  "CREATE TABLE IF NOT EXISTS Comprobante (numeroPick INTEGER, orden INTEGER, observaciones TEXT, puedeUsuario INTEGER, codArt INTEGER);";
@@ -26,7 +26,8 @@ public class dbCreationHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_USERCONFIG = "CREATE TABLE IF NOT EXISTS UserConfig (apiURL TEXT);";
     private static final String SQL_CREATE_USUARIO = "CREATE TABLE IF NOT EXISTS Usuario (idUsuario INTEGER, loginUsuario TEXT, estado INTEGER, nombre TEXT, area INTEGER);";
     private static final String SQL_CREATE_STOCK = "CREATE TABLE IF NOT EXISTS Stock(codigoArticulo TEXT, cantidad REAL, unidad INTEGER, kilos REAL, PRIMARY KEY(codigoArticulo));";
-    private static final String SQL_CREATE_SERIALES ="CREATE TABLE IF NOT EXISTS Seriales(codigoArticulo TEXT, serial TEXT)";
+    private static final String SQL_CREATE_SERIALES ="CREATE TABLE IF NOT EXISTS Seriales(codigoArticulo TEXT, serial TEXT, tipoComprobante TEXT);";
+    private static final String SQL_CREATE_ARTICULOS = "CREATE TABLE IF NOT EXISTS Articulos(codigo TEXT, descripcion TEXT);";
 
     public dbCreationHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,6 +38,8 @@ public class dbCreationHelper extends SQLiteOpenHelper {
         getWritableDatabase().execSQL(SQL_CREATE_USUARIO);
         getWritableDatabase().execSQL(SQL_CREATE_STOCK);
         getWritableDatabase().execSQL(SQL_CREATE_SERIALES);
+        getWritableDatabase().execSQL(SQL_CREATE_ARTICULOS);
+
     }
 
     public void onCreate(SQLiteDatabase db) {
@@ -47,6 +50,7 @@ public class dbCreationHelper extends SQLiteOpenHelper {
         getWritableDatabase().execSQL(SQL_CREATE_USUARIO);
         getWritableDatabase().execSQL(SQL_CREATE_STOCK);
         getWritableDatabase().execSQL(SQL_CREATE_SERIALES);
+        getWritableDatabase().execSQL(SQL_CREATE_ARTICULOS);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -1,29 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_entradas"
-        android:layout_width="match_parent"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="387dp"
         android:layout_height="wrap_content"
-        android:text="@string/entradas" />
+        tools:layout_editor_absoluteX="-4dp">
 
-    <Button
-        android:id="@+id/btn_salidas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/salidas" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:background="@color/colorSabioBase">
 
-    <Button
-        android:id="@+id/btn_stock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/stock" />
+        </android.support.v7.widget.Toolbar>
 
-    <Button
-        android:id="@+id/btn_logout"
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cerrar_sesion" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btn_entradaSalida"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/entradas" />
+
+            <Button
+                android:id="@+id/btn_sincronizar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sincronizar_articulos" />
+
+            <Button
+                android:id="@+id/btn_stock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/stock" />
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cerrar_sesion" />
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

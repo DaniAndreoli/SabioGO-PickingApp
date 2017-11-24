@@ -1,13 +1,18 @@
 package com.sabiogo.pickingapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -40,20 +45,23 @@ public class OpcionesActivity extends Activity {
     private final String ID_USUARIO = "id_usuario";
     private final String DefaultID = "";
     private String id_usuario;
+    private boolean result;
 
-    Button btn_entradas, btn_salidas, btn_stock, btn_logout;
+    Button btn_entradaSalida, btn_stock, btn_logout, btn_sincronizar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opciones);
 
-        btn_entradas = (Button)findViewById(R.id.btn_entradas);
-        btn_salidas = (Button)findViewById(R.id.btn_salidas);
+        btn_entradaSalida = (Button)findViewById(R.id.btn_entradaSalida);
         btn_stock = (Button)findViewById(R.id.btn_stock);
+        btn_sincronizar = (Button) findViewById(R.id.btn_sincronizar);
         btn_logout = (Button)findViewById(R.id.btn_logout);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
+
+        //verificarSincronizacionPendiente();
 
         btn_logout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -67,24 +75,56 @@ public class OpcionesActivity extends Activity {
             }
         });
 
+        btn_entradaSalida.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                entradaSalida();
+            }
+        });
+
+        btn_sincronizar.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                sincronizarArticulos();
+            }
+        });
+
         //Una vez logueado el usuario, obtenemos los codigos de barra desde el WS
-        this.getCodigosBarra();
+        if(!result){
+            this.getCodigosBarra();
+        }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==0)
+        {
+            result = true;
+        }
+
+    }
     private void logout(){
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(OpcionesActivity.this);
         try{
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + "/api/session/logout/" + id_usuario,
+            SharedPreferences preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.remove(ID_USUARIO);
+            editor.commit();
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,   "http://" + UserConfigDAO.getUserConfig(OpcionesActivity.this).getApiUrl() + "/api/session/logout/" + id_usuario,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            //Obtenemos el response
-                            Log.d(TAG, "logout: usuario encontrado para desloguear.");
-                            Log.d(TAG, "logout: borrando id usuario de las preferencias.");
-                            SharedPreferences preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.clear();
-                            editor.commit();
+                            if(response.toString().equals("true")) {
+                                //Obtenemos el response
+                                Log.d(TAG, "logout: usuario encontrado para desloguear.");
+                                Log.d(TAG, "logout: borrando id usuario de las preferencias.");
+                                SharedPreferences preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.clear();
+                                editor.commit();
+                            }
                         }
                     },
                     new Response.ErrorListener() {
@@ -109,13 +149,19 @@ public class OpcionesActivity extends Activity {
         startActivity(intent);
     }
 
+    public void entradaSalida(){
+        Log.d(TAG, "entradaSalida: avanzando a la vista de entrada/salida");
+        Intent intent = new Intent(getApplicationContext(), EntradaSalidaActivity.class);
+        startActivity(intent);
+    }
+
     public void getCodigosBarra(){
-        //Realizamos la consulta al web service para obtener el listado de codigos de barra "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + "/api/codigos/get/" + id_usuario
+        //Realizamos la consulta al web service para obtener el listado de codigos de barra
         JsonArrayRequest jsObjRequest = new JsonArrayRequest
-                (Request.Method.GET, "http://192.168.1.5/api/codigos/get/pistola" , null, new Response.Listener<JSONArray>() {
+                (Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(OpcionesActivity.this).getApiUrl() + "/api/codigos/get/" + id_usuario, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        CodigoBarraDAO.insertCodigosBarra(getApplicationContext(), CodigoBarraMapper.mapList(response));
+                        CodigoBarraDAO.insertCodigosBarra(OpcionesActivity.this, CodigoBarraMapper.mapList(response));
                     }
                 }, new Response.ErrorListener() {
 
@@ -127,5 +173,50 @@ public class OpcionesActivity extends Activity {
                 });
         // Add the request to the RequestQueue.
         WSHelper.getInstance(this).addToRequestQueue(jsObjRequest);
+    }
+
+
+    private void verificarSincronizacionPendiente() {
+        try {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,  "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + "/api/updates/pendientes" ,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            //Obtenemos el response
+                            if(response.equals("true")){
+                                btn_sincronizar.setEnabled(true);
+                                btn_entradaSalida.setEnabled(false);
+                                btn_stock.setEnabled(false);
+                                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OpcionesActivity.this);
+                                alertDialogBuilder
+                                        .setTitle("Sincronizar articulos")
+                                        .setMessage("Existen articulos que deben ser sincronizados. Por favor sincronice antes de continuar")
+                                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
+                                            public void onClick(DialogInterface dialog, int id){
+                                                dialog.cancel();
+                                            }
+                                        });
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "Articulos sincronizados.", Toast.LENGTH_SHORT);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getApplicationContext(), "Error al verificar articulos sincronizados.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+            // Add the request to the RequestQueue.
+            WSHelper.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    private void sincronizarArticulos(){
+       // JsonArrayRequest jsObjectRequest = new JsonArrayRequest
+         //       (Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(OpcionesActivity.this).getApiUrl() + "/api/codigos/get/" + id_usuario,null)
     }
 }

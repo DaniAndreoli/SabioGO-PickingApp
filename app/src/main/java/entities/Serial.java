@@ -7,6 +7,7 @@ package entities;
 public class Serial {
     private String numero;
     private int idSerial;
+    //private int codigoArticulo;
 
     public String getNumero() {
         return numero;
@@ -16,6 +17,14 @@ public class Serial {
         this.numero = numero;
     }
 
+    /*
+    public int getCodigoArticulo() {
+        return codigoArticulo;
+    }
+
+    public void setCodigoArticulo(int codigoArticulo) {
+        this.codigoArticulo = codigoArticulo;
+    }*/
 
     public Serial() {
         this.idSerial = 0;

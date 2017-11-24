@@ -15,7 +15,7 @@ import object_mapping.SerialMapper;
 
 public class SerialDAO extends DAO {
 
-    public static boolean grabarSerial(Context context, Serial serial, String codigoArticulo) {
+    public static boolean grabarSerial(Context context, Serial serial, String codigoArticulo, String tipoComprobante) {
 
         try {
             initializeDAO(context);
@@ -30,6 +30,7 @@ public class SerialDAO extends DAO {
                 ContentValues content = new ContentValues();
                 content.put("codigoArticulo", codigoArticulo);
                 content.put("serial", serial.getNumero());
+                content.put("tipoComprobante", tipoComprobante);
 
                 db.insert("Seriales", null, content);
                 return true;
@@ -39,12 +40,12 @@ public class SerialDAO extends DAO {
         }
     }
 
-    public static List<Serial> getSerialList(Context context) {
+    public static List<Serial> getSerialList(Context context, String tipoComprobante) {
         try {
             //Initialize DAO for using Database (connection opened) and AccessHelper objects
             initializeDAO(context);
 
-            Cursor cursor = db.rawQuery("SELECT * FROM Seriales", null);
+            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE tipoComprobante =?", new String[]{ tipoComprobante });
             List<Serial> seriales= SerialMapper.mapList(cursor);
 
             //Closes the connection and makes a backup of db file
@@ -58,11 +59,11 @@ public class SerialDAO extends DAO {
     }
 
 
-    public static List<Serial> getSerialesArticulo(Context context, String nroArt){
+    public static List<Serial> getSerialesArticulo(Context context, String nroArt, String tipoComprobante){
         try{
             initializeDAO(context);
 
-            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE codigoArticulo = ?", new String[] { nroArt});
+            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE codigoArticulo = ? AND tipoComprobante = ?", new String[] { nroArt, tipoComprobante });
             List<Serial> seriales = SerialMapper.mapList(cursor);
 
             close();
@@ -73,10 +74,11 @@ public class SerialDAO extends DAO {
         }
     }
 
-    public static void borrarSeriales(Context context){
+    public static void borrarSeriales(Context context, String tipoComprobante){
         try{
             initializeDAO(context);
-            db.execSQL("DELETE FROM Seriales");
+            //db.execSQL("DELETE FROM Seriales");
+            db.delete("Seriales","tipoComprobante = ?", new String[] { tipoComprobante });
             close();
         }catch (Exception ex){
             throw ex;

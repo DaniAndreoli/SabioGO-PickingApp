@@ -23,7 +23,7 @@ public class dbAccessHelper {
      *
      * @param context
      */
-    private dbAccessHelper(Context context) {
+    public dbAccessHelper(Context context) {
         this.openHelper = new dbCreationHelper(context);
     }
 
