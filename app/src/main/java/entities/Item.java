@@ -17,7 +17,6 @@ public class Item {
     private double saldo;
     private List<Serial> seriales;
 
-
     public Item(){
 
     }

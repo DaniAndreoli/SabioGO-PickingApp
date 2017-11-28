@@ -18,8 +18,8 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 * */
 public class dbCreationHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;//DATABASE_VERSION
-    private static final String DATABASE_NAME = "PICKING_APP.db";
+    private static final int DATABASE_VERSION = 1;//DATABASE_VERSION
+    private static final String DATABASE_NAME = "PICKING_APP_DB.db";
     private static final String SQL_CREATE_CODBARRA = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));";
     private static final String SQL_CREATE_COMPROBANTE =  "CREATE TABLE IF NOT EXISTS Comprobante (numeroPick INTEGER, orden INTEGER, observaciones TEXT, puedeUsuario INTEGER, codArt INTEGER);";
     private static final String SQL_CREATE_ITEM = "CREATE TABLE IF NOT EXISTS Item (codigoArticulo TEXT, descripcion TEXT, unidad INTEGER, cantidad REAL, kilos REAL, puedePickear REAL, saldo REAL);";
@@ -30,23 +30,23 @@ public class dbCreationHelper extends SQLiteOpenHelper {
 
     public dbCreationHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        getWritableDatabase().execSQL(SQL_CREATE_CODBARRA);
+        /*getWritableDatabase().execSQL(SQL_CREATE_CODBARRA);
         getWritableDatabase().execSQL(SQL_CREATE_COMPROBANTE);
         getWritableDatabase().execSQL(SQL_CREATE_ITEM);
         getWritableDatabase().execSQL(SQL_CREATE_USERCONFIG);
         getWritableDatabase().execSQL(SQL_CREATE_USUARIO);
         getWritableDatabase().execSQL(SQL_CREATE_STOCK);
-        getWritableDatabase().execSQL(SQL_CREATE_SERIALES);
+        getWritableDatabase().execSQL(SQL_CREATE_SERIALES);*/
     }
 
     public void onCreate(SQLiteDatabase db) {
-        getWritableDatabase().execSQL(SQL_CREATE_CODBARRA);
-        getWritableDatabase().execSQL(SQL_CREATE_COMPROBANTE);
-        getWritableDatabase().execSQL(SQL_CREATE_ITEM);
-        getWritableDatabase().execSQL(SQL_CREATE_USERCONFIG);
-        getWritableDatabase().execSQL(SQL_CREATE_USUARIO);
-        getWritableDatabase().execSQL(SQL_CREATE_STOCK);
-        getWritableDatabase().execSQL(SQL_CREATE_SERIALES);
+        db.execSQL(SQL_CREATE_CODBARRA);
+        db.execSQL(SQL_CREATE_COMPROBANTE);
+        db.execSQL(SQL_CREATE_ITEM);
+        db.execSQL(SQL_CREATE_USERCONFIG);
+        db.execSQL(SQL_CREATE_USUARIO);
+        db.execSQL(SQL_CREATE_STOCK);
+        db.execSQL(SQL_CREATE_SERIALES);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

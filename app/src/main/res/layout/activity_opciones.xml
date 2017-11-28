@@ -1,29 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Button
-        android:id="@+id/btn_entradas"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/entradas" />
+        android:layout_height="match_parent"
+        android:background="#cfcfcf">
 
-    <Button
-        android:id="@+id/btn_salidas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/salidas" />
+        <android.support.v7.widget.Toolbar android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            xmlns:android="http://schemas.android.com/apk/res/android"/>
 
-    <Button
-        android:id="@+id/btn_stock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/stock" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:padding="10dp">
 
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cerrar_sesion" />
-</LinearLayout>
+            <Button
+                android:id="@+id/btn_stock"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="#bf360c"
+                android:elevation="4dp"
+                android:radius="10dip"
+                android:text="@string/stock"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/btn_entradaSalida"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="#01579b"
+                android:elevation="4dp"
+                android:radius="10dp"
+                android:text="@string/entradas_salidas" />
+
+            <Button
+                android:id="@+id/btn_sync"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="#004d40"
+                android:elevation="4dp"
+                android:text="@string/sync" />
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="#a30000"
+                android:elevation="4dp"
+                android:radius="100dp"
+                android:text="@string/cerrar_sesion" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

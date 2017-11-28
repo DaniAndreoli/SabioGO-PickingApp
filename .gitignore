@@ -56,3 +56,5 @@ freeline_project_description.json
 build.gradle
 *.gradle
 *.gradle
+.idea/modules.xml
+app/build.gradle

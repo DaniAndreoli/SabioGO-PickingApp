@@ -27,16 +27,16 @@ public class ConfigActivity extends AppCompatActivity {
         this.btnGuardar = (Button) findViewById(R.id.btnGuardar);
         this.btnCancelar = (Button) findViewById(R.id.btnCancelar);
 
-        this.txtApiUri.setText(UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl());
+        userConfig = UserConfigDAO.getUserConfig(getApplicationContext());
+
+        if (userConfig != null) {
+            this.txtApiUri.setText(UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl());
+        }
 
         //Definimos listener para btnGuardar
         this.btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 userConfig = new UserConfig(txtApiUri.getText().toString());
-
-                /*Toast t = new Toast(getBaseContext());
-                t.setText("Guardando datos...");
-                t.show();*/
 
                 try {
                     //De esta forma enviamos la configuracion de usuario a traves del intent (SIN USAR BASE DE DATOS)

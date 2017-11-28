@@ -1,81 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/txt_CodigoStock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="number"
-            android:text="@string/ingrese_un_codigo_de_barra" />
-
-        <Button
-            android:id="@+id/btn_agregarProductoStock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Ok" />
-    </LinearLayout>
+    android:layout_height="match_parent"
+    android:background="#cfcfcf">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!--<android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_agregarCodBarManualStock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_salirStock"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="14dp"
-        android:clickable="true"
-        app:fabSize="mini"
-        app:srcCompat="@android:drawable/ic_input_add"
-        tools:visibility="invisible" />-->
-
-        <ListView
-            android:id="@+id/lv_itemsStock"
+        <android.support.v7.widget.Toolbar android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:titleTextColor="@color/colorWhite"
+            xmlns:android="http://schemas.android.com/apk/res/android"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/btn_grabarStock"
-                android:layout_width="188dp"
+            <!--Header-->
+            <LinearLayout
+                android:id="@+id/addItemLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/txt_CodigoStock"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:text="@string/ingrese_un_codigo_de_barra" />
+
+                    <Button
+                        android:id="@+id/btn_agregarProductoStock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ok" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Articulo"
+                        android:layout_weight="1"
+                        android:layout_marginStart="5dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cantidad"
+                        android:layout_weight="3" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--ListViews-->
+            <android.support.v4.view.ViewPager
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!--<ScrollView-->
+                <!--android:id="@+id/scroll_view_itemsStock"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_above="@+id/footer"-->
+                <!--android:layout_below="@+id/addItemLayout">-->
+
+                <!--<ListView-->
+                    <!--android:id="@+id/lv_itemsStock"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"/>-->
+
+            <!--</ScrollView>-->
+
+            <!--&lt;!&ndash;ListViews&ndash;&gt;-->
+            <!--<ScrollView-->
+                <!--android:id="@+id/scroll_view_seriales"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_above="@+id/footer"-->
+                <!--android:layout_below="@+id/addItemLayout">-->
+
+                <!--<ListView-->
+                    <!--android:id="@+id/lv_seriales"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp" />-->
+
+            <!--</ScrollView>-->
+
+            <!--Footer-->
+            <RelativeLayout
+                android:id="@+id/footer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_weight="1"
-                android:text="@string/grabar" />
+                android:gravity="center"
+                android:layout_gravity="center">
 
-            <Button
-                android:id="@+id/btn_salirStock"
-                android:layout_width="187dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_weight="1"
-                android:text="@string/salir" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btn_grabarStock"
+                    android:layout_width="188dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grabar" />
+
+                <Button
+                    android:id="@+id/btn_salirStock"
+                    android:layout_width="188dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/salir"
+                    android:layout_toEndOf="@+id/btn_grabarStock"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 
-</LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

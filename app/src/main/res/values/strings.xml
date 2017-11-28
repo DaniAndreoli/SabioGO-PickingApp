@@ -8,10 +8,9 @@
     <string name="api_url">Direccion URL</string>
 
     <string name="iniciar_sesion">Iniciar Sesion</string>
-    <string name="cerrar_sesion">Cerrar sesion</string>
-    <string name="stock">Stock</string>
-    <string name="salidas">Salidas</string>
-    <string name="entradas">Entradas</string>
+    <string name="cerrar_sesion">Salir</string>
+    <string name="stock">Conteo de Stock</string>
+    <string name="entradas_salidas">Entrada/Salida</string>
     <string name="grabar">Grabar</string>
     <string name="salir">Salir</string>
     <string name="ingrese_un_codigo_de_barra">Ingrese un codigo de barra</string>
@@ -20,4 +19,5 @@
     <string name="serial_invalido">Serial no valido</string>
     <string name="producto_agregado">Producto agregado</string>
     <string name="api_ingresarStock">/api/comprobantes/ingresar/</string>
+    <string name="sync">Sincronizar</string>
 </resources>

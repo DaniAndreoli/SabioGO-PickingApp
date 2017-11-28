@@ -7,6 +7,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -52,7 +58,7 @@ import helpers.WSHelper;
  * Created by Federico on 28/10/2017.
  */
 
-public class StockActivity extends Activity {
+public class StockActivity extends AppCompatActivity {
 
     private static final String TAG = "StockActivity";
     public static final String PREFS_NAME = "mPrefs";
@@ -70,6 +76,22 @@ public class StockActivity extends Activity {
     ListView lv_articulos;
     EditText txt_codigo;
 
+    //SLIDER
+    /**
+     * The number of pages (wizard steps) to show in this demo.
+     */
+    private static final int NUM_PAGES = 2;
+
+    /**
+     * The pager widget, which handles animation and allows swiping horizontally to access previous
+     * and next wizard steps.
+     */
+    private ViewPager mPager;
+
+    /**
+     * The pager adapter, which provides the pages to the view pager widget.
+     */
+    private PagerAdapter mPagerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,7 +101,6 @@ public class StockActivity extends Activity {
         btn_grabar = (Button)findViewById(R.id.btn_grabarStock);
         btn_salir  = (Button)findViewById(R.id.btn_salirStock);
         btn_agregarProducto = (Button)findViewById(R.id.btn_agregarProductoStock);
-        //btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualStock);
         lv_articulos = (ListView)findViewById(R.id.lv_itemsStock);
         txt_codigo = (EditText)findViewById(R.id.txt_CodigoStock);
 
@@ -127,6 +148,12 @@ public class StockActivity extends Activity {
 
         stockAdapter = new StockAdapter(this, R.layout.listview_row,listadoItemStock);
         lv_articulos.setAdapter(stockAdapter);
+
+        //SLIDER
+        // Instantiate a ViewPager and a PagerAdapter.
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
     }
 
     private void salir(){
@@ -232,6 +259,9 @@ public class StockActivity extends Activity {
                 //rv_articulos.setAdapter(adapter);
                 Serial serialNuevo = new Serial(serial);
                 SerialDAO.grabarSerial(getApplicationContext(), serialNuevo, item.getCodigoArticulo());
+
+                //Obtenemos el listado de todos los seriales para actualizar la segunda lista
+                List<Serial> listadoSeriales = SerialDAO.getSerialList(getApplicationContext());
             }
             result = true;
         }
@@ -292,13 +322,7 @@ public class StockActivity extends Activity {
     public void grabarComprobanteStock(final Comprobante comprobante){
         //VER COMO SE HACE PARA MANDAR UN JSON A LA URL QUE ESTOY METIENDO. EN ESTE CODIGO NO ESTOY CARGANDO EL JSON EN NINGUN MOMENTO
         JSONObject jsonBody;
-/*      URL url = new URL("http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        InputStream is = urlConnection.getInputStream();*/
         try {
-            /*jsonBody = new JSONObject();
-            jsonBody.put("", comprobante);*/
-
             String url = "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario;
 
             Map<String, String> postParam= new HashMap<String, String>();
@@ -328,73 +352,6 @@ public class StockActivity extends Activity {
 
             jsonObjReq.setTag(TAG);
 
-    /* if (queue!= null) {
-    queue.cancelAll(TAG);
-    } */
-
-            /*StringRequest strRequest = new StringRequest(Request.Method.POST, url,
-                    new Response.Listener<String>()
-                    {
-                        @Override
-                        public void onResponse(String response)
-                        {
-                            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-                        }
-                    },
-                    new Response.ErrorListener()
-                    {
-                        @Override
-                        public void onErrorResponse(VolleyError error)
-                        {
-                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-            {
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("comprobante", comprobante.toString());
-                    return params;
-                }
-            };*/
-
-            /*StringRequest stringRequest = new StringRequest(1, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if(response.toString().equals("true")){
-                                borrarRegistros();
-                                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
-                                alertDialogBuilder
-                                        .setTitle("Comprobante")
-                                        .setMessage("Comprobante guardado con éxito")
-                                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
-                                            public void onClick(DialogInterface dialog, int id){
-                                                Intent intent = new Intent(getApplicationContext(), OpcionesActivity.class);
-                                                startActivityForResult(intent,0);
-                                            }
-                                        });
-                                AlertDialog alertDialog = alertDialogBuilder.create();
-                                alertDialog.show();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
-                    alertDialogBuilder
-                            .setTitle("Error")
-                            .setMessage(error.toString())
-                            .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-                }
-            });*/
-
             WSHelper.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
         } catch (Exception e) {
             e.printStackTrace();
@@ -404,5 +361,26 @@ public class StockActivity extends Activity {
     private void borrarRegistros(){
         StockDAO.borrarItemStock(getApplicationContext());
         SerialDAO.borrarSeriales(getApplicationContext());
+    }
+
+    /**
+     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    //NEGRADA - Llevar el comportamiento a una nueva clase
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return new ConteoStockSlideFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
     }
 }
