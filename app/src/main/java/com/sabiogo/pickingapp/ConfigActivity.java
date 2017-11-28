@@ -38,10 +38,6 @@ public class ConfigActivity extends AppCompatActivity {
             public void onClick(View v) {
                 userConfig = new UserConfig(txtApiUri.getText().toString());
 
-                /*Toast t = new Toast(getBaseContext());
-                t.setText("Guardando datos...");
-                t.show();*/
-
                 try {
                     //De esta forma enviamos la configuracion de usuario a traves del intent (SIN USAR BASE DE DATOS)
                     Intent resultado = new Intent();

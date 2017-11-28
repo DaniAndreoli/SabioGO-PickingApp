@@ -157,22 +157,24 @@ public class OpcionesActivity extends Activity {
 
     public void getCodigosBarra(){
         //Realizamos la consulta al web service para obtener el listado de codigos de barra
-        JsonArrayRequest jsObjRequest = new JsonArrayRequest
-                (Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(OpcionesActivity.this).getApiUrl() + "/api/codigos/get/" + id_usuario, null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        CodigoBarraDAO.insertCodigosBarra(OpcionesActivity.this, CodigoBarraMapper.mapList(response));
-                    }
-                }, new Response.ErrorListener() {
+        if (UserConfigDAO.getUserConfig(getApplicationContext()) != null){
+            JsonArrayRequest jsObjRequest = new JsonArrayRequest
+                    (Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + "/api/codigos/get/" + id_usuario, null, new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            CodigoBarraDAO.insertCodigosBarra(getApplicationContext(), CodigoBarraMapper.mapList(response));
+                        }
+                    }, new Response.ErrorListener() {
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO Auto-generated method stub
 
-                    }
-                });
-        // Add the request to the RequestQueue.
-        WSHelper.getInstance(this).addToRequestQueue(jsObjRequest);
+                        }
+                    });
+            // Add the request to the RequestQueue.
+            WSHelper.getInstance(this).addToRequestQueue(jsObjRequest);
+        }
     }
 
 

@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         this.txtUserID = (EditText) findViewById(R.id.txtUserID);
         this.btnLogin = (Button) findViewById(R.id.btnLogin);
 
-
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
 
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //Controlamos click en los botones del menu
-        int id = item.getItemId();
+            int id = item.getItemId();
 
         if (id == R.id.action_settings) {
             Intent i = new Intent(MainActivity.this, ConfigActivity.class);
