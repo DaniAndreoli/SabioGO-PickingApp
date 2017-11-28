@@ -91,7 +91,14 @@ public class EntradaSalidaActivity extends Activity{
     }
 
     private void borrarRegistros() {
+<<<<<<< HEAD
         //SerialDAO.borrarSeriales(getApplicationContext(), COMPROBANTE_ENTRADA_SALIDA);
         //AGREGAR BORRAR ITEMS DEL COMPROBANTE
     }
 }
+=======
+        SerialDAO.borrarSeriales(getApplicationContext(), COMPROBANTE_ENTRADA_SALIDA);
+        //AGREGAR BORRAR ITEMS DEL COMPROBANTE
+    }
+}
+>>>>>>> Fede/master

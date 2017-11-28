@@ -2,17 +2,24 @@ package com.sabiogo.pickingapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+<<<<<<< HEAD
+=======
+import android.content.Context;
+>>>>>>> Fede/master
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+<<<<<<< HEAD
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+=======
+>>>>>>> Fede/master
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -23,6 +30,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+<<<<<<< HEAD
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -43,6 +51,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+=======
+import android.os.Vibrator;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+>>>>>>> Fede/master
 import data_access.CodigoBarraDAO;
 import data_access.SerialDAO;
 import data_access.StockDAO;
@@ -52,12 +71,17 @@ import entities.Comprobante;
 import entities.Item;
 import entities.ItemStock;
 import entities.Serial;
+<<<<<<< HEAD
+=======
+import helpers.GsonRequest;
+>>>>>>> Fede/master
 import helpers.WSHelper;
 
 /**
  * Created by Federico on 28/10/2017.
  */
 
+<<<<<<< HEAD
 public class StockActivity extends AppCompatActivity {
 
     private static final String TAG = "StockActivity";
@@ -65,6 +89,19 @@ public class StockActivity extends AppCompatActivity {
     private final String ID_USUARIO = "id_usuario";
     private final String DefaultID = "";
     private final float UNO = 1;
+=======
+public class StockActivity extends Activity {
+
+    private static final String TAG = "StockActivity";
+    public static final String PREFS_NAME = "mPrefs";
+    public static final String COMPROBANTE_STOCK = "1";
+    private final String ID_USUARIO = "id_usuario";
+    private final String DefaultID = "";
+    private final float UNO = 1;
+    public static final Integer SERIAL_AGREGADO = 1;
+    public static final Integer SERIAL_REPETIDO = 2;
+    public static final Integer SERIAL_INCORRECTO = 3;
+>>>>>>> Fede/master
     public StockAdapter stockAdapter;
     List<ItemStock> listadoItemStock;
 
@@ -75,6 +112,7 @@ public class StockActivity extends AppCompatActivity {
     //FloatingActionButton btn_agregarManual;
     ListView lv_articulos;
     EditText txt_codigo;
+<<<<<<< HEAD
 
     //SLIDER
     /**
@@ -92,6 +130,10 @@ public class StockActivity extends AppCompatActivity {
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
+=======
+    Vibrator vibrator;
+
+>>>>>>> Fede/master
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,8 +143,15 @@ public class StockActivity extends AppCompatActivity {
         btn_grabar = (Button)findViewById(R.id.btn_grabarStock);
         btn_salir  = (Button)findViewById(R.id.btn_salirStock);
         btn_agregarProducto = (Button)findViewById(R.id.btn_agregarProductoStock);
+<<<<<<< HEAD
         lv_articulos = (ListView)findViewById(R.id.lv_itemsStock);
         txt_codigo = (EditText)findViewById(R.id.txt_CodigoStock);
+=======
+        //btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualStock);
+        lv_articulos = (ListView)findViewById(R.id.lv_itemsStock);
+        txt_codigo = (EditText)findViewById(R.id.txt_CodigoStock);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+>>>>>>> Fede/master
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
@@ -148,6 +197,7 @@ public class StockActivity extends AppCompatActivity {
 
         stockAdapter = new StockAdapter(this, R.layout.listview_row,listadoItemStock);
         lv_articulos.setAdapter(stockAdapter);
+<<<<<<< HEAD
 
         //SLIDER
         // Instantiate a ViewPager and a PagerAdapter.
@@ -162,11 +212,25 @@ public class StockActivity extends AppCompatActivity {
                 .setTitle("Salir")
                 .setMessage("¿Esta seguro que desea salir?")
                 .setNegativeButton("No", new DialogInterface.OnClickListener(){
+=======
+    }
+
+    private void salir(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(StockActivity.this);
+        alertDialogBuilder
+                .setTitle("Salir")
+                .setMessage("¿Esta seguro que desea salir?")
+                .setPositiveButton("No", new DialogInterface.OnClickListener(){
+>>>>>>> Fede/master
                     public void onClick(DialogInterface dialog, int id){
                         dialog.cancel();
                     }
                 })
+<<<<<<< HEAD
                 .setPositiveButton("Si", new DialogInterface.OnClickListener(){
+=======
+                .setNegativeButton("Si", new DialogInterface.OnClickListener(){
+>>>>>>> Fede/master
                     public void onClick(DialogInterface dialog, int id){
                         borrarRegistros();
                         Log.d(TAG, "nextActivity: avanzando a la vista opciones");
@@ -174,6 +238,10 @@ public class StockActivity extends AppCompatActivity {
                         startActivityForResult(intent,0);
                     }
                 });
+<<<<<<< HEAD
+=======
+
+>>>>>>> Fede/master
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
@@ -239,6 +307,7 @@ public class StockActivity extends AppCompatActivity {
         List<CodigoBarra> listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
 
         if (!serial.equals("")){
+<<<<<<< HEAD
             CodigoBarra codigoBarra = verificarCodigoBarra(listadoCodBarra, serial);
 
             if (codigoBarra != null){
@@ -266,6 +335,41 @@ public class StockActivity extends AppCompatActivity {
             result = true;
         }
         else{
+=======
+            if(!serialEsRepetido(serial)){
+                CodigoBarra codigoBarra = verificarCodigoBarra(listadoCodBarra, serial);
+
+                if (codigoBarra != null){
+                    Integer codArt = codigoBarra.getCodigoArticulo(serial);
+                    kilos = codigoBarra.getKilos(serial);
+
+                    //TODO Modificar tipo
+                    ItemStock item = new ItemStock(Integer.toString(codArt), UNO, UNO, kilos);
+
+                    listadoItemStock = StockDAO.leerItemStock(getApplicationContext(),item);
+
+                    Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_LONG).show();
+                    //adapter = new MyItemStockRecyclerViewAdapter(listadoItemStock, null);
+
+                    stockAdapter = new StockAdapter(this, R.layout.listview_row,listadoItemStock);
+                    lv_articulos.setAdapter(stockAdapter);
+
+                    //rv_articulos.setAdapter(adapter);
+                    Serial serialNuevo = new Serial(serial);
+                    SerialDAO.grabarSerial(getApplicationContext(), serialNuevo, item.getCodigoArticulo(), COMPROBANTE_STOCK);
+                }
+                vibrar(SERIAL_AGREGADO);
+                result = true;
+            }else
+            {
+                vibrar(SERIAL_REPETIDO);
+                Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_LONG).show();
+                result = false;
+            }
+        }
+        else{
+            vibrar(SERIAL_INCORRECTO);
+>>>>>>> Fede/master
             Toast.makeText(getBaseContext(), R.string.serial_invalido, Toast.LENGTH_LONG).show();
             result =  false;
         }
@@ -282,6 +386,20 @@ public class StockActivity extends AppCompatActivity {
         return null;
     }
 
+<<<<<<< HEAD
+=======
+    public Boolean serialEsRepetido(String serial){
+        Boolean esRepetido = false;
+        List<Serial> listadoSeriales = SerialDAO.getSerialList(getApplicationContext(), COMPROBANTE_STOCK);
+        for(Serial seriales : listadoSeriales){
+            if(seriales.getNumero().equals(serial)){
+                esRepetido = true;
+            }
+        }
+        return esRepetido;
+    }
+
+>>>>>>> Fede/master
     private Comprobante armarComprobanteStock() {
         Comprobante comprobante = new Comprobante();
         List<ItemStock> listadoItemsStock;
@@ -303,7 +421,11 @@ public class StockActivity extends AppCompatActivity {
             }
 
             for (Item item: listadoItem) {
+<<<<<<< HEAD
                 List<Serial> seriales= SerialDAO.getSerialesArticulo(getApplicationContext(), item.getCodigoArticulo());
+=======
+                List<Serial> seriales= SerialDAO.getSerialesArticulo(getApplicationContext(), item.getCodigoArticulo(), COMPROBANTE_STOCK);
+>>>>>>> Fede/master
                 item.setSeriales(seriales);
             }
 
@@ -320,6 +442,7 @@ public class StockActivity extends AppCompatActivity {
     }
 
     public void grabarComprobanteStock(final Comprobante comprobante){
+<<<<<<< HEAD
         //VER COMO SE HACE PARA MANDAR UN JSON A LA URL QUE ESTOY METIENDO. EN ESTE CODIGO NO ESTOY CARGANDO EL JSON EN NINGUN MOMENTO
         JSONObject jsonBody;
         try {
@@ -336,10 +459,30 @@ public class StockActivity extends AppCompatActivity {
                             Log.d(TAG, response.toString());
                         }
                     }, new Response.ErrorListener() {
+=======
+        JSONObject jsonBody;
+        try {
+            String url = "http://" + UserConfigDAO.getUserConfig( getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario;
+
+            HashMap<String, String> headers = new HashMap<String, String>();
+            //headers.put("Content-Type","application/json");
+            GsonRequest request = new GsonRequest(url,comprobante,Comprobante.class,headers, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, response);
+                    borrarRegistros();
+                    Toast.makeText(getApplicationContext(), "Grabado correctamente", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), OpcionesActivity.class);
+                    startActivityForResult(intent,0);
+                }
+            }, new Response.ErrorListener() {
+>>>>>>> Fede/master
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(TAG, "Error: " + error.getMessage());
+<<<<<<< HEAD
                 }
             }) {
                 @Override
@@ -353,6 +496,19 @@ public class StockActivity extends AppCompatActivity {
             jsonObjReq.setTag(TAG);
 
             WSHelper.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+=======
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                }
+            }){ @Override
+                public String getBodyContentType(){
+                return "application/json";
+            }
+
+            };
+            request.setRetryPolicy(new DefaultRetryPolicy(50000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            ));
+            WSHelper.getInstance(getApplicationContext()).addToRequestQueue(request);
+>>>>>>> Fede/master
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -360,6 +516,7 @@ public class StockActivity extends AppCompatActivity {
 
     private void borrarRegistros(){
         StockDAO.borrarItemStock(getApplicationContext());
+<<<<<<< HEAD
         SerialDAO.borrarSeriales(getApplicationContext());
     }
 
@@ -384,3 +541,22 @@ public class StockActivity extends AppCompatActivity {
         }
     }
 }
+=======
+        SerialDAO.borrarSeriales(getApplicationContext(), COMPROBANTE_STOCK);
+    }
+
+    public void vibrar(Integer codigoVibracion){
+        if (codigoVibracion.equals(SERIAL_AGREGADO)) {
+            vibrator.vibrate(200);
+
+        } else if (codigoVibracion.equals(SERIAL_REPETIDO)) {
+            long[] pattern = {0, 150, 100, 150, 100, 50}; //delay, duracion primera vibracion, segundo delay, duracion segunda vibracion
+            vibrator.vibrate(pattern, -1); //-1 es para que vibre exactamente como el patron/pattern
+
+        } else if (codigoVibracion.equals(SERIAL_INCORRECTO)) {
+            vibrator.vibrate(600);
+
+        }
+    }
+}
+>>>>>>> Fede/master

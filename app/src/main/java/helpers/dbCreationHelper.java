@@ -18,6 +18,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 * */
 public class dbCreationHelper extends SQLiteOpenHelper {
 
+<<<<<<< HEAD
     private static final int DATABASE_VERSION = 1;//DATABASE_VERSION
     private static final String DATABASE_NAME = "PICKING_APP_DB.db";
     private static final String SQL_CREATE_CODBARRA = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));";
@@ -37,6 +38,33 @@ public class dbCreationHelper extends SQLiteOpenHelper {
         getWritableDatabase().execSQL(SQL_CREATE_USUARIO);
         getWritableDatabase().execSQL(SQL_CREATE_STOCK);
         getWritableDatabase().execSQL(SQL_CREATE_SERIALES);*/
+=======
+    private static final int DATABASE_VERSION = 7;//DATABASE_VERSION
+    private static final String DATABASE_NAME = "PICKING_APP.db";
+    private static final String SQL_CREATE_CODBARRA = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));";
+    private static final String SQL_CREATE_COMPROBANTE =  "CREATE TABLE IF NOT EXISTS Comprobante (id_comprobante INTEGER PRIMARY KEY AUTOINCREMENT, numeroPick INTEGER, orden INTEGER, observaciones TEXT, puedeUsuario INTEGER, codArt INTEGER);";
+    private static final String SQL_CREATE_ITEM = "CREATE TABLE IF NOT EXISTS Item (id_item INTEGER PRIMARY KEY AUTOINCREMENT, codigoArticulo TEXT, descripcion TEXT, unidad INTEGER, cantidad REAL, kilos REAL, puedePickear REAL, saldo REAL, id_comprobante INTEGER, FOREIGN KEY(id_comprobante) REFERENCES Comprobante(id_comprobante));";
+    private static final String SQL_CREATE_USERCONFIG = "CREATE TABLE IF NOT EXISTS UserConfig (apiURL TEXT);";
+    private static final String SQL_CREATE_USUARIO = "CREATE TABLE IF NOT EXISTS Usuario (idUsuario INTEGER, loginUsuario TEXT, estado INTEGER, nombre TEXT, area INTEGER);";
+    private static final String SQL_CREATE_STOCK = "CREATE TABLE IF NOT EXISTS Stock(codigoArticulo TEXT, cantidad REAL, unidad INTEGER, kilos REAL, PRIMARY KEY(codigoArticulo));";
+    private static final String SQL_CREATE_SERIALES ="CREATE TABLE IF NOT EXISTS Seriales(codigoArticulo TEXT, serial TEXT, tipoComprobante TEXT, id_item INTEGER, FOREIGN KEY(id_item) REFERENCES Item(id_item));";
+    private static final String SQL_CREATE_ARTICULOS = "CREATE TABLE IF NOT EXISTS Articulos(codigo TEXT, descripcion TEXT);";
+
+
+    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS Seriales;";
+
+    public dbCreationHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+//        getWritableDatabase().execSQL(SQL_CREATE_CODBARRA);
+//        getWritableDatabase().execSQL(SQL_CREATE_COMPROBANTE);
+//        getWritableDatabase().execSQL(SQL_CREATE_ITEM);
+//        getWritableDatabase().execSQL(SQL_CREATE_USERCONFIG);
+//        getWritableDatabase().execSQL(SQL_CREATE_USUARIO);
+//        getWritableDatabase().execSQL(SQL_CREATE_STOCK);
+//        getWritableDatabase().execSQL(SQL_CREATE_SERIALES);
+//        getWritableDatabase().execSQL(SQL_CREATE_ARTICULOS);
+
+>>>>>>> Fede/master
     }
 
     public void onCreate(SQLiteDatabase db) {
@@ -47,13 +75,22 @@ public class dbCreationHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_USUARIO);
         db.execSQL(SQL_CREATE_STOCK);
         db.execSQL(SQL_CREATE_SERIALES);
+<<<<<<< HEAD
+=======
+        db.execSQL(SQL_CREATE_ARTICULOS);
+>>>>>>> Fede/master
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
+<<<<<<< HEAD
         /*db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);*/
+=======
+        db.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(db);
+>>>>>>> Fede/master
     }
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {

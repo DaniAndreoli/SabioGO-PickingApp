@@ -208,10 +208,18 @@ public class CodigoBarra {
     //TODO Agregar metodos get para atributos: codArt, cantidad, kilos, unidades, obteniendo un numero de serie como
 
     public Integer getCodigoArticulo(String serial){
+<<<<<<< HEAD
         return Integer.parseInt(serial.substring(this.getUbicacionCodProd(),this.getUbicacionCantidad() -1));
     }
 
     public float getKilos(String serial){
         return Float.parseFloat(serial.substring(this.getUbicacionPeso(), this.getUbicacionPeso() + this.getLargoPeso()));
+=======
+        return Integer.parseInt(serial.substring(this.getUbicacionCodProd() - 1,this.getUbicacionCantidad() -1));
+    }
+
+    public float getKilos(String serial){
+        return Float.parseFloat(serial.substring(this.getUbicacionPeso() -1, this.getUbicacionPeso() + this.getLargoPeso() -1));
+>>>>>>> Fede/master
     }
 }

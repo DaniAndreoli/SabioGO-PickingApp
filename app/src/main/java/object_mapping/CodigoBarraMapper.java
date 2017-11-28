@@ -42,7 +42,11 @@ public abstract class CodigoBarraMapper implements List<CodigoBarra> {
                         codBarra.setLargoCodProd(cursor.getInt(cursor.getColumnIndex("largoCodProd")));
                         codBarra.setUbicacionCantidad(cursor.getInt(cursor.getColumnIndex("ubicacionCantidad")));
                         codBarra.setLargoCantidad(cursor.getInt(cursor.getColumnIndex("largoCantidad")));
+<<<<<<< HEAD
                         codBarra.setUbicacionPrecio(cursor.getInt(cursor.getColumnIndex("ubicacionPeso")));
+=======
+                        codBarra.setUbicacionPeso(cursor.getInt(cursor.getColumnIndex("ubicacionPeso")));
+>>>>>>> Fede/master
                         codBarra.setLargoPeso(cursor.getInt(cursor.getColumnIndex("largoPeso")));
                         codBarra.setUbicacionPrecio(cursor.getInt(cursor.getColumnIndex("ubicacionPrecio")));
                         codBarra.setLargoPrecio(cursor.getInt(cursor.getColumnIndex("largoPrecio")));
@@ -96,7 +100,11 @@ public abstract class CodigoBarraMapper implements List<CodigoBarra> {
                     codBarra.setLargoCodProd(jsonObj.getInt("largoCodProd"));
                     codBarra.setUbicacionCantidad(jsonObj.getInt("ubicacionCantidad"));
                     codBarra.setLargoCantidad(jsonObj.getInt("largoCantidad"));
+<<<<<<< HEAD
                     codBarra.setUbicacionPrecio(jsonObj.getInt("ubicacionPeso"));
+=======
+                    codBarra.setUbicacionPeso(jsonObj.getInt("ubicacionPeso"));
+>>>>>>> Fede/master
                     codBarra.setLargoPeso(jsonObj.getInt("largoPeso"));
                     codBarra.setUbicacionPrecio(jsonObj.getInt("ubicacionPrecio"));
                     codBarra.setLargoPrecio(jsonObj.getInt("largoPrecio"));

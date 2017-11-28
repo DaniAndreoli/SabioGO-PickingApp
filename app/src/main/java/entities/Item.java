@@ -17,6 +17,10 @@ public class Item {
     private double saldo;
     private List<Serial> seriales;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Fede/master
     public Item(){
 
     }

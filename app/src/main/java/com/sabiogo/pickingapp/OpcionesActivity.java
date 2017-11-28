@@ -1,13 +1,21 @@
 package com.sabiogo.pickingapp;
 
 import android.app.Activity;
+<<<<<<< HEAD
+=======
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+>>>>>>> Fede/master
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+=======
+>>>>>>> Fede/master
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,25 +46,41 @@ import object_mapping.CodigoBarraMapper;
  * Created by Federico on 27/10/2017.
  */
 
+<<<<<<< HEAD
 public class OpcionesActivity extends AppCompatActivity {
+=======
+public class OpcionesActivity extends Activity {
+>>>>>>> Fede/master
 
     private static final String TAG = "OpcionesActivity";
     public static final String PREFS_NAME = "mPrefs";
     private final String ID_USUARIO = "id_usuario";
     private final String DefaultID = "";
     private String id_usuario;
+<<<<<<< HEAD
     private Boolean result;
 
     Button btn_entrada_salida, btn_stock, btn_sync, btn_logout;
+=======
+    private boolean result;
+
+    Button btn_entradaSalida, btn_stock, btn_logout, btn_sincronizar;
+>>>>>>> Fede/master
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opciones);
 
+<<<<<<< HEAD
         btn_entrada_salida = (Button)findViewById(R.id.btn_entradaSalida);
         btn_stock = (Button)findViewById(R.id.btn_stock);
         btn_sync = (Button)findViewById(R.id.btn_sync);
+=======
+        btn_entradaSalida = (Button)findViewById(R.id.btn_entradaSalida);
+        btn_stock = (Button)findViewById(R.id.btn_stock);
+        btn_sincronizar = (Button) findViewById(R.id.btn_sincronizar);
+>>>>>>> Fede/master
         btn_logout = (Button)findViewById(R.id.btn_logout);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
@@ -75,13 +99,21 @@ public class OpcionesActivity extends AppCompatActivity {
             }
         });
 
+<<<<<<< HEAD
         btn_entrada_salida.setOnClickListener(new View.OnClickListener(){
+=======
+        btn_entradaSalida.setOnClickListener(new View.OnClickListener(){
+>>>>>>> Fede/master
             public void onClick(View view){
                 entradaSalida();
             }
         });
 
+<<<<<<< HEAD
         btn_sync.setOnClickListener(new View.OnClickListener(){
+=======
+        btn_sincronizar.setOnClickListener(new View.OnClickListener(){
+>>>>>>> Fede/master
             public void onClick(View view){
                 sincronizarArticulos();
             }
@@ -105,7 +137,10 @@ public class OpcionesActivity extends AppCompatActivity {
         }
 
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> Fede/master
     private void logout(){
         RequestQueue queue = Volley.newRequestQueue(OpcionesActivity.this);
         try{
@@ -150,6 +185,15 @@ public class OpcionesActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+<<<<<<< HEAD
+=======
+    public void entradaSalida(){
+        Log.d(TAG, "entradaSalida: avanzando a la vista de entrada/salida");
+        Intent intent = new Intent(getApplicationContext(), EntradaSalidaActivity.class);
+        startActivity(intent);
+    }
+
+>>>>>>> Fede/master
     public void getCodigosBarra(){
         //Realizamos la consulta al web service para obtener el listado de codigos de barra
         if (UserConfigDAO.getUserConfig(getApplicationContext()) != null){
@@ -172,6 +216,10 @@ public class OpcionesActivity extends AppCompatActivity {
         }
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Fede/master
     private void verificarSincronizacionPendiente() {
         try {
             StringRequest stringRequest = new StringRequest(Request.Method.GET,  "http://" + UserConfigDAO.getUserConfig(getApplicationContext()).getApiUrl() + "/api/updates/pendientes" ,
@@ -180,8 +228,13 @@ public class OpcionesActivity extends AppCompatActivity {
                         public void onResponse(String response) {
                             //Obtenemos el response
                             if(response.equals("true")){
+<<<<<<< HEAD
                                 btn_sync.setEnabled(true);
                                 btn_entrada_salida.setEnabled(false);
+=======
+                                btn_sincronizar.setEnabled(true);
+                                btn_entradaSalida.setEnabled(false);
+>>>>>>> Fede/master
                                 btn_stock.setEnabled(false);
                                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OpcionesActivity.this);
                                 alertDialogBuilder
@@ -212,6 +265,7 @@ public class OpcionesActivity extends AppCompatActivity {
     }
 
     private void sincronizarArticulos(){
+<<<<<<< HEAD
         // JsonArrayRequest jsObjectRequest = new JsonArrayRequest
         //       (Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(OpcionesActivity.this).getApiUrl() + "/api/codigos/get/" + id_usuario,null)
     }
@@ -222,3 +276,9 @@ public class OpcionesActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+=======
+       // JsonArrayRequest jsObjectRequest = new JsonArrayRequest
+         //       (Request.Method.GET, "http://" + UserConfigDAO.getUserConfig(OpcionesActivity.this).getApiUrl() + "/api/codigos/get/" + id_usuario,null)
+    }
+}
+>>>>>>> Fede/master
