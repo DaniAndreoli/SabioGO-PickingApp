@@ -4,12 +4,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import android.content.Context;
-import android.os.Environment;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
 
 //Clase encargada de realizar las conexiones con la base de datos
 public class dbAccessHelper {

@@ -9,7 +9,6 @@ import java.util.List;
 import entities.Usuario;
 
 import helpers.dbOperationResponse;
-import object_mapping.UserConfigMapper;
 import object_mapping.UsuarioMapper;
 
 /**

@@ -11,7 +11,6 @@ import entities.Item;
 
 import helpers.dbOperationResponse;
 import object_mapping.ComprobanteMapper;
-import object_mapping.UserConfigMapper;
 
 /**
  * Created by Dani_ on 29/10/2017.

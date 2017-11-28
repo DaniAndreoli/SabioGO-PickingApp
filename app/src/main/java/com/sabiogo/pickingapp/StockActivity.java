@@ -1,13 +1,11 @@
 package com.sabiogo.pickingapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -25,34 +23,19 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.os.Vibrator;
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import org.json.JSONObject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
 import data_access.CodigoBarraDAO;
 import data_access.SerialDAO;
 import data_access.StockDAO;
@@ -69,7 +52,7 @@ import helpers.WSHelper;
  * Created by Federico on 28/10/2017.
  */
 
-public class StockActivity extends Activity {
+public class StockActivity extends AppCompatActivity {
 
     private static final String TAG = "StockActivity";
     public static final String PREFS_NAME = "mPrefs";
@@ -108,7 +91,6 @@ public class StockActivity extends Activity {
      */
     private PagerAdapter mPagerAdapter;
     Vibrator vibrator;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -381,7 +363,7 @@ public class StockActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                 }
             }){ @Override
-                public String getBodyContentType(){
+            public String getBodyContentType(){
                 return "application/json";
             }
 
@@ -398,6 +380,7 @@ public class StockActivity extends Activity {
         StockDAO.borrarItemStock(getApplicationContext());
         SerialDAO.borrarSeriales(getApplicationContext(), COMPROBANTE_STOCK);
     }
+
     public void vibrar(Integer codigoVibracion){
         if (codigoVibracion.equals(SERIAL_AGREGADO)) {
             vibrator.vibrate(200);
@@ -411,7 +394,7 @@ public class StockActivity extends Activity {
 
         }
     }
-  
+
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
