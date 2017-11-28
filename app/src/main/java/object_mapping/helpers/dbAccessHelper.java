@@ -23,11 +23,7 @@ public class dbAccessHelper {
      *
      * @param context
      */
-<<<<<<< HEAD
     private dbAccessHelper(Context context) {
-=======
-    public dbAccessHelper(Context context) {
->>>>>>> Fede/master
         this.openHelper = new dbCreationHelper(context);
     }
 

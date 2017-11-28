@@ -15,11 +15,7 @@ import object_mapping.SerialMapper;
 
 public class SerialDAO extends DAO {
 
-<<<<<<< HEAD
-    public static boolean grabarSerial(Context context, Serial serial, String codigoArticulo) {
-=======
     public static boolean grabarSerial(Context context, Serial serial, String codigoArticulo, String tipoComprobante) {
->>>>>>> Fede/master
 
         try {
             initializeDAO(context);
@@ -34,10 +30,7 @@ public class SerialDAO extends DAO {
                 ContentValues content = new ContentValues();
                 content.put("codigoArticulo", codigoArticulo);
                 content.put("serial", serial.getNumero());
-<<<<<<< HEAD
-=======
                 content.put("tipoComprobante", tipoComprobante);
->>>>>>> Fede/master
 
                 db.insert("Seriales", null, content);
                 return true;
@@ -47,20 +40,12 @@ public class SerialDAO extends DAO {
         }
     }
 
-<<<<<<< HEAD
-    public static List<Serial> getSerialList(Context context) {
-=======
     public static List<Serial> getSerialList(Context context, String tipoComprobante) {
->>>>>>> Fede/master
         try {
             //Initialize DAO for using Database (connection opened) and AccessHelper objects
             initializeDAO(context);
 
-<<<<<<< HEAD
-            Cursor cursor = db.rawQuery("SELECT * FROM Seriales", null);
-=======
             Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE tipoComprobante =?", new String[]{ tipoComprobante });
->>>>>>> Fede/master
             List<Serial> seriales= SerialMapper.mapList(cursor);
 
             //Closes the connection and makes a backup of db file
@@ -74,19 +59,11 @@ public class SerialDAO extends DAO {
     }
 
 
-<<<<<<< HEAD
-    public static List<Serial> getSerialesArticulo(Context context, String nroArt){
-        try{
-            initializeDAO(context);
-
-            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE codigoArticulo = ?", new String[] { nroArt});
-=======
     public static List<Serial> getSerialesArticulo(Context context, String nroArt, String tipoComprobante){
         try{
             initializeDAO(context);
 
             Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE codigoArticulo = ? AND tipoComprobante = ?", new String[] { nroArt, tipoComprobante });
->>>>>>> Fede/master
             List<Serial> seriales = SerialMapper.mapList(cursor);
 
             close();
@@ -97,18 +74,11 @@ public class SerialDAO extends DAO {
         }
     }
 
-<<<<<<< HEAD
-    public static void borrarSeriales(Context context){
-        try{
-            initializeDAO(context);
-            db.execSQL("DELETE FROM Seriales");
-=======
     public static void borrarSeriales(Context context, String tipoComprobante){
         try{
             initializeDAO(context);
             //db.execSQL("DELETE FROM Seriales");
             db.delete("Seriales","tipoComprobante = ?", new String[] { tipoComprobante });
->>>>>>> Fede/master
             close();
         }catch (Exception ex){
             throw ex;

@@ -98,11 +98,7 @@ public abstract class CodigoBarraDAO extends DAO {
             db.beginTransaction();
 
             //Si vamos a obtener un listado completo de todos los codigos de barra posibles, eliminamos los anteriores
-<<<<<<< HEAD
-            db.delete("CodigoBarra",null,null);
-=======
             db.delete("CodigoBarra","numero>?",new String[]{"0"});
->>>>>>> Fede/master
 
             for (CodigoBarra codBarra: lsCodigosBarra) {
 

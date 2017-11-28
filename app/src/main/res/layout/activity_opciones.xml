@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
 <android.support.design.widget.CoordinatorLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
@@ -60,64 +59,10 @@
                 android:background="#004d40"
                 android:elevation="4dp"
                 android:text="@string/sync" />
-=======
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="387dp"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="-4dp">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:background="@color/colorSabioBase">
-
-        </android.support.v7.widget.Toolbar>
-
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/btn_entradaSalida"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/entradas" />
-
-            <Button
-                android:id="@+id/btn_sincronizar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/sincronizar_articulos" />
-
-            <Button
-                android:id="@+id/btn_stock"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/stock" />
->>>>>>> Fede/master
 
             <Button
                 android:id="@+id/btn_logout"
                 android:layout_width="match_parent"
-<<<<<<< HEAD
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
@@ -130,11 +75,4 @@
 
     </LinearLayout>
 
-=======
-                android:layout_height="wrap_content"
-                android:text="@string/cerrar_sesion" />
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
->>>>>>> Fede/master
 </android.support.design.widget.CoordinatorLayout>

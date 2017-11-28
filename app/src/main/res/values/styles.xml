@@ -2,19 +2,15 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-<<<<<<< HEAD
 
         <item name="android:actionBarStyle">@style/MyTheme.ActionBarStyle</item>
 
-=======
->>>>>>> Fede/master
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-<<<<<<< HEAD
     <style name="MyTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/MyTheme.ActionBarStyle</item>
     </style>
@@ -33,10 +29,5 @@
     <style name="actionOverflowButtonStyle" parent="@style/Widget.AppCompat.ActionButton">
         <item name="android:tint">@color/colorWhite</item>
     </style>
-=======
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
->>>>>>> Fede/master
 
 </resources>

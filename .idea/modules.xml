@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
-      <module fileurl="file://C:\Users\Dani\Documents\GitHub\SabioGO-PickingApp\PickingApp.iml" filepath="C:\Users\Dani\Documents\GitHub\SabioGO-PickingApp\PickingApp.iml" />
-=======
->>>>>>> Fede/master
       <module fileurl="file://$PROJECT_DIR$/SabioGO-PickingApp.iml" filepath="$PROJECT_DIR$/SabioGO-PickingApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

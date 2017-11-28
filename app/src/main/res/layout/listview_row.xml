@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
-=======
-
->>>>>>> Fede/master
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -13,17 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-<<<<<<< HEAD
         android:layout_marginStart="10dp" />
-=======
-        android:layout_marginLeft="10dp"></TextView>
->>>>>>> Fede/master
 
     <TextView
         android:id="@+id/tv_cantidadStock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-<<<<<<< HEAD
         android:layout_weight="5"
         android:layout_gravity="center"/>
 
@@ -34,7 +25,4 @@
         android:background="@drawable/ic_delete_black_24dp"/>
 
 
-=======
-        android:layout_weight="4"></TextView>
->>>>>>> Fede/master
 </LinearLayout>

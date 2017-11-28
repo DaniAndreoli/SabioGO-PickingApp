@@ -53,11 +53,8 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
-<<<<<<< HEAD
 build.gradle
 *.gradle
 *.gradle
 .idea/modules.xml
 app/build.gradle
-=======
->>>>>>> Fede/master
