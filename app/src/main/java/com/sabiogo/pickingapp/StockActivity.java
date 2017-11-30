@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -15,10 +16,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,7 +65,7 @@ public class StockActivity extends AppCompatActivity {
     //Declaracion de Variables de Clase
     private static final String TAG = "StockActivity";
     public static final String PREFS_NAME = "mPrefs";
-    public static final String COMPROBANTE_STOCK = "1";
+    public static final String COMPROBANTE_STOCK = "Stock";
     private String id_usuario;
     private List<ItemStock> listadoItemStock;
     private List<CodigoBarra> listadoCodBarra;
@@ -107,6 +110,10 @@ public class StockActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock);
+
+        //Seteamos el toolbar de la aplicacion
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
 
         //Inicializamos objetos visuales
         btn_grabar = (Button)findViewById(R.id.btn_grabarStock);
@@ -194,7 +201,7 @@ public class StockActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 })
-                ;
+        ;
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
@@ -203,6 +210,8 @@ public class StockActivity extends AppCompatActivity {
     private void agregarManual(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         final EditText input = new EditText(getApplicationContext());
+        input.setTextColor(getResources().getColor(R.color.colorBlack));
+        input.setGravity(Gravity.CENTER);
         input.setSingleLine(true);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -264,7 +273,7 @@ public class StockActivity extends AppCompatActivity {
 
         if (!serial.equals("")){
             if(!serialEsRepetido(serial)){
-                    CodigoBarra codigoBarra = verificarCodigoBarra(serial);
+                CodigoBarra codigoBarra = verificarCodigoBarra(serial);
 
                 if (codigoBarra != null){
                     Integer codArt = codigoBarra.getCodigoArticulo(serial);

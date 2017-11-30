@@ -8,11 +8,9 @@
     <color name="colorSecondaryLight">#ffae60</color>
     <color name="colorSecondaryDark">#b75000</color>
     <color name="colorAccent">#522837</color>
+
     <color name="colorWhite">#e2ffffff</color>
+    <color name="colorBlack">#000000</color>
 
     <color name="colorLight">#69b4ff</color>
-<<<<<<< HEAD
 </resources>
-=======
-</resources>
->>>>>>> ff3afe9fd773f7292f7843ac82dacfdcadf03257
