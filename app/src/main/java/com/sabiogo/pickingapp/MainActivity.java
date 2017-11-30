@@ -67,9 +67,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
 
-        /*if (!id_usuario.isEmpty()){
+        if (!id_usuario.isEmpty()){
             nextActivity();
-        }*/
+        }
 
         this.btnLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -141,13 +141,9 @@ public class MainActivity extends AppCompatActivity {
         this.userConfig = UserConfigDAO.getUserConfig(getApplicationContext());
 
         if (id_usuario.isEmpty()){
-            //Emplear informe de errores con el elemento SnackBar de Material Design
-            /*txtUserID.setError("Ingrese un id válido");
-            Toast.makeText(getBaseContext(), "Fallo al ingresar", Toast.LENGTH_LONG).show();*/
-
             Snackbar.make(this.coordLayout, "Ingrese el nombre de usuario", Snackbar.LENGTH_LONG).show();
-
             return;
+
         }else{
             try {
                 final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this, R.style.AppTheme);
