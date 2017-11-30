@@ -23,8 +23,11 @@ public class SerialMapper {
                 Serial serial;
                 while (!cursor.isAfterLast()) {
                     serial = new Serial();
-                    //serial.setCodigoArticulo(cursor.getString(cursor.getColumnIndex("codigoArticulo")));
-                    serial.setNumero(cursor.getString(cursor.getColumnIndex("serial")));
+                    serial.setCodigoArticulo(cursor.getString(cursor.getColumnIndex("codigoArticulo")));
+                    serial.setSerial(cursor.getString(cursor.getColumnIndex("serial")));
+                    serial.setTipoComprobante(cursor.getString(cursor.getColumnIndex("tipoComprobante")));
+                    serial.setIdItem(cursor.getInt(cursor.getColumnIndex("id_item")));
+
                     lsSerial.add(serial);
                     cursor.moveToNext();
                 }
@@ -52,7 +55,7 @@ public class SerialMapper {
                 if (!cursor.isNull(cursor.getColumnIndex("codigoArticulo"))) {
                     serial = new Serial();
                     //serial.setCodigoArticulo(cursor.getInt(cursor.getColumnIndex("codigoArticulo")));
-                    serial.setNumero(cursor.getString(cursor.getColumnIndex("serial")));
+                    serial.setSerial(cursor.getString(cursor.getColumnIndex("serial")));
                 }
                 cursor.close();
             }

@@ -10,24 +10,25 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import entities.Item;
 import entities.ItemStock;
 
 /**
  * Created by Federico on 28/10/2017.
  */
 
-public class StockAdapter extends ArrayAdapter<ItemStock>{
-
+public class EntradaSalidaAdapter extends ArrayAdapter<Item>{
 
     private Activity activity;
     private static LayoutInflater inflater = null;
-    private List<ItemStock> listaItemStocks;
+    private List<Item> listaItemsComprobante;
 
-    public StockAdapter(Activity activity, int textViewResourceId,List<ItemStock> lsItemStocks) {
-        super(activity, textViewResourceId, lsItemStocks);
+    public EntradaSalidaAdapter(Activity activity, int textViewResourceId,List<Item> lsItems) {
+        super(activity, textViewResourceId, lsItems);
         try {
             this.activity = activity;
-            this.listaItemStocks = lsItemStocks;
+            this.listaItemsComprobante = lsItems;
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         } catch (Exception e) {
@@ -36,10 +37,10 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
     }
 
     public int getCount() {
-        return listaItemStocks.size();
+        return listaItemsComprobante.size();
     }
 
-    public ItemStock getItem(ItemStock position) {
+    public Item getItem(Item position) {
         return position;
     }
 
@@ -48,7 +49,7 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
     }
 
     public static class ViewHolder {
-        public TextView codigoArticulo;
+        public TextView descripcionArticulo;
         public TextView cantidad;
     }
 
@@ -60,15 +61,15 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
                 vi = inflater.inflate(R.layout.listview_row, null);
                 holder = new ViewHolder();
 
-                holder.codigoArticulo = (TextView) vi.findViewById(R.id.tv_descripcionItem);
+                holder.descripcionArticulo = (TextView) vi.findViewById(R.id.tv_descripcionItem);
                 holder.cantidad = (TextView) vi.findViewById(R.id.tv_cantidadItem);
 
                 vi.setTag(holder);
             } else {
                 holder = (ViewHolder) vi.getTag();
             }
-            holder.codigoArticulo.setText(listaItemStocks.get(position).getCodigoArticulo());
-            holder.cantidad.setText(Float.toString(listaItemStocks.get(position).getCantidad()));
+            holder.descripcionArticulo.setText(listaItemsComprobante.get(position).getDescripcion());
+            holder.cantidad.setText(Double.toString(listaItemsComprobante.get(position).getSaldo()));
         } catch (Exception e) {
             throw e;
         }

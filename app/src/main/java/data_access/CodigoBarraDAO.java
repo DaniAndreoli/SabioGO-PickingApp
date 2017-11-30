@@ -149,4 +149,5 @@ public abstract class CodigoBarraDAO extends DAO {
         }
     }
 
+
 }

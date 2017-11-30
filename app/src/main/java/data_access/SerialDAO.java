@@ -15,12 +15,12 @@ import object_mapping.SerialMapper;
 
 public class SerialDAO extends DAO {
 
-    public static boolean grabarSerial(Context context, Serial serial, String codigoArticulo, String tipoComprobante) {
+    public static boolean grabarSerial(Context context, Serial serial) {
 
         try {
             initializeDAO(context);
             //Realizamos la busqueda en la base de datos por codigo de articulo
-            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE serial = ?", new String[] { serial.getNumero()});
+            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE serial=?", new String[]{serial.getSerial()});
 
             //Si el cursor trae datos quiere decir que el serial ya existe en el listado
             if (cursor.getCount() != 0) {
@@ -28,9 +28,9 @@ public class SerialDAO extends DAO {
             } else {
                 //Si el cursor no trae datos significa que el serial no fue cargado en la tabla Seriales, por lo tanto lo insertamos
                 ContentValues content = new ContentValues();
-                content.put("codigoArticulo", codigoArticulo);
-                content.put("serial", serial.getNumero());
-                content.put("tipoComprobante", tipoComprobante);
+                content.put("codigoArticulo", serial.getCodigoArticulo());
+                content.put("serial", serial.getSerial());
+                content.put("tipoComprobante", serial.getTipoComprobante());
 
                 db.insert("Seriales", null, content);
                 return true;

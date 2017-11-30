@@ -28,9 +28,7 @@
                 android:id="@+id/addItemLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -43,14 +41,14 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="number"
-                        android:text="@string/ingrese_un_codigo_de_barra" />
+                        android:hint="@string/ingrese_un_codigo_de_barra"/>
 
-                    <Button
-                        android:id="@+id/btn_agregarProductoStock"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Ok" />
+                    <!--<Button-->
+                    <!--android:id="@+id/btn_agregarProductoStock"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="Ok" />-->
 
                 </LinearLayout>
 
@@ -77,38 +75,40 @@
             </LinearLayout>
 
             <!--ListViews-->
-            <android.support.v4.view.ViewPager
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            <!--<android.support.v4.view.ViewPager-->
+            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--android:id="@+id/pager"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
 
             <!--<ScrollView-->
-                <!--android:id="@+id/scroll_view_itemsStock"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_above="@+id/footer"-->
-                <!--android:layout_below="@+id/addItemLayout">-->
+            <!--android:id="@+id/scroll_view_itemsStock"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_above="@+id/footer"-->
+            <!--android:layout_below="@+id/addItemLayout">-->
 
-                <!--<ListView-->
-                    <!--android:id="@+id/lv_itemsStock"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp"/>-->
+            <ListView
+                android:id="@+id/lv_itemsStock"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/footer"
+                android:layout_below="@+id/addItemLayout"/>
 
             <!--</ScrollView>-->
 
             <!--&lt;!&ndash;ListViews&ndash;&gt;-->
             <!--<ScrollView-->
-                <!--android:id="@+id/scroll_view_seriales"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_above="@+id/footer"-->
-                <!--android:layout_below="@+id/addItemLayout">-->
+            <!--android:id="@+id/scroll_view_seriales"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_above="@+id/footer"-->
+            <!--android:layout_below="@+id/addItemLayout">-->
 
-                <!--<ListView-->
-                    <!--android:id="@+id/lv_seriales"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="0dp" />-->
+            <!--<ListView-->
+            <!--android:id="@+id/lv_seriales"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp" />-->
 
             <!--</ScrollView>-->
 
@@ -138,8 +138,18 @@
 
         </RelativeLayout>
 
-
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_agregarCodBarManualStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_add"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_anchor="@id/my_toolbar"
+        app:fabSize="normal"/>
 
 </android.support.design.widget.CoordinatorLayout>

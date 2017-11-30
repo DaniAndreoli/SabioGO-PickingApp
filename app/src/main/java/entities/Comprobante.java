@@ -2,16 +2,20 @@ package entities;
 
 import java.util.List;
 
+import data_access.CodigoBarraDAO;
+
 /**
  * Created by Dani_ on 24/10/2017.
  */
 
 public class Comprobante {
 
+    private int id_comprobante;
     private int numeroPick;
     private int orden;
     private String observaciones;
     private int puedeUsuario;
+    private String idUsuario;
     private List<Item> items;
 
     public Comprobante(){
@@ -59,4 +63,29 @@ public class Comprobante {
     }
 
 
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public int getId_comprobante() {
+        return id_comprobante;
+    }
+
+    public void setId_comprobante(int id_comprobante) {
+        this.id_comprobante = id_comprobante;
+    }
+
+    public Boolean perteneceAlComprobante(String codArt) {
+
+        for (Item item: getItems()) {
+            if (item.getCodigoArticulo() == codArt) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -19,5 +19,6 @@
     <string name="serial_invalido">Serial no valido</string>
     <string name="producto_agregado">Producto agregado</string>
     <string name="api_ingresarStock">/api/comprobantes/ingresar/</string>
+    <string name="api_ingresarComprobanteEntradaSalida">/api/comprobantes/ingresar/</string>
     <string name="sync">Sincronizar</string>
 </resources>

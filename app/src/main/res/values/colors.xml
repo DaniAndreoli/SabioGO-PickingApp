@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+
+    <color name="colorPrimary">#522837</color>
+    <color name="colorPrimaryLight">#805261</color>
+    <color name="colorPrimaryDark">#290011</color>
+    <color name="colorSecondary">#ef7e31</color>
+    <color name="colorSecondaryLight">#ffae60</color>
+    <color name="colorSecondaryDark">#b75000</color>
     <color name="colorAccent">#522837</color>
     <color name="colorWhite">#e2ffffff</color>
+
     <color name="colorLight">#69b4ff</color>
-    <color name="colorSabioBase">#522837</color>
 </resources>

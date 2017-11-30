@@ -39,6 +39,11 @@
             android:label="Movimiento de Stock">
         </activity>
 
+        <activity
+            android:name=".EntradaSalidaActivity"
+            android:label="Entrada - Salida">
+        </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

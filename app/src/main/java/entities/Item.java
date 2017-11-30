@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Item {
 
+    private int id_item;
     private String codigoArticulo;
     private String descripcion;
     private int unidad;
@@ -84,5 +85,13 @@ public class Item {
 
     public void setSeriales(List<Serial> seriales) {
         this.seriales = seriales;
+    }
+
+    public int getId_item() {
+        return id_item;
+    }
+
+    public void setId_item(int id_item) {
+        this.id_item = id_item;
     }
 }

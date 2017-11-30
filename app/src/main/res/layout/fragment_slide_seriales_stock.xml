@@ -1,0 +1,11 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_view_itemsStock"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ListView
+        android:id="@+id/lv_itemsStock"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+</ScrollView>

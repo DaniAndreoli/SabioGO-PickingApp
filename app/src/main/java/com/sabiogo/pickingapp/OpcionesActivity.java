@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -37,7 +38,7 @@ public class OpcionesActivity extends AppCompatActivity {
     private final String ID_USUARIO = "id_usuario";
     private final String DefaultID = "";
     private String id_usuario;
-    private Boolean result;
+    private Boolean result = false;
 
     Button btn_entrada_salida, btn_stock, btn_sync, btn_logout;
 
@@ -169,7 +170,6 @@ public class OpcionesActivity extends AppCompatActivity {
             WSHelper.getInstance(this).addToRequestQueue(jsObjRequest);
         }
     }
-
 
     private void verificarSincronizacionPendiente() {
         try {
