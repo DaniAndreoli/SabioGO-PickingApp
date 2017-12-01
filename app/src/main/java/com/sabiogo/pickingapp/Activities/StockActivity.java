@@ -451,17 +451,10 @@ public class StockActivity extends AppCompatActivity {
             return NUM_PAGES;
         }
     }
-<<<<<<< HEAD:app/src/main/java/com/sabiogo/pickingapp/Activities/StockActivity.java
-<<<<<<< HEAD:app/src/main/java/com/sabiogo/pickingapp/StockActivity.java
 
     @Override
     public void onBackPressed() {
     }
-
-=======
->>>>>>> 313fc4ecd5d7462665eba8d41ef639e0b40bf1c4:app/src/main/java/com/sabiogo/pickingapp/Activities/StockActivity.java
-=======
->>>>>>> 313fc4ecd5d7462665eba8d41ef639e0b40bf1c4:app/src/main/java/com/sabiogo/pickingapp/Activities/StockActivity.java
 }
 
 

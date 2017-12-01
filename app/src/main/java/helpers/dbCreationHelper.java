@@ -15,13 +15,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class dbCreationHelper extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 8;//DATABASE_VERSION
-    private static final String DATABASE_NAME = "PICKING_APP.db";
     private static final int DATABASE_VERSION = 1;//DATABASE_VERSION
-    //private static final String DATABASE_NAME = "PICKING_APP.db";
-    private static final String DATABASE_NAME = "SABIO_PICKING_APP.db";
-    private static final int DATABASE_VERSION = 1;//DATABASE_VERSION
-    //private static final String DATABASE_NAME = "PICKING_APP.db";
     private static final String DATABASE_NAME = "SABIO_PICKING_APP.db";
     private static final String SQL_CREATE_CODBARRA = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));";
     private static final String SQL_CREATE_COMPROBANTE =  "CREATE TABLE IF NOT EXISTS Comprobante (id_comprobante INTEGER PRIMARY KEY AUTOINCREMENT, numeroPick INTEGER, orden INTEGER, observaciones TEXT, puedeUsuario INTEGER, idUsuario TEXT);";
@@ -37,18 +31,6 @@ public class dbCreationHelper extends SQLiteOpenHelper {
 
     public dbCreationHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
-
-//        getWritableDatabase().execSQL(SQL_CREATE_CODBARRA);
-//        getWritableDatabase().execSQL(SQL_CREATE_COMPROBANTE);
-//        getWritableDatabase().execSQL(SQL_CREATE_ITEM);
-//        getWritableDatabase().execSQL(SQL_CREATE_USERCONFIG);
-//        getWritableDatabase().execSQL(SQL_CREATE_USUARIO);
-//        getWritableDatabase().execSQL(SQL_CREATE_STOCK);
-//        getWritableDatabase().execSQL(SQL_CREATE_SERIALES);
-//        getWritableDatabase().execSQL(SQL_CREATE_ARTICULOS);
-
-
     }
 
     public void onCreate(SQLiteDatabase db) {
@@ -80,7 +62,7 @@ public class dbCreationHelper extends SQLiteOpenHelper {
         super.onOpen(db);
         if (!db.isReadOnly()) {
             // Enable foreign key constraints
-            db.execSQL("PRAGMA foreign_keys=ON;");
+            db.execSQL("PRAGMA foreign_keys= ON;");
         }
     }
 }
