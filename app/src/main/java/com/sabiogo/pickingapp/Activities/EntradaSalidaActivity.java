@@ -2,10 +2,12 @@ package com.sabiogo.pickingapp.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -35,6 +37,8 @@ import data_access.SerialDAO;
 import data_access.UserConfigDAO;
 import entities.CodigoBarra;
 import entities.Comprobante;
+import entities.Item;
+import entities.Serial;
 import helpers.*;
 import object_mapping.ComprobanteMapper;
 
@@ -48,6 +52,13 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     public static final String COMPROBANTE_ENTRADA_SALIDA = "2";
     private final String ID_USUARIO = "id_usuario";
     private final String DefaultID = "";
+    public static final Integer SERIAL_AGREGADO = 1;
+    public static final Integer SERIAL_REPETIDO = 2;
+    public static final Integer SERIAL_INCORRECTO = 3;
+    public static final Integer SERIAL_INEXISTENTE = 4;
+    public static final Integer SALDO_INSUFICIENTE = 5;
+    public static final Integer ARTICULO_FUERA_COMPROBANTE = 6;
+    public static final String COMPROBANTE_ENTRADASALIDA = "Entrada/Salida";
 
     private String id_usuario;
     private Comprobante comprobante;
@@ -60,6 +71,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     ListView lv_articulosComprobante;
     EditText txt_codigo;
     TextView tv_descripcionComprobante;
+    private Vibrator vibrator;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +91,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         lv_articulosComprobante = (ListView)findViewById(R.id.lv_itemsComprobante);
         txt_codigo = (EditText)findViewById(R.id.txt_codigoArticulo);
         tv_descripcionComprobante = (TextView)findViewById(R.id.tv_descripcionComprobante);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
@@ -199,20 +213,54 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     }
 
     private void borrarRegistros() {
-        SerialDAO.borrarSeriales(getApplicationContext(), COMPROBANTE_ENTRADA_SALIDA);
+        //SerialDAO.borrarSeriales(getApplicationContext(), COMPROBANTE_ENTRADA_SALIDA);
+        ComprobanteDAO.borrarRegistros(getApplicationContext(),comprobante);
         //AGREGAR BORRAR ITEMS DEL COMPROBANTE
     }
 
     private void leerArticulo(String serial) {
         if (!serial.equals("")) {
-            CodigoBarra codigoBarra = verificarCodigoBarra(serial);
+            if(!serialEsRepetido(serial)){
+                CodigoBarra codigoBarra = verificarCodigoBarra(serial);
 
-            if(codigoBarra != null) {
-                String codArt = Integer.toString(codigoBarra.getCodigoArticulo(serial));
+                if(codigoBarra != null) {
+                    String codArt = Integer.toString(codigoBarra.getCodigoArticulo(serial));
 
-                if(comprobante.perteneceAlComprobante(codArt)) {
-                    //TODO Desarrollar logica de picking para el item
+                    if(comprobante.perteneceAlComprobante(codArt)) {
+
+                        for (Item items: comprobante.getItems()) {
+
+                            if(codArt.equals(items.getCodigoArticulo())){
+
+                                if(items.getSaldo() > 0){
+                                    Serial serialnuevo = new Serial(codArt, serial, COMPROBANTE_ENTRADASALIDA);
+                                    SerialDAO.grabarSerialItem(getApplicationContext(), items, serialnuevo );
+                                    comprobante = ComprobanteDAO.getComprobanteUsuario(getApplicationContext(),id_usuario);
+
+                                    entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row,comprobante.getItems());
+                                    lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
+
+                                }else {
+                                    vibrar(SALDO_INSUFICIENTE);
+                                    Toast.makeText(getApplicationContext(), "Saldo completado", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }
+
+                    } else {
+                        vibrator.vibrate(ARTICULO_FUERA_COMPROBANTE);
+                        Toast.makeText(getApplicationContext(), "El articulo no pertenece al comprobante", Toast.LENGTH_LONG).show();
+
+                    }
+
+                } else {
+                    vibrar(SERIAL_INCORRECTO);
+                    Toast.makeText(getBaseContext(), R.string.serial_invalido, Toast.LENGTH_SHORT).show();
                 }
+
+            } else {
+                vibrar(SERIAL_REPETIDO);
+                Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -260,5 +308,38 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    public void vibrar(Integer codigoVibracion){
+        if (codigoVibracion.equals(SERIAL_AGREGADO)) {
+            vibrator.vibrate(200);
+
+        } else if (codigoVibracion.equals(SERIAL_REPETIDO)) {
+            long[] pattern = {0, 150, 100, 150, 100, 50}; //delay, duracion primera vibracion, segundo delay, duracion segunda vibracion
+            vibrator.vibrate(pattern, -1); //-1 es para que vibre exactamente como el patron/pattern
+
+        } else if (codigoVibracion.equals(SERIAL_INCORRECTO)) {
+            vibrator.vibrate(600);
+
+        } else if (codigoVibracion.equals(SERIAL_INEXISTENTE)) {
+            vibrator.vibrate(600);
+
+        } else if (codigoVibracion.equals(SALDO_INSUFICIENTE)){
+            vibrator.vibrate(800);
+
+        }else if (codigoVibracion.equals(ARTICULO_FUERA_COMPROBANTE)){
+            vibrator.vibrate(600);
+        }
+    }
+
+    public Boolean serialEsRepetido(String serial){
+        Boolean esRepetido = false;
+        List<Serial> listadoSeriales = SerialDAO.getSerialList(getApplicationContext(), COMPROBANTE_ENTRADA_SALIDA);
+        for(Serial seriales : listadoSeriales){
+            if(seriales.getSerial().equals(serial)){
+                esRepetido = true;
+            }
+        }
+        return esRepetido;
     }
 }

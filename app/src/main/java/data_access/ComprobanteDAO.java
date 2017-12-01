@@ -71,7 +71,7 @@ public abstract class ComprobanteDAO extends DAO {
                     content = new ContentValues();
                     content.put("codigoArticulo", item.getCodigoArticulo());
                     content.put("serial", serial.getSerial());
-                    content.put("tipoComprobante", "'Entrada/Salida'");
+                    content.put("tipoComprobante", "Entrada/Salida");
                     content.put("id_item", item.getId_item());
 
                     db.insert("Seriales", null, content);

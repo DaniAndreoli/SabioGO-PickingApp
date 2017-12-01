@@ -58,3 +58,4 @@ build.gradle
 *.gradle
 .idea/modules.xml
 app/build.gradle
+app/src/main/java/data_access/SerialDAO.java

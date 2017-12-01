@@ -15,15 +15,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class dbCreationHelper extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 3;//DATABASE_VERSION
+    private static final int DATABASE_VERSION = 4;//DATABASE_VERSION
     private static final String DATABASE_NAME = "SABIO_PICKING_APP.db";
     private static final String SQL_CREATE_CODBARRA = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));";
     private static final String SQL_CREATE_COMPROBANTE =  "CREATE TABLE IF NOT EXISTS Comprobante (id_comprobante INTEGER PRIMARY KEY AUTOINCREMENT, numeroPick INTEGER, orden INTEGER, observaciones TEXT, puedeUsuario INTEGER, idUsuario TEXT);";
-    private static final String SQL_CREATE_ITEM = "CREATE TABLE IF NOT EXISTS Item (id_item INTEGER PRIMARY KEY AUTOINCREMENT, codigoArticulo TEXT, descripcion TEXT, unidad INTEGER, cantidad REAL, kilos REAL, puedePickear REAL, saldo REAL, id_comprobante INTEGER, FOREIGN KEY(id_comprobante) REFERENCES Comprobante(id_comprobante));";
+    private static final String SQL_CREATE_ITEM = "CREATE TABLE IF NOT EXISTS Item (id_item INTEGER PRIMARY KEY AUTOINCREMENT, codigoArticulo TEXT, descripcion TEXT, unidad INTEGER, cantidad REAL, kilos REAL, puedePickear REAL, saldo REAL, id_comprobante INTEGER, FOREIGN KEY(id_comprobante) REFERENCES Comprobante(id_comprobante) ON DELETE CASCADE);";
     private static final String SQL_CREATE_USERCONFIG = "CREATE TABLE IF NOT EXISTS UserConfig (apiURL TEXT);";
     private static final String SQL_CREATE_USUARIO = "CREATE TABLE IF NOT EXISTS Usuario (idUsuario INTEGER, loginUsuario TEXT, estado INTEGER, nombre TEXT, area INTEGER);";
     private static final String SQL_CREATE_STOCK = "CREATE TABLE IF NOT EXISTS Stock(codigoArticulo TEXT, cantidad REAL, unidad INTEGER, kilos REAL, PRIMARY KEY(codigoArticulo));";
-    private static final String SQL_CREATE_SERIALES ="CREATE TABLE IF NOT EXISTS Seriales(codigoArticulo TEXT, serial TEXT, tipoComprobante TEXT, id_item INTEGER, FOREIGN KEY(id_item) REFERENCES Item(id_item));";
+    private static final String SQL_CREATE_SERIALES ="CREATE TABLE IF NOT EXISTS Seriales(codigoArticulo TEXT, serial TEXT, tipoComprobante TEXT, id_item INTEGER, FOREIGN KEY(id_item) REFERENCES Item(id_item) ON DELETE CASCADE);";
     private static final String SQL_CREATE_ARTICULOS = "CREATE TABLE IF NOT EXISTS Articulos(codigo TEXT, descripcion TEXT);";
     private static final String SQL_CREATE_LOGS = "CREATE TABLE IF NOT EXISTS Logs(id_usuario TEXT, actividad TEXT, fecha TEXT);"; //actividad: login o logout
 

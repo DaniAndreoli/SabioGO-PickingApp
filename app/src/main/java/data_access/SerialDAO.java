@@ -44,7 +44,7 @@ public class SerialDAO extends DAO {
         }
     }
 
-    public static void grabarSerialItem(Context context, Item itemComprobante, Serial serial, String idUsuario) {
+    public static void grabarSerialItem(Context context, Item itemComprobante, Serial serial) {
         try {
             initializeDAO(context);
 
