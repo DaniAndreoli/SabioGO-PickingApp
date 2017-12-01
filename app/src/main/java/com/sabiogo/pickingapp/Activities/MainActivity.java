@@ -34,6 +34,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -46,11 +48,13 @@ import com.sabiogo.pickingapp.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+
 import data_access.LogsDAO;
 import data_access.UserConfigDAO;
 import entities.DatosLOG;
 import entities.UserConfig;
-import helpers.WSHelper;
+import helpers.*;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -197,8 +201,9 @@ public class MainActivity extends AppCompatActivity{
                         progressDialog.show();
 
                         // Solicitamos un request de tipo string a la url provista por la configuracion
-                        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://" + this.userConfig.getApiUrl() + "/api/session/login/" + id_usuario,
-                                new Response.Listener<String>() {
+                        String url = "http://" + this.userConfig.getApiUrl() + "/api/session/login/" + id_usuario;
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        helpers.GsonRequest request = new helpers.GsonRequest(url,datosLOG,DatosLOG.class,headers, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
                                         //Obtenemos el response
@@ -228,10 +233,15 @@ public class MainActivity extends AppCompatActivity{
 
                                         progressDialog.dismiss();
                                     }
-                                });
-                        // Add the request to the RequestQueue.
-                        WSHelper.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+                                }){ @Override
+                        public String getBodyContentType(){
+                            return "application/json";
+                        }
 
+                        };
+                        request.setRetryPolicy(new DefaultRetryPolicy(50000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                        ));
+                        WSHelper.getInstance(getApplicationContext()).addToRequestQueue(request);
                         new android.os.Handler().postDelayed(
                                 new Runnable() {
                                     public void run() {

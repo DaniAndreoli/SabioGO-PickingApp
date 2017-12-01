@@ -24,6 +24,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -34,6 +36,9 @@ import com.android.volley.toolbox.Volley;
 import com.jaredrummler.android.device.DeviceName;
 import com.sabiogo.pickingapp.R;
 import org.json.JSONArray;
+
+import java.util.HashMap;
+
 import data_access.ArticuloDAO;
 import data_access.CodigoBarraDAO;
 import data_access.LogsDAO;
@@ -135,6 +140,7 @@ public class OpcionesActivity extends AppCompatActivity {
     private void logout(){
         if(GPSEncendido()){
             RequestQueue queue = Volley.newRequestQueue(OpcionesActivity.this);
+            String url = "http://" + UserConfigDAO.getUserConfig(OpcionesActivity.this).getApiUrl() + "/api/session/logout/" + id_usuario;
             try{
                 LogsDAO.insertarFecha(OpcionesActivity.this,id_usuario, LOGOUT);
                 SharedPreferences preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -142,8 +148,8 @@ public class OpcionesActivity extends AppCompatActivity {
                 editor.remove(ID_USUARIO);
                 editor.commit();
                 datosLOG = obtenerDatosLOG();
-                StringRequest stringRequest = new StringRequest(Request.Method.GET,   "http://" + UserConfigDAO.getUserConfig(OpcionesActivity.this).getApiUrl() + "/api/session/logout/" + id_usuario,
-                        new Response.Listener<String>() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                helpers.GsonRequest request = new helpers.GsonRequest(url,datosLOG,DatosLOG.class,headers, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 if(response.toString().equals("true")) {
@@ -163,9 +169,16 @@ public class OpcionesActivity extends AppCompatActivity {
                                 //Obtenemos un error
                                 Log.d(TAG,"logout: error.");
                             }
-                        });
+                        }){ @Override
+                public String getBodyContentType(){
+                    return "application/json";
+                }
+
+                };
                 // Add the request to the RequestQueue.
-                queue.add(stringRequest);
+                request.setRetryPolicy(new DefaultRetryPolicy(50000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                ));
+                WSHelper.getInstance(getApplicationContext()).addToRequestQueue(request);
                 setResult(99);
                 finish();
             }catch (Exception ex){

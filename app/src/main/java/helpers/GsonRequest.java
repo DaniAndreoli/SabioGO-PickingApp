@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import entities.Comprobante;
+import entities.DatosLOG;
 
 /**
  * Created by nachh on 7/11/2017.
@@ -33,6 +34,15 @@ public class GsonRequest<T> extends Request<T> {
      * @param headers Map of request headers
      */
     public GsonRequest(String url, Comprobante dataIn, Class<T> clazz, Map<String, String> headers,
+                       Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(Method.POST, url, errorListener);
+        this.dataIn = dataIn;
+        this.clazz = clazz;
+        this.headers = headers;
+        this.listener = listener;
+    }
+
+    public GsonRequest(String url, DatosLOG dataIn, Class<T> clazz, Map<String, String> headers,
                        Response.Listener<T> listener, Response.ErrorListener errorListener) {
         super(Method.POST, url, errorListener);
         this.dataIn = dataIn;
