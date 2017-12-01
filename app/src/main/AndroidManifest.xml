@@ -6,7 +6,8 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,16 +34,19 @@
 
         <activity
             android:name=".Activities.OpcionesActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:label="Menu de Opciones">
         </activity>
 
         <activity
             android:name=".Activities.StockActivity"
+            android:parentActivityName=".Activities.OpcionesActivity"
             android:label="Movimiento de Stock">
         </activity>
 
         <activity
             android:name=".Activities.EntradaSalidaActivity"
+            android:parentActivityName=".Activities.OpcionesActivity"
             android:label="Entrada - Salida">
         </activity>
 

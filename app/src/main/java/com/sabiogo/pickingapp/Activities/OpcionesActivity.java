@@ -160,6 +160,7 @@ public class OpcionesActivity extends AppCompatActivity {
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.clear();
                                     editor.commit();
+
                                 }
                             }
                         },

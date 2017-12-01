@@ -69,7 +69,7 @@ public class EntradaSalidaAdapter extends ArrayAdapter<Item>{
                 holder = (ViewHolder) vi.getTag();
             }
             holder.descripcionArticulo.setText(listaItemsComprobante.get(position).getDescripcion());
-            holder.cantidad.setText(Double.toString(listaItemsComprobante.get(position).getSaldo()));
+            holder.cantidad.setText(Double.toString(listaItemsComprobante.get(position).getFaltaPickear()));
         } catch (Exception e) {
             throw e;
         }

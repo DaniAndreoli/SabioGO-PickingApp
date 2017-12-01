@@ -82,7 +82,7 @@ public class Comprobante {
     public Boolean perteneceAlComprobante(String codArt) {
 
         for (Item item: getItems()) {
-            if (item.getCodigoArticulo() == codArt) {
+            if (item.getCodigoArticulo().equals(codArt)) {
                 return true;
             }
         }

@@ -5,6 +5,8 @@ package entities;
  */
 
 public class Serial {
+
+    private int id_serial;
     private String codigoArticulo;
     private String serial;
     private String tipoComprobante;//Stock o Entrada/Salida
@@ -50,5 +52,13 @@ public class Serial {
 
     public void setIdItem(int idItem) {
         this.idItem = idItem;
+    }
+
+    public int getId_serial() {
+        return id_serial;
+    }
+
+    public void setId_serial(int id_serial) {
+        this.id_serial = id_serial;
     }
 }

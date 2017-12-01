@@ -27,6 +27,7 @@ public class SerialMapper {
                     serial.setSerial(cursor.getString(cursor.getColumnIndex("serial")));
                     serial.setTipoComprobante(cursor.getString(cursor.getColumnIndex("tipoComprobante")));
                     serial.setIdItem(cursor.getInt(cursor.getColumnIndex("id_item")));
+                    serial.setId_serial(cursor.getInt(cursor.getColumnIndex("id_serial")));
 
                     lsSerial.add(serial);
                     cursor.moveToNext();

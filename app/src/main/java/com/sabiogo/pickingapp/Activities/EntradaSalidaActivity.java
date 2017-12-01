@@ -8,11 +8,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +53,6 @@ import object_mapping.ComprobanteMapper;
 public class EntradaSalidaActivity extends AppCompatActivity {
 
     public static final String PREFS_NAME = "mPrefs";
-    public static final String COMPROBANTE_ENTRADA_SALIDA = "2";
     private final String ID_USUARIO = "id_usuario";
     private final String DefaultID = "";
     public static final Integer SERIAL_AGREGADO = 1;
@@ -67,7 +70,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     private Activity activityThis = this;
 
     Button btn_salir, btn_grabar, btn_agregarProducto;
-    //FloatingActionButton btn_agregarManual;
+    FloatingActionButton btn_agregarManual;
     ListView lv_articulosComprobante;
     EditText txt_codigo;
     TextView tv_descripcionComprobante;
@@ -85,9 +88,9 @@ public class EntradaSalidaActivity extends AppCompatActivity {
 
         //Definimos los objetos de UI
         btn_grabar = (Button)findViewById(R.id.btn_grabarComprobante);
-        btn_salir  = (Button)findViewById(R.id.btn_salir);
+        btn_salir  = (Button)findViewById(R.id.btn_salirEntradaSalida);
         //btn_agregarProducto = (Button)findViewById(R.id.btn_agregarProductoStock);
-        //btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualStock);
+        btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualEntradaSalida);
         lv_articulosComprobante = (ListView)findViewById(R.id.lv_itemsComprobante);
         txt_codigo = (EditText)findViewById(R.id.txt_codigoArticulo);
         tv_descripcionComprobante = (TextView)findViewById(R.id.tv_descripcionComprobante);
@@ -109,16 +112,11 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         } else {
             /*Por tratarse de una peticion asincrona, no sabremos si el comprobante fue seteado en el instante, por lo que seteamos el ListView
             * tanto en la peticion al WebService (dentro del metodo setComprobante), como en el caso en el que el Comprobante se encuentre en BD local*/
-            entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row,comprobante.getItems());
-            lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
-        }
-
-        //En esta instancia el comprobante ya no deberia ser nulo pero lo validamos para setear el titulo del toolbar
-        if (comprobante != null) {
-            tv_descripcionComprobante.setText("Comprobante: " + comprobante.getObservaciones());
-
-        } else {
-            tv_descripcionComprobante.setText("Sin Comprobantes");
+            if (comprobante.getItems() != null) {
+                entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row, comprobante.getItems());
+                lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
+            }
+            setTitulo();
         }
 
         btn_salir.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +124,13 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                 salir();
             }
         });
+
+        btn_agregarManual.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                agregarManual();
+            }
+        });
+
         listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
     }
 
@@ -145,6 +150,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
 
                                         entradaSalidaAdapter = new EntradaSalidaAdapter(activityThis, R.layout.listview_row,comprobante.getItems());
                                         lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
+
+                                        setTitulo();
 
                                     } else {
                                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(EntradaSalidaActivity.this);
@@ -198,7 +205,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                 .setPositiveButton("Si", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         borrarRegistros();
-                        Intent intent = new Intent(getApplicationContext(), OpcionesActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivityForResult(intent,0);
                     }
                 })
@@ -232,17 +239,21 @@ public class EntradaSalidaActivity extends AppCompatActivity {
 
                             if(codArt.equals(items.getCodigoArticulo())){
 
-                                if(items.getSaldo() > 0){
+                                if(items.getFaltaPickear() > 0){
                                     Serial serialnuevo = new Serial(codArt, serial, COMPROBANTE_ENTRADASALIDA);
-                                    SerialDAO.grabarSerialItem(getApplicationContext(), items, serialnuevo );
+                                    serialnuevo.setIdItem(items.getId_item());
+
+                                    SerialDAO.grabarSerialItem(getApplicationContext(), items, serialnuevo);
                                     comprobante = ComprobanteDAO.getComprobanteUsuario(getApplicationContext(),id_usuario);
 
                                     entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row,comprobante.getItems());
                                     lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
 
+                                    Toast.makeText(getApplicationContext(), "Articulo leido", Toast.LENGTH_LONG).show();
+
                                 }else {
                                     vibrar(SALDO_INSUFICIENTE);
-                                    Toast.makeText(getApplicationContext(), "Saldo completado", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Ya se han leido todos los articulos de este tipo", Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
@@ -334,7 +345,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
 
     public Boolean serialEsRepetido(String serial){
         Boolean esRepetido = false;
-        List<Serial> listadoSeriales = SerialDAO.getSerialList(getApplicationContext(), COMPROBANTE_ENTRADA_SALIDA);
+        List<Serial> listadoSeriales = SerialDAO.getSerialList(getApplicationContext(), COMPROBANTE_ENTRADASALIDA);
         for(Serial seriales : listadoSeriales){
             if(seriales.getSerial().equals(serial)){
                 esRepetido = true;
@@ -342,4 +353,47 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         }
         return esRepetido;
     }
+
+    private void agregarManual(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        final EditText input = new EditText(getApplicationContext());
+        input.setTextColor(getResources().getColor(R.color.colorBlack));
+        input.setGravity(Gravity.CENTER);
+        input.setSingleLine(true);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+
+        alertDialogBuilder
+                .setTitle("Ingrese el código de barras del artículo")
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        if(!input.getText().toString().equals("")){
+                            leerArticulo(input.getText().toString());
+
+                        }
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.setView(input);
+        alertDialog.show();
+    }
+
+    private void setTitulo() {
+        //En esta instancia el comprobante ya no deberia ser nulo pero lo validamos para setear el titulo del toolbar
+        if (comprobante != null) {
+            tv_descripcionComprobante.setText("Comprobante: " + comprobante.getObservaciones());
+
+        } else {
+            tv_descripcionComprobante.setText("Sin Comprobantes");
+        }
+    }
+
 }

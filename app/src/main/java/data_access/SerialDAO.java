@@ -48,21 +48,30 @@ public class SerialDAO extends DAO {
         try {
             initializeDAO(context);
 
-            //Setea el serial del primer Serial de la lista de seriales del Item
-            db.rawQuery("UPDATE Seriales SET serial = " + serial.getSerial() +
-                    " WHERE id_item = (SELECT id_item FROM Seriales WHERE id_item =" + itemComprobante.getId_item() + " AND serial = null ORDER BY id_item LIMIT 1)", null, null);
+            List<Serial> lsSerialesItem = SerialMapper.mapList(db.rawQuery("SELECT * FROM Seriales " +
+                    "WHERE serial = 'null' AND tipoComprobante = ? AND id_item = ?", new String[] { serial.getTipoComprobante(), Integer.toString(serial.getIdItem()) }, null));
 
-            //Actualiza el valor del saldo en saldo - 1 para el item del comprobante
-            db.rawQuery("UPDATE Item SET saldo = " + Double.toString(itemComprobante.getSaldo() - 1 ) +
-                    " WHERE id_item = " + itemComprobante.getId_item(), null, null);
+            ContentValues content = new ContentValues();
+
+            if (lsSerialesItem != null && lsSerialesItem.size() != 0) {
+                Serial primerSerialNulo = lsSerialesItem.get(0);
+                primerSerialNulo.setSerial(serial.getSerial());
+
+                content.put("serial", primerSerialNulo.getSerial());
+
+                db.update("Seriales", content, "id_serial = ?", new String[] { Integer.toString(primerSerialNulo.getId_serial()) });
+            }
+
+            content = new ContentValues();
+            content.put("faltaPickear", itemComprobante.getFaltaPickear() - 1);
+
+            db.update("Item", content, "id_item = ?", new String[] { Integer.toString(itemComprobante.getId_item()) });
 
             db.close();
 
         }catch (Exception e) {
             throw e;
         }
-
-
     }
 
     public static List<Serial> getSerialList(Context context, String tipoComprobante) {

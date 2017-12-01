@@ -37,6 +37,7 @@ public class ItemMapper {
                     item.setKilos(cursor.getDouble(cursor.getColumnIndex("kilos")));
                     item.setPuedePickear(cursor.getDouble(cursor.getColumnIndex("puedePickear")));
                     item.setSaldo(cursor.getDouble(cursor.getColumnIndex("saldo")));
+                    item.setFaltaPickear(cursor.getInt(cursor.getColumnIndex("faltaPickear")));
 
                     lsItems.add(item);
                     cursor.moveToNext();

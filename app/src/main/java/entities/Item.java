@@ -16,6 +16,7 @@ public class Item {
     private double kilos;
     private double puedePickear;
     private double saldo;
+    private int faltaPickear;
     private List<Serial> seriales;
 
 
@@ -93,5 +94,13 @@ public class Item {
 
     public void setId_item(int id_item) {
         this.id_item = id_item;
+    }
+
+    public int getFaltaPickear() {
+        return faltaPickear;
+    }
+
+    public void setFaltaPickear(int faltaPickear) {
+        this.faltaPickear = faltaPickear;
     }
 }

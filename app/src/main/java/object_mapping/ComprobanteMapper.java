@@ -100,6 +100,7 @@ public abstract class ComprobanteMapper implements List<Comprobante> {
                             item.setKilos(itemJson.getInt("kilos"));
                             item.setPuedePickear(itemJson.getInt("puedePickear"));
                             item.setSaldo(itemJson.getInt("saldo"));
+                            item.setFaltaPickear(itemJson.getInt("cantidad"));
 
                             //Obtenemos el JsonArray en la posicion "seriales" del JsonObject Item
                             JSONArray serialesJsonArray = itemJson.getJSONArray("seriales");

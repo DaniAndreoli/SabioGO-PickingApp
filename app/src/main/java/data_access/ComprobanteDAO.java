@@ -54,6 +54,7 @@ public abstract class ComprobanteDAO extends DAO {
                 content.put("kilos", item.getKilos());
                 content.put("puedePickear", item.getPuedePickear());
                 content.put("saldo", item.getSaldo());
+                content.put("faltaPickear", item.getFaltaPickear());
 
                 //Seteamos el id_comprobante del item
                 content.put("id_comprobante", comp.getId_comprobante());
@@ -125,9 +126,9 @@ public abstract class ComprobanteDAO extends DAO {
             //Initialize DAO for using Database (connection opened) and AccessHelper objects
             initializeDAO(context);
 
-
             //Eliminamos todos los seriales del comprobante
-            db.delete("Seriales", "tipoComprobante = ?", new String[] { "Entrada/Salida" });
+            db.execSQL("DELETE FROM Seriales WHERE tipoComprobante = ?", new String[] { "Entrada/Salida" });
+            //db.delete("Seriales", "tipoComprobante = ?", new String[] { "Entrada/Salida" });
 
             //Eliminamos todos los items del comprobante
             db.delete("Item", "id_comprobante = ?", new String[] { Integer.toString(comprobante.getId_comprobante()) });
@@ -135,7 +136,6 @@ public abstract class ComprobanteDAO extends DAO {
             //Eliminamos el comprobante
             db.delete("Comprobante", "id_comprobante = ?", new String[] { Integer.toString(comprobante.getId_comprobante()) });
 
-            db.setTransactionSuccessful();
             db.close();
 
         } catch (Error e) {

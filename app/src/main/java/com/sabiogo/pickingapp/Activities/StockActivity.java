@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.bluetooth.*;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -34,9 +35,12 @@ import com.android.volley.VolleyLog;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import android.os.Vibrator;
 import com.android.volley.DefaultRetryPolicy;
@@ -55,6 +59,7 @@ import entities.Comprobante;
 import entities.Item;
 import entities.ItemStock;
 import entities.Serial;
+import helpers.ConnectThread;
 import helpers.GsonRequest;
 import helpers.WSHelper;
 
@@ -68,6 +73,7 @@ public class StockActivity extends AppCompatActivity {
     private static final String TAG = "StockActivity";
     public static final String PREFS_NAME = "mPrefs";
     public static final String COMPROBANTE_STOCK = "Stock";
+    private static final UUID MY_UUID = UUID.fromString("0000110E-0000-1000-8000-00805F9B34FB");
     private String id_usuario;
     private List<ItemStock> listadoItemStock;
     private List<CodigoBarra> listadoCodBarra;
@@ -182,9 +188,49 @@ public class StockActivity extends AppCompatActivity {
 
             }
         });*/
-
-        txt_codigo.requestFocus();
         listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
+        //txt_codigo.setVisibility(View.INVISIBLE);
+        txt_codigo.requestFocus();
+
+        
+        /*BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
+        BluetoothDevice device = bluetooth.getRemoteDevice( bluetooth.getAddress());
+
+        ConnectThread hilo = new ConnectThread();
+        hilo.run();*/
+//        if(bluetooth != null)
+//        {
+//
+//            String status;
+//            if (bluetooth.isEnabled()) {
+//                BluetoothDevice device = bluetooth.getRemoteDevice( bluetooth.getAddress());
+//
+//                    BluetoothSocket mSocket = null;
+//                    //Log.d(TAG,device.getName());
+//                    //BluetoothSocket mSocket=null;
+//                    try {
+//                        mSocket = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
+//                    } catch (IOException e1) {
+//                        // TODO Auto-generated catch block
+//                        Log.d(TAG,"socket not created");
+//                        e1.printStackTrace();
+//                    }
+//                    try{
+//                        mSocket.connect();
+//                    }
+//                    catch(IOException e){
+//                        try {
+//                            mSocket.close();
+//                            Log.d(TAG,"Cannot connect");
+//                        } catch (IOException e1) {
+//                            Log.d(TAG,"Socket not closed");
+//                            e1.printStackTrace();
+//                        }
+//            }
+//
+//        }
+//
+//    }
     }
 
     private void salir(){
@@ -196,7 +242,7 @@ public class StockActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id){
                         borrarRegistros();
                         Log.d(TAG, "nextActivity: avanzando a la vista opciones");
-                        Intent intent = new Intent(getApplicationContext(), OpcionesActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivityForResult(intent,0);
                     }
                 })
@@ -268,7 +314,7 @@ public class StockActivity extends AppCompatActivity {
                             txt_codigo.setText("");
                             txt_codigo.requestFocus();
 
-                            pDialog.dismiss();
+                            //pDialog.dismiss();
                         }
                     }, 2000);
                 }
@@ -329,7 +375,6 @@ public class StockActivity extends AppCompatActivity {
         waitingFlag = false;
         return result;
     }
-
 
     public CodigoBarra verificarCodigoBarra(String serial){
         for (CodigoBarra codBar : listadoCodBarra) {
@@ -449,6 +494,27 @@ public class StockActivity extends AppCompatActivity {
         mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
     }
+
+
+
+//    public void receiveData(BluetoothSocketWrapper socket) throws IOException {
+//        InputStream socketInputStream = socket.getInputStream();
+//        byte[] buffer = new byte[256];
+//        int bytes;
+//
+//        // Keep looping to listen for received messages
+//        while (true) {
+//            try {
+//                bytes = socketInputStream.read(buffer);            //read bytes from input buffer
+//                String readMessage = new String(buffer, 0, bytes);
+//                // Send the obtained bytes to the UI Activity via handler
+//                Log.i("logging", readMessage + "");
+//            } catch (IOException e) {
+//                break;
+//            }
+//        }
+//
+//    }
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
