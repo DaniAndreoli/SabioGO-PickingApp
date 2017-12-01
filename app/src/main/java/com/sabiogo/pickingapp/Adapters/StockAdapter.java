@@ -10,7 +10,11 @@ import android.widget.TextView;
 
 import com.sabiogo.pickingapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import data_access.ArticuloDAO;
+import entities.Articulo;
 import entities.ItemStock;
 
 /**
@@ -22,6 +26,7 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
     private Activity activity;
     private static LayoutInflater inflater = null;
     private List<ItemStock> listaItemStocks;
+    private List<Articulo> listaDescripcion;
 
     public StockAdapter(Activity activity, int textViewResourceId,List<ItemStock> lsItemStocks) {
         super(activity, textViewResourceId, lsItemStocks);
@@ -30,6 +35,15 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
             this.listaItemStocks = lsItemStocks;
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+            listaDescripcion = new ArrayList<Articulo>();
+            Articulo articulo;
+            //Va aca?
+            for (ItemStock item: listaItemStocks){
+                articulo = new Articulo();
+                articulo.setCodigo(item.getCodigoArticulo());
+                articulo.setDescripcion(ArticuloDAO.getDescripcionArticulo(getContext(), item.getCodigoArticulo()));
+                listaDescripcion.add(articulo);
+            }
         } catch (Exception e) {
             throw e;
         }
@@ -48,7 +62,7 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
     }
 
     public static class ViewHolder {
-        public TextView codigoArticulo;
+        public TextView descripcionArticulo;
         public TextView cantidad;
     }
 
@@ -60,14 +74,15 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
                 vi = inflater.inflate(R.layout.listview_row, null);
                 holder = new ViewHolder();
 
-                holder.codigoArticulo = (TextView) vi.findViewById(R.id.tv_descripcionItem);
+                holder.descripcionArticulo = (TextView) vi.findViewById(R.id.tv_descripcionItem);
                 holder.cantidad = (TextView) vi.findViewById(R.id.tv_cantidadItem);
 
                 vi.setTag(holder);
             } else {
                 holder = (ViewHolder) vi.getTag();
             }
-            holder.codigoArticulo.setText(listaItemStocks.get(position).getCodigoArticulo());
+            //holder.descripcionArticulo.setText(listaItemStocks.get(position).getCodigoArticulo());
+            holder.descripcionArticulo.setText(buscarDescripcion(listaItemStocks.get(position).getCodigoArticulo()));
             holder.cantidad.setText(Float.toString(listaItemStocks.get(position).getCantidad()));
 
             notifyDataSetChanged();
@@ -76,5 +91,15 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
             throw e;
         }
         return vi;
+    }
+
+
+    public String buscarDescripcion(String codigoArticulo){
+        for (Articulo articulo: listaDescripcion) {
+            if(articulo.getCodigo().equals(codigoArticulo)){
+                return articulo.getDescripcion();
+            }
+        }
+        return "";
     }
 }

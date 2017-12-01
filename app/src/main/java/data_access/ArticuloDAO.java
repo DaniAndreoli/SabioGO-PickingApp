@@ -16,22 +16,28 @@ import object_mapping.ArticuloMapper;
 
 public class ArticuloDAO extends DAO {
 
-    public static List<Articulo> getArticulo(Context context) {
+    public static String getDescripcionArticulo(Context context, String codigoArticulo) {
         try {
             //Initialize DAO for using Database (connection opened) and AccessHelper objects
             initializeDAO(context);
 
-            Cursor cursor = db.rawQuery("SELECT * FROM Articulos", null);
-            List<Articulo> list = ArticuloMapper.mapList(cursor);
+            String descripcion = "";
+
+            Cursor cursor = db.rawQuery("SELECT * FROM Articulos WHERE codigo = ?", new String[]{ codigoArticulo });
+            if (cursor != null && cursor.getCount() != 0) {
+               cursor.moveToFirst();
+               descripcion = cursor.getString(cursor.getColumnIndex("descripcion"));
+            }
 
             //Closes the connection and makes a backup of db file
+            cursor.close();
             close();
-            return list;
+            return descripcion;
 
         } catch (Exception e) {
             e.getMessage();
             close();
-            return null;
+            return codigoArticulo;
         }
     }
 
@@ -47,7 +53,7 @@ public class ArticuloDAO extends DAO {
             content.put("codigo", articulo.getCodigo());
             content.put("descripcion", articulo.getDescripcion());
 
-            db.insert("Articulo", null, content);
+            db.insert("Articulos", null, content);
 
             response.Ok(true);
 
@@ -78,7 +84,7 @@ public class ArticuloDAO extends DAO {
             db.beginTransaction();
 
             //Si vamos a obtener un listado completo de todos los articulos posibles, eliminamos los anteriores
-            db.delete("Articulo","codigo >?",new String[]{"0"});
+            db.delete("Articulos","codigo >?",new String[]{"0"});
 
             for (Articulo articulo: lsArticulos) {
 
@@ -86,7 +92,7 @@ public class ArticuloDAO extends DAO {
                 content.put("codigo",articulo.getCodigo());
                 content.put("descripcion",articulo.getDescripcion());
 
-                db.insert("Articulo", null, content);
+                db.insert("Articulos", null, content);
             }
 
             response.Ok(true);

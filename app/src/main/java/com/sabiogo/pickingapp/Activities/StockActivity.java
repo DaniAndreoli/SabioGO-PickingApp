@@ -44,6 +44,7 @@ import com.sabiogo.pickingapp.Fragments.ConteoStockFragment;
 import com.sabiogo.pickingapp.Fragments.SerialesStockFragment;
 import com.sabiogo.pickingapp.R;
 
+import data_access.ArticuloDAO;
 import data_access.CodigoBarraDAO;
 import data_access.SerialDAO;
 import data_access.StockDAO;
@@ -75,6 +76,7 @@ public class StockActivity extends AppCompatActivity {
     public static final Integer SERIAL_AGREGADO = 1;
     public static final Integer SERIAL_REPETIDO = 2;
     public static final Integer SERIAL_INCORRECTO = 3;
+    public static final Integer SERIAL_INEXISTENTE = 4;
     private final String ID_USUARIO = "id_usuario";
     private final String DefaultID = "";
     private final float UNO = 1;
@@ -268,50 +270,59 @@ public class StockActivity extends AppCompatActivity {
     }
 
     public Boolean agregarArticulo(String serial){
-        boolean result;
+        boolean result = false;
         Float kilos;
-
         if (!serial.equals("")){
             if(!serialEsRepetido(serial)){
                 CodigoBarra codigoBarra = verificarCodigoBarra(serial);
 
                 if (codigoBarra != null){
                     Integer codArt = codigoBarra.getCodigoArticulo(serial);
-                    kilos = codigoBarra.getKilos(serial);
 
-                    //Definimos el item que estamos leyendo, con sus datos
-                    ItemStock item = new ItemStock(Integer.toString(codArt), UNO, UNO, kilos);
+                    if(!ArticuloDAO.getDescripcionArticulo(getApplicationContext(), Integer.toString(codArt)).equals("")){
+                        kilos = codigoBarra.getKilos(serial);
+
+                        //Definimos el item que estamos leyendo, con sus datos
+                        ItemStock item = new ItemStock(Integer.toString(codArt), UNO, UNO, kilos);
 
                     /*Ejecutamos metodo DAO que verifica si el item creado existe
                     para aumentar su cantidad, o crearlo de lo contrario, y luego devuelve el listado actualizado*/
-                    listadoItemStock = StockDAO.leerItemStock(getApplicationContext(),item);
+                        listadoItemStock = StockDAO.leerItemStock(getApplicationContext(),item);
 
-                    //Inserttamos el objeto Serial en la bd Sqlite
-                    Serial serialNuevo = new Serial(item.getCodigoArticulo(), serial, "Stock");
-                    SerialDAO.grabarSerial(getApplicationContext(), serialNuevo);
+                        //Inserttamos el objeto Serial en la bd Sqlite
+                        Serial serialNuevo = new Serial(item.getCodigoArticulo(), serial, "Stock");
+                        SerialDAO.grabarSerial(getApplicationContext(), serialNuevo);
 
-                    //Creamos el adapter
-                    mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
-                    mPager.setAdapter(mPagerAdapter);
+                        //Creamos el adapter
+                        mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
+                        mPager.setAdapter(mPagerAdapter);
+
+                        vibrar(SERIAL_AGREGADO);
+                        Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_LONG).show();
+                        result = true;
+
+                    } else {
+                        vibrar(SERIAL_INEXISTENTE);
+                        Toast.makeText(getApplicationContext(), "Producto inexistente", Toast.LENGTH_LONG).show();
+                        result = false;
+                    }
+
+                }else {
+                    vibrar(SERIAL_REPETIDO);
+                    Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_SHORT).show();
+                    result = false;
                 }
-                vibrar(SERIAL_AGREGADO);
-                Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_LONG).show();
-                result = true;
-
-            }else {
-                vibrar(SERIAL_REPETIDO);
-                Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_SHORT).show();
-                result = false;
             }
-        }
-        else {
-            vibrar(SERIAL_INCORRECTO);
-            Toast.makeText(getBaseContext(), R.string.serial_invalido, Toast.LENGTH_SHORT).show();
-            result =  false;
+            else {
+                vibrar(SERIAL_INCORRECTO);
+                Toast.makeText(getBaseContext(), R.string.serial_invalido, Toast.LENGTH_SHORT).show();
+                result =  false;
+            }
         }
         waitingFlag = false;
         return result;
     }
+
 
     public CodigoBarra verificarCodigoBarra(String serial){
         for (CodigoBarra codBar : listadoCodBarra) {
@@ -422,6 +433,8 @@ public class StockActivity extends AppCompatActivity {
         } else if (codigoVibracion.equals(SERIAL_INCORRECTO)) {
             vibrator.vibrate(600);
 
+        } else if (codigoVibracion.equals(SERIAL_INEXISTENTE)) {
+            vibrator.vibrate(600);
         }
     }
 

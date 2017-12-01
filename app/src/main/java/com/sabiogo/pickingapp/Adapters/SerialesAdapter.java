@@ -95,7 +95,7 @@ public class SerialesAdapter extends ArrayAdapter<Serial>{
                     SerialDAO.borrarSerial(getContext(), serial.getSerial(), serial.getTipoComprobante(), serial.getCodigoArticulo());
                     listaSeriales = SerialDAO.getSerialList(getContext(), "Stock");
 
-                    Toast.makeText(getContext(), "Producto Eliminado!", Toast.LENGTH_LONG);
+                    Toast.makeText(getContext(), "Producto Eliminado!", Toast.LENGTH_LONG).show();
 
                     //notifyDataSetChanged();
                     ((StockActivity) activity).actualizarPager();

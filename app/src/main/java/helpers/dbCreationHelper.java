@@ -15,7 +15,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class dbCreationHelper extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 1;//DATABASE_VERSION
+    private static final int DATABASE_VERSION = 3;//DATABASE_VERSION
     private static final String DATABASE_NAME = "SABIO_PICKING_APP.db";
     private static final String SQL_CREATE_CODBARRA = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));";
     private static final String SQL_CREATE_COMPROBANTE =  "CREATE TABLE IF NOT EXISTS Comprobante (id_comprobante INTEGER PRIMARY KEY AUTOINCREMENT, numeroPick INTEGER, orden INTEGER, observaciones TEXT, puedeUsuario INTEGER, idUsuario TEXT);";
