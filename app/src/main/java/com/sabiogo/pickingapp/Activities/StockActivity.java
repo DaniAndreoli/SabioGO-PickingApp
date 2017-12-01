@@ -257,7 +257,8 @@ public class StockActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (waitingFlag == false) {
-                    pDialog = ProgressDialog.show(getApplicationContext(),"Leyendo...", "Aguarde un instante por favor.");
+                    //pDialog = new ProgressDialog(getApplicationContext(), Th)
+                    //ProgressDialog.show(getApplicationContext(),"Leyendo...", "Aguarde un instante por favor.");
 
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {

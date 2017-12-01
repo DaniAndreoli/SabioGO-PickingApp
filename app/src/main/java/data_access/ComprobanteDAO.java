@@ -125,7 +125,6 @@ public abstract class ComprobanteDAO extends DAO {
             //Initialize DAO for using Database (connection opened) and AccessHelper objects
             initializeDAO(context);
 
-            db.beginTransaction();
 
             //Eliminamos todos los seriales del comprobante
             db.delete("Seriales", "tipoComprobante = ?", new String[] { "Entrada/Salida" });

@@ -6,6 +6,8 @@ import android.database.Cursor;
 
 import java.util.List;
 
+import entities.Comprobante;
+import entities.Item;
 import entities.ItemStock;
 import entities.Serial;
 import object_mapping.SerialMapper;
@@ -40,6 +42,27 @@ public class SerialDAO extends DAO {
         }catch (Exception e) {
             return false;
         }
+    }
+
+    public static void grabarSerialItem(Context context, Item itemComprobante, Serial serial, String idUsuario) {
+        try {
+            initializeDAO(context);
+
+            //Setea el serial del primer Serial de la lista de seriales del Item
+            db.rawQuery("UPDATE Seriales SET serial = " + serial.getSerial() +
+                    " WHERE id_item = (SELECT id_item FROM Seriales WHERE id_item =" + itemComprobante.getId_item() + " AND serial = null ORDER BY id_item LIMIT 1)", null, null);
+
+            //Actualiza el valor del saldo en saldo - 1 para el item del comprobante
+            db.rawQuery("UPDATE Item SET saldo = " + Double.toString(itemComprobante.getSaldo() - 1 ) +
+                    " WHERE id_item = " + itemComprobante.getId_item(), null, null);
+
+            db.close();
+
+        }catch (Exception e) {
+            throw e;
+        }
+
+
     }
 
     public static List<Serial> getSerialList(Context context, String tipoComprobante) {
