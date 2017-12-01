@@ -5,34 +5,50 @@ package entities;
  */
 
 public class Serial {
-    private String numero;
-    private int idSerial;
-    //private int codigoArticulo;
+    private String codigoArticulo;
+    private String serial;
+    private String tipoComprobante;//Stock o Entrada/Salida
+    private int idItem;
 
-    public String getNumero() {
-        return numero;
+    public Serial() {
+
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public Serial(String codigoArt, String nroSerie, String tipoComprobante) {
+        this.codigoArticulo = codigoArt;
+        this.serial = nroSerie;
+        this.tipoComprobante = tipoComprobante;
     }
 
-    /*
-    public int getCodigoArticulo() {
+    public String getCodigoArticulo() {
         return codigoArticulo;
     }
 
-    public void setCodigoArticulo(int codigoArticulo) {
+    public void setCodigoArticulo(String codigoArticulo) {
         this.codigoArticulo = codigoArticulo;
-    }*/
-
-    public Serial() {
-        this.idSerial = 0;
     }
 
-    public Serial(String numero){
-        this.idSerial = 0;
-        this.numero= numero;
+    public String getSerial() {
+        return serial;
     }
 
+    public void setSerial(String serial) {
+        this.serial = serial;
+    }
+
+    public String getTipoComprobante() {
+        return tipoComprobante;
+    }
+
+    public void setTipoComprobante(String tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
+    }
+
+    public int getIdItem() {
+        return idItem;
+    }
+
+    public void setIdItem(int idItem) {
+        this.idItem = idItem;
+    }
 }

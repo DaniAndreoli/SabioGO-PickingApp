@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    android:layout_height="match_parent"
+<android.support.design.widget.CoordinatorLayout android:layout_height="match_parent"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -16,8 +16,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Light"
-            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/colorWhite"
             xmlns:android="http://schemas.android.com/apk/res/android"/>
 
         <LinearLayout
@@ -37,7 +36,8 @@
                 android:elevation="4dp"
                 android:radius="10dip"
                 android:text="@string/stock"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"/>
 
             <Button
                 android:id="@+id/btn_entradaSalida"
@@ -48,7 +48,8 @@
                 android:background="#01579b"
                 android:elevation="4dp"
                 android:radius="10dp"
-                android:text="@string/entradas_salidas" />
+                android:text="@string/entradas_salidas"
+                android:textColor="@color/colorWhite"/>
 
             <Button
                 android:id="@+id/btn_sync"
@@ -58,7 +59,8 @@
                 android:layout_weight="1"
                 android:background="#004d40"
                 android:elevation="4dp"
-                android:text="@string/sync" />
+                android:text="@string/sync"
+                android:textColor="@color/colorWhite"/>
 
             <Button
                 android:id="@+id/btn_logout"
@@ -69,7 +71,8 @@
                 android:background="#a30000"
                 android:elevation="4dp"
                 android:radius="100dp"
-                android:text="@string/cerrar_sesion" />
+                android:text="@string/cerrar_sesion"
+                android:textColor="@color/colorWhite"/>
 
         </LinearLayout>
 

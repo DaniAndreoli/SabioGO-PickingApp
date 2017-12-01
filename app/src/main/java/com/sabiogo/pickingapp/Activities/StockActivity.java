@@ -1,4 +1,4 @@
-package com.sabiogo.pickingapp;
+package com.sabiogo.pickingapp.Activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -6,16 +6,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,6 +39,10 @@ import java.util.List;
 
 import android.os.Vibrator;
 import com.android.volley.DefaultRetryPolicy;
+import com.sabiogo.pickingapp.Adapters.StockAdapter;
+import com.sabiogo.pickingapp.Fragments.ConteoStockFragment;
+import com.sabiogo.pickingapp.Fragments.SerialesStockFragment;
+import com.sabiogo.pickingapp.R;
 
 import data_access.CodigoBarraDAO;
 import data_access.SerialDAO;
@@ -54,25 +62,32 @@ import helpers.WSHelper;
 
 public class StockActivity extends AppCompatActivity {
 
+    //Declaracion de Variables de Clase
     private static final String TAG = "StockActivity";
     public static final String PREFS_NAME = "mPrefs";
-    public static final String COMPROBANTE_STOCK = "1";
-    private final String ID_USUARIO = "id_usuario";
-    private final String DefaultID = "";
-    private final float UNO = 1;
+    public static final String COMPROBANTE_STOCK = "Stock";
+    private String id_usuario;
+    private List<ItemStock> listadoItemStock;
+    private List<CodigoBarra> listadoCodBarra;
+
+    private Boolean waitingFlag = false;
+
     public static final Integer SERIAL_AGREGADO = 1;
     public static final Integer SERIAL_REPETIDO = 2;
     public static final Integer SERIAL_INCORRECTO = 3;
-    public StockAdapter stockAdapter;
-    List<ItemStock> listadoItemStock;
+    private final String ID_USUARIO = "id_usuario";
+    private final String DefaultID = "";
+    private final float UNO = 1;
 
     //public MyItemStockRecyclerViewAdapter adapter;
-    private String id_usuario;
 
-    Button btn_salir, btn_grabar, btn_agregarProducto;
-    //FloatingActionButton btn_agregarManual;
-    ListView lv_articulos;
-    EditText txt_codigo;
+    //Declaracion de Controles Visuales
+    private Button btn_salir, btn_grabar, btn_agregarProducto;
+    private FloatingActionButton btn_agregarManual;
+    private ListView lv_articulos;
+    private EditText txt_codigo;
+    private StockAdapter stockAdapter;
+    private Vibrator vibrator;
 
     //SLIDER
     /**
@@ -90,17 +105,21 @@ public class StockActivity extends AppCompatActivity {
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
-    Vibrator vibrator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock);
 
+        //Seteamos el toolbar de la aplicacion
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        //Inicializamos objetos visuales
         btn_grabar = (Button)findViewById(R.id.btn_grabarStock);
         btn_salir  = (Button)findViewById(R.id.btn_salirStock);
-        btn_agregarProducto = (Button)findViewById(R.id.btn_agregarProductoStock);
-        //btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualStock);
+        //btn_agregarProducto = (Button)findViewById(R.id.btn_agregarProductoStock);
+        btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualStock);
         lv_articulos = (ListView)findViewById(R.id.lv_itemsStock);
         txt_codigo = (EditText)findViewById(R.id.txt_CodigoStock);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -116,20 +135,21 @@ public class StockActivity extends AppCompatActivity {
             }
         });
 
-        /*btn_agregarManual.setOnClickListener(new View.OnClickListener(){
+        btn_agregarManual.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 agregarManual();
             }
-        });*/
-
-        txt_codigo.setText("12345678911234567891123456");
-
-        btn_agregarProducto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                agregarArticulo(txt_codigo.getText().toString());
-            }
         });
+
+        //txt_codigo.setText("12345678911234567891123456");
+
+
+//        btn_agregarProducto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                agregarArticulo(txt_codigo.getText().toString());
+//            }
+//        });
 
         btn_grabar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,26 +167,24 @@ public class StockActivity extends AppCompatActivity {
         //Una vez seteados los valores de la interfaz, verificamos si existe un conteo de stock pendiente y de ser asi lo mostramos en pantalla
         listadoItemStock = StockDAO.getStockList(getApplicationContext());
 
-        stockAdapter = new StockAdapter(this, R.layout.listview_row,listadoItemStock);
-        lv_articulos.setAdapter(stockAdapter);
+//        stockAdapter = new StockAdapter(this, R.layout.listview_conteo_row,listadoItemStock);
+//        lv_articulos.setAdapter(stockAdapter);
 
-        //SLIDER
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+
+        mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+
+        txt_codigo.requestFocus();
+        listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
     }
 
     private void salir(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle("Salir")
                 .setMessage("¿Esta seguro que desea salir?")
-                .setNegativeButton("No", new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id){
-                        dialog.cancel();
-                    }
-                })
                 .setPositiveButton("Si", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         borrarRegistros();
@@ -174,15 +192,23 @@ public class StockActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), OpcionesActivity.class);
                         startActivityForResult(intent,0);
                     }
-                });
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        dialog.cancel();
+                    }
+                })
+        ;
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
 
     private void agregarManual(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         final EditText input = new EditText(getApplicationContext());
+        input.setTextColor(getResources().getColor(R.color.colorBlack));
+        input.setGravity(Gravity.CENTER);
         input.setSingleLine(true);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -223,13 +249,16 @@ public class StockActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                //ESTE METODO SE VA A IMPLEMENTAR UNA VEZ QUE TENGAN EL ANILLO, CUANDO CARGUEN AUTOMATICAMENTE LOS CODIGO DE BARRA. EL USUARIO NO VA A TENER ACCESO DE FORMA MANUAL A ESTE CAMPO, Y SI INGRESA DE FORMA MANUAL ES A TRAVES DE OTRO CAMPO
-
-                if(!txt_codigo.getText().toString().equals("")){
-                    //LLAMAR AL METODO QUE COMPRUEBA SI EL CODIGO INGRESADO ES VALIDO O NO (TRUE O FALSE)
-                    //IF(CODIGO ES VALIDO) ENTONCES TOAST = CODIGO AGREGADO ELSE CODIGOERRONEO
-
-                    //TXT.CODIGO.SETTEXT("");
+                if (waitingFlag == false) {
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            agregarArticulo(txt_codigo.getText().toString());
+                            waitingFlag = true;
+                            txt_codigo.setText("");
+                            txt_codigo.requestFocus();
+                        }
+                    }, 2000);
                 }
             }
         });
@@ -238,50 +267,52 @@ public class StockActivity extends AppCompatActivity {
     public Boolean agregarArticulo(String serial){
         boolean result;
         Float kilos;
-        List<CodigoBarra> listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
 
         if (!serial.equals("")){
             if(!serialEsRepetido(serial)){
-                CodigoBarra codigoBarra = verificarCodigoBarra(listadoCodBarra, serial);
+                CodigoBarra codigoBarra = verificarCodigoBarra(serial);
 
                 if (codigoBarra != null){
                     Integer codArt = codigoBarra.getCodigoArticulo(serial);
                     kilos = codigoBarra.getKilos(serial);
 
-                    //TODO Modificar tipo
+                    //Definimos el item que estamos leyendo, con sus datos
                     ItemStock item = new ItemStock(Integer.toString(codArt), UNO, UNO, kilos);
 
+                    /*Ejecutamos metodo DAO que verifica si el item creado existe
+                    para aumentar su cantidad, o crearlo de lo contrario, y luego devuelve el listado actualizado*/
                     listadoItemStock = StockDAO.leerItemStock(getApplicationContext(),item);
 
-                    Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_LONG).show();
-                    //adapter = new MyItemStockRecyclerViewAdapter(listadoItemStock, null);
+                    //Creamos el adapter
+                    /*stockAdapter = new StockAdapter(this, R.layout.listview_conteo_row,listadoItemStock);
+                    lv_articulos.setAdapter(stockAdapter);*/
+                    mPager.setAdapter(mPagerAdapter);
 
-                    stockAdapter = new StockAdapter(this, R.layout.listview_row,listadoItemStock);
-                    lv_articulos.setAdapter(stockAdapter);
+                    //Inserttamos el objeto Serial en la bd Sqlite
+                    Serial serialNuevo = new Serial(item.getCodigoArticulo(), serial, "Stock");
+                    SerialDAO.grabarSerial(getApplicationContext(), serialNuevo);
 
-                    //rv_articulos.setAdapter(adapter);
-                    Serial serialNuevo = new Serial(serial);
-                    SerialDAO.grabarSerial(getApplicationContext(), serialNuevo, item.getCodigoArticulo(), COMPROBANTE_STOCK);
                 }
                 vibrar(SERIAL_AGREGADO);
+                Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_LONG).show();
                 result = true;
             }else
             {
                 vibrar(SERIAL_REPETIDO);
-                Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_SHORT).show();
                 result = false;
             }
         }
         else{
             vibrar(SERIAL_INCORRECTO);
-            Toast.makeText(getBaseContext(), R.string.serial_invalido, Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), R.string.serial_invalido, Toast.LENGTH_SHORT).show();
             result =  false;
         }
-        txt_codigo.setText("98765432109876543210123456");
+        waitingFlag = false;
         return result;
     }
 
-    public CodigoBarra verificarCodigoBarra(List<CodigoBarra> listadoCodBarra, String serial){
+    public CodigoBarra verificarCodigoBarra(String serial){
         for (CodigoBarra codBar : listadoCodBarra) {
             if(serial.length() == codBar.getLargoTotal()){
                 return codBar;
@@ -294,7 +325,7 @@ public class StockActivity extends AppCompatActivity {
         Boolean esRepetido = false;
         List<Serial> listadoSeriales = SerialDAO.getSerialList(getApplicationContext(), COMPROBANTE_STOCK);
         for(Serial seriales : listadoSeriales){
-            if(seriales.getNumero().equals(serial)){
+            if(seriales.getSerial().equals(serial)){
                 esRepetido = true;
             }
         }
@@ -346,7 +377,6 @@ public class StockActivity extends AppCompatActivity {
             HashMap<String, String> headers = new HashMap<String, String>();
             //headers.put("Content-Type","application/json");
             GsonRequest request = new GsonRequest(url,comprobante,Comprobante.class,headers, new Response.Listener<String>() {
-
                 @Override
                 public void onResponse(String response) {
                     Log.d(TAG, response);
@@ -356,7 +386,6 @@ public class StockActivity extends AppCompatActivity {
                     startActivityForResult(intent,0);
                 }
             }, new Response.ErrorListener() {
-
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(TAG, "Error: " + error.getMessage());
@@ -395,19 +424,26 @@ public class StockActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
      */
-    //NEGRADA - Llevar el comportamiento a una nueva clase
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
+    private class StockPagerAdapter extends FragmentStatePagerAdapter {
+        public StockPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return new ConteoStockSlideFragment();
+            switch(position) {
+
+                case 0: return ConteoStockFragment.newInstance();
+                case 1: return SerialesStockFragment.newInstance();
+            }
+
+
+            return new ConteoStockFragment();
         }
 
         @Override
@@ -415,7 +451,14 @@ public class StockActivity extends AppCompatActivity {
             return NUM_PAGES;
         }
     }
+<<<<<<< HEAD:app/src/main/java/com/sabiogo/pickingapp/StockActivity.java
 
+    @Override
+    public void onBackPressed() {
+    }
+
+=======
+>>>>>>> 313fc4ecd5d7462665eba8d41ef639e0b40bf1c4:app/src/main/java/com/sabiogo/pickingapp/Activities/StockActivity.java
 }
 
 

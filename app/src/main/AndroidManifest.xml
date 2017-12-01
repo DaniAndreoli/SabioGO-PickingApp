@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +16,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,19 +26,24 @@
         </activity>
 
         <activity
-            android:name=".ConfigActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".Activities.ConfigActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:label="Configuraciones">
         </activity>
 
         <activity
-            android:name=".OpcionesActivity"
+            android:name=".Activities.OpcionesActivity"
             android:label="Menu de Opciones">
         </activity>
 
         <activity
-            android:name=".StockActivity"
+            android:name=".Activities.StockActivity"
             android:label="Movimiento de Stock">
+        </activity>
+
+        <activity
+            android:name=".Activities.EntradaSalidaActivity"
+            android:label="Entrada - Salida">
         </activity>
 
         <meta-data

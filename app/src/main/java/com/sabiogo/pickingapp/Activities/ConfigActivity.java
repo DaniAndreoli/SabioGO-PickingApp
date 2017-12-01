@@ -1,4 +1,4 @@
-package com.sabiogo.pickingapp;
+package com.sabiogo.pickingapp.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.sabiogo.pickingapp.R;
 
 import data_access.UserConfigDAO;
 import entities.UserConfig;
