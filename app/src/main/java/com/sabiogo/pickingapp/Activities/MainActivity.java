@@ -293,7 +293,6 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-
     private void savePreferences(){
         Log.d(TAG,"savePreferences: se almacena el id del usuario como 'variable de sesion'.");
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -415,6 +414,7 @@ public class MainActivity extends AppCompatActivity{
                     102);
         }
     }
+
     private final LocationListener locationListenerGPS = new LocationListener() {
         public void onLocationChanged(Location location) {
             latitud = location.getLongitude();

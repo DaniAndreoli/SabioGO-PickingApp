@@ -94,37 +94,6 @@ public abstract class ComprobanteDAO extends DAO {
         }
     }
 
-    //Metodo que retorna todos los comprobantes (Sin listado de items, es decir sin detalle).
-    //Si se necesita el detalle de un comprobante llamar al metodo getComprobanteDetalle() enviando un comprobante en particular por parametro
-    /*public static List<Comprobante> getComprobantes(Context context) {
-        List<Comprobante> lsComprobantes = new ArrayList<Comprobante>();
-
-        try {
-            //Initialize DAO for using Database (connection opened) and AccessHelper objects
-            initializeDAO(context);
-
-            //Obtenemos el listado de Comprobantes
-            Cursor cursor = db.rawQuery("SELECT * FROM Comprobante", null);
-            lsComprobantes = ComprobanteMapper.mapList(cursor);
-
-            //Una vez obtenidos los comprobantes, los llenamos con sus detalles
-            for (int i=0; i<lsComprobantes.size(); i++) {
-                lsComprobantes.get(i).setItems();
-
-            }
-            //comprobante.setItems(getComprobanteDetalle(context, lsComprobantes));
-
-            //Closes the connection and makes a backup of db file
-            db.close();
-
-        }catch (Exception e) {
-            e.getMessage();
-        }
-        finally {
-            return comprobante;
-        }
-    }*/
-
     public static Comprobante getComprobanteUsuario(Context context, String idUsuario) {
         Comprobante comprobante = null;
 
@@ -147,6 +116,32 @@ public abstract class ComprobanteDAO extends DAO {
 
         } finally {
             return comprobante;
+        }
+    }
+
+    public static void borrarRegistros(Context context, Comprobante comprobante) {
+
+        try {
+            //Initialize DAO for using Database (connection opened) and AccessHelper objects
+            initializeDAO(context);
+
+            db.beginTransaction();
+
+            //Eliminamos todos los seriales del comprobante
+            db.delete("Seriales", "tipoComprobante = ?", new String[] { "Entrada/Salida" });
+
+            //Eliminamos todos los items del comprobante
+            db.delete("Item", "id_comprobante = ?", new String[] { Integer.toString(comprobante.getId_comprobante()) });
+
+            //Eliminamos el comprobante
+            db.delete("Comprobante", "id_comprobante = ?", new String[] { Integer.toString(comprobante.getId_comprobante()) });
+
+            db.setTransactionSuccessful();
+            db.close();
+
+        } catch (Error e) {
+            throw e;
+
         }
     }
 
@@ -185,5 +180,7 @@ public abstract class ComprobanteDAO extends DAO {
             return comprobante.getItems();
         }
     }
+
+
 
 }

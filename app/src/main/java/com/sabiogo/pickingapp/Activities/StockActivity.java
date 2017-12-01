@@ -1,6 +1,7 @@
 package com.sabiogo.pickingapp.Activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -77,6 +78,7 @@ public class StockActivity extends AppCompatActivity {
     public static final Integer SERIAL_REPETIDO = 2;
     public static final Integer SERIAL_INCORRECTO = 3;
     public static final Integer SERIAL_INEXISTENTE = 4;
+    public ProgressDialog pDialog;
     private final String ID_USUARIO = "id_usuario";
     private final String DefaultID = "";
     private final float UNO = 1;
@@ -189,7 +191,7 @@ public class StockActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle("Salir")
-                .setMessage("¿Esta seguro que desea salir?")
+                .setMessage("¿Está seguro que desea salir?")
                 .setPositiveButton("Si", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         borrarRegistros();
@@ -222,7 +224,7 @@ public class StockActivity extends AppCompatActivity {
         input.setLayoutParams(lp);
 
         alertDialogBuilder
-                .setTitle("Ingrese el codigo de barra del articulo")
+                .setTitle("Ingrese el código de barras del artículo")
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         dialog.cancel();
@@ -255,6 +257,8 @@ public class StockActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (waitingFlag == false) {
+                    pDialog = ProgressDialog.show(getApplicationContext(),"Leyendo...", "Aguarde un instante por favor.");
+
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
@@ -262,6 +266,8 @@ public class StockActivity extends AppCompatActivity {
                             waitingFlag = true;
                             txt_codigo.setText("");
                             txt_codigo.requestFocus();
+
+                            pDialog.dismiss();
                         }
                     }, 2000);
                 }
