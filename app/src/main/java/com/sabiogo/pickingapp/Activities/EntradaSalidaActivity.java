@@ -95,7 +95,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         } else {
             /*Por tratarse de una peticion asincrona, no sabremos si el comprobante fue seteado en el instante, por lo que seteamos el ListView
             * tanto en la peticion al WebService (dentro del metodo setComprobante), como en el caso en el que el Comprobante se encuentre en BD local*/
-            entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_conteo_row,comprobante.getItems());
+            entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row,comprobante.getItems());
             lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
         }
 
@@ -129,7 +129,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                                         comprobante = ComprobanteMapper.mapObject(response);
                                         ComprobanteDAO.insertComprobante(getApplicationContext(), comprobante, id_usuario);
 
-                                        entradaSalidaAdapter = new EntradaSalidaAdapter(activityThis, R.layout.listview_conteo_row,comprobante.getItems());
+                                        entradaSalidaAdapter = new EntradaSalidaAdapter(activityThis, R.layout.listview_row,comprobante.getItems());
                                         lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
 
                                     } else {

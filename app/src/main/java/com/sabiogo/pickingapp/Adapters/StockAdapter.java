@@ -19,7 +19,6 @@ import entities.ItemStock;
 
 public class StockAdapter extends ArrayAdapter<ItemStock>{
 
-
     private Activity activity;
     private static LayoutInflater inflater = null;
     private List<ItemStock> listaItemStocks;
@@ -58,7 +57,7 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
         final ViewHolder holder;
         try {
             if (convertView == null) {
-                vi = inflater.inflate(R.layout.listview_conteo_row, null);
+                vi = inflater.inflate(R.layout.listview_row, null);
                 holder = new ViewHolder();
 
                 holder.codigoArticulo = (TextView) vi.findViewById(R.id.tv_descripcionItem);
@@ -70,6 +69,9 @@ public class StockAdapter extends ArrayAdapter<ItemStock>{
             }
             holder.codigoArticulo.setText(listaItemStocks.get(position).getCodigoArticulo());
             holder.cantidad.setText(Float.toString(listaItemStocks.get(position).getCantidad()));
+
+            notifyDataSetChanged();
+
         } catch (Exception e) {
             throw e;
         }

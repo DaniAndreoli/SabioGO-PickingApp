@@ -28,7 +28,8 @@
                 android:id="@+id/addItemLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginBottom="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -54,7 +55,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/footer"
-                android:layout_below="@+id/addItemLayout"/>
+                android:layout_below="@+id/addItemLayout"
+                android:layout_marginStart="10dp"/>
 
             <!--Footer-->
             <RelativeLayout

@@ -19,11 +19,13 @@
         android:layout_weight="5"
         android:layout_gravity="center"/>
 
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="@drawable/ic_delete_black_24dp"/>-->
+    <Button
+        android:id="@+id/btn_eliminarSerial"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_weight="1"
+        android:background="@drawable/ic_delete_black_24dp"
+        android:visibility="invisible"/>
 
 
 </LinearLayout>

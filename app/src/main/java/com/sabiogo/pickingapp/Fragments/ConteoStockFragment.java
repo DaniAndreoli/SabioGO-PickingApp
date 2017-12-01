@@ -30,7 +30,7 @@ public class ConteoStockFragment extends Fragment {
         ListView lv_articulos = (ListView)fragmentLayout.findViewById(R.id.lv_itemsStock);
 
         List<ItemStock> listadoItemsStock = StockDAO.getStockList(getContext());
-        stockAdapter = new StockAdapter(getActivity(), R.layout.listview_conteo_row, listadoItemsStock);
+        stockAdapter = new StockAdapter(getActivity(), R.layout.listview_row, listadoItemsStock);
         lv_articulos.setAdapter(stockAdapter);
 
         return fragmentLayout;

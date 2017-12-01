@@ -9,7 +9,6 @@ import android.widget.ListView;
 
 import com.sabiogo.pickingapp.Adapters.SerialesAdapter;
 import com.sabiogo.pickingapp.R;
-import com.sabiogo.pickingapp.Adapters.StockAdapter;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class SerialesStockFragment extends Fragment {
         ListView lv_seriales = (ListView)fragmentLayout.findViewById(R.id.lv_serialesItemsStock);
 
         List<Serial> listadoSerialesItemsStock = SerialDAO.getSerialList(getContext(), "Stock");
-        serialesAdapter = new SerialesAdapter(getActivity(), R.layout.listview_conteo_row, listadoSerialesItemsStock);
+        serialesAdapter = new SerialesAdapter(getActivity(), R.layout.listview_row, listadoSerialesItemsStock);
         lv_seriales.setAdapter(serialesAdapter);
 
         return fragmentLayout;

@@ -58,7 +58,7 @@ public class EntradaSalidaAdapter extends ArrayAdapter<Item>{
         final ViewHolder holder;
         try {
             if (convertView == null) {
-                vi = inflater.inflate(R.layout.listview_conteo_row, null);
+                vi = inflater.inflate(R.layout.listview_row, null);
                 holder = new ViewHolder();
 
                 holder.descripcionArticulo = (TextView) vi.findViewById(R.id.tv_descripcionItem);

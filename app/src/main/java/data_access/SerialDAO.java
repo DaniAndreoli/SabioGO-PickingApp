@@ -6,8 +6,10 @@ import android.database.Cursor;
 
 import java.util.List;
 
+import entities.ItemStock;
 import entities.Serial;
 import object_mapping.SerialMapper;
+import object_mapping.StockMapper;
 
 /**
  * Created by Federico 01/11/2017.
@@ -84,4 +86,34 @@ public class SerialDAO extends DAO {
         }
     }
 
+    public static void borrarSerial(Context context, String serial, String tipoComprobante, String codArticulo) {
+        try{
+            initializeDAO(context);
+
+            //Eliminamos el serial correspondiente
+            db.delete("Seriales","serial = ? and tipoComprobante = ?", new String[] { serial, tipoComprobante });
+
+            //Verificamos la cantidad de articulos pickeados para el codigo de articulo al cual pertenece el serial
+            Cursor cursorItemStock = db.rawQuery("SELECT * FROM Stock WHERE codigoArticulo = ?", new String[] { codArticulo });
+            ItemStock itemStock = StockMapper.mapObject(cursorItemStock);
+
+            //Si la cantidad de items que se correspondan con este serial, es mayor que 1, descontamos su cantidad en 1
+            if (itemStock.getCantidad() > 1) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("cantidad", itemStock.getCantidad() -1);
+
+                db.update("Stock",contentValues,"codigoArticulo = ?", new String[] { codArticulo });
+//                db.rawQuery("UPDATE Stock SET cantidad = ? WHERE codigoArticulo = ?", new String[] { Float.toString(itemStock.getCantidad() - 1), itemStock.getCodigoArticulo() });
+
+            } else if (itemStock.getCantidad() == 1) {
+                //Si la cantidad de items que es 1, eliminamos el registro
+                db.delete("Stock", "codigoArticulo = ?", new String[] { codArticulo });
+
+            }
+
+            close();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
 }

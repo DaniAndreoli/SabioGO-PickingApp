@@ -118,7 +118,6 @@ public class StockActivity extends AppCompatActivity {
         //Inicializamos objetos visuales
         btn_grabar = (Button)findViewById(R.id.btn_grabarStock);
         btn_salir  = (Button)findViewById(R.id.btn_salirStock);
-        //btn_agregarProducto = (Button)findViewById(R.id.btn_agregarProductoStock);
         btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualStock);
         lv_articulos = (ListView)findViewById(R.id.lv_itemsStock);
         txt_codigo = (EditText)findViewById(R.id.txt_CodigoStock);
@@ -141,16 +140,6 @@ public class StockActivity extends AppCompatActivity {
             }
         });
 
-        //txt_codigo.setText("12345678911234567891123456");
-
-
-//        btn_agregarProducto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                agregarArticulo(txt_codigo.getText().toString());
-//            }
-//        });
-
         btn_grabar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,14 +156,28 @@ public class StockActivity extends AppCompatActivity {
         //Una vez seteados los valores de la interfaz, verificamos si existe un conteo de stock pendiente y de ser asi lo mostramos en pantalla
         listadoItemStock = StockDAO.getStockList(getApplicationContext());
 
-//        stockAdapter = new StockAdapter(this, R.layout.listview_conteo_row,listadoItemStock);
-//        lv_articulos.setAdapter(stockAdapter);
-
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
-
         mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+
+        /*mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
+                mPager.setAdapter(mPagerAdapter);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });*/
 
         txt_codigo.requestFocus();
         listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
@@ -283,27 +286,25 @@ public class StockActivity extends AppCompatActivity {
                     para aumentar su cantidad, o crearlo de lo contrario, y luego devuelve el listado actualizado*/
                     listadoItemStock = StockDAO.leerItemStock(getApplicationContext(),item);
 
-                    //Creamos el adapter
-                    /*stockAdapter = new StockAdapter(this, R.layout.listview_conteo_row,listadoItemStock);
-                    lv_articulos.setAdapter(stockAdapter);*/
-                    mPager.setAdapter(mPagerAdapter);
-
                     //Inserttamos el objeto Serial en la bd Sqlite
                     Serial serialNuevo = new Serial(item.getCodigoArticulo(), serial, "Stock");
                     SerialDAO.grabarSerial(getApplicationContext(), serialNuevo);
 
+                    //Creamos el adapter
+                    mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
+                    mPager.setAdapter(mPagerAdapter);
                 }
                 vibrar(SERIAL_AGREGADO);
                 Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_LONG).show();
                 result = true;
-            }else
-            {
+
+            }else {
                 vibrar(SERIAL_REPETIDO);
                 Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_SHORT).show();
                 result = false;
             }
         }
-        else{
+        else {
             vibrar(SERIAL_INCORRECTO);
             Toast.makeText(getBaseContext(), R.string.serial_invalido, Toast.LENGTH_SHORT).show();
             result =  false;
@@ -424,6 +425,10 @@ public class StockActivity extends AppCompatActivity {
         }
     }
 
+    public void actualizarPager() {
+        mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+    }
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
@@ -441,7 +446,6 @@ public class StockActivity extends AppCompatActivity {
                 case 0: return ConteoStockFragment.newInstance();
                 case 1: return SerialesStockFragment.newInstance();
             }
-
 
             return new ConteoStockFragment();
         }
