@@ -1,4 +1,4 @@
-package com.sabiogo.pickingapp;
+package com.sabiogo.pickingapp.Activities;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;

@@ -1,4 +1,4 @@
-package com.sabiogo.pickingapp;
+package com.sabiogo.pickingapp.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.sabiogo.pickingapp.R;
 
 import org.json.JSONArray;
 

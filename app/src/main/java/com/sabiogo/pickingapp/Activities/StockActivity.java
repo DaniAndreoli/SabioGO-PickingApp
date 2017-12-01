@@ -1,16 +1,14 @@
-package com.sabiogo.pickingapp;
+package com.sabiogo.pickingapp.Activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
@@ -41,8 +39,10 @@ import java.util.List;
 
 import android.os.Vibrator;
 import com.android.volley.DefaultRetryPolicy;
-import com.sabiogo.pickingapp.Fragments.ConteoStockSlideFragment;
-import com.sabiogo.pickingapp.Fragments.SerialesStockSlideFragment;
+import com.sabiogo.pickingapp.Adapters.StockAdapter;
+import com.sabiogo.pickingapp.Fragments.ConteoStockFragment;
+import com.sabiogo.pickingapp.Fragments.SerialesStockFragment;
+import com.sabiogo.pickingapp.R;
 
 import data_access.CodigoBarraDAO;
 import data_access.SerialDAO;
@@ -167,17 +167,14 @@ public class StockActivity extends AppCompatActivity {
         //Una vez seteados los valores de la interfaz, verificamos si existe un conteo de stock pendiente y de ser asi lo mostramos en pantalla
         listadoItemStock = StockDAO.getStockList(getApplicationContext());
 
-        stockAdapter = new StockAdapter(this, R.layout.listview_row,listadoItemStock);
-        lv_articulos.setAdapter(stockAdapter);
+//        stockAdapter = new StockAdapter(this, R.layout.listview_conteo_row,listadoItemStock);
+//        lv_articulos.setAdapter(stockAdapter);
 
-        //SLIDER
         // Instantiate a ViewPager and a PagerAdapter.
-        /*mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ConteoSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        mPager = (ViewPager) findViewById(R.id.pager);
 
-        mPagerAdapter = new SerialesSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);*/
+        mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
 
         txt_codigo.requestFocus();
         listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
@@ -287,8 +284,9 @@ public class StockActivity extends AppCompatActivity {
                     listadoItemStock = StockDAO.leerItemStock(getApplicationContext(),item);
 
                     //Creamos el adapter
-                    stockAdapter = new StockAdapter(this, R.layout.listview_row,listadoItemStock);
-                    lv_articulos.setAdapter(stockAdapter);
+                    /*stockAdapter = new StockAdapter(this, R.layout.listview_conteo_row,listadoItemStock);
+                    lv_articulos.setAdapter(stockAdapter);*/
+                    mPager.setAdapter(mPagerAdapter);
 
                     //Inserttamos el objeto Serial en la bd Sqlite
                     Serial serialNuevo = new Serial(item.getCodigoArticulo(), serial, "Stock");
@@ -431,14 +429,21 @@ public class StockActivity extends AppCompatActivity {
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
      */
-    private class ConteoSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ConteoSlidePagerAdapter(FragmentManager fm) {
+    private class StockPagerAdapter extends FragmentStatePagerAdapter {
+        public StockPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return new ConteoStockSlideFragment();
+            switch(position) {
+
+                case 0: return ConteoStockFragment.newInstance();
+                case 1: return SerialesStockFragment.newInstance();
+            }
+
+
+            return new ConteoStockFragment();
         }
 
         @Override
@@ -446,27 +451,6 @@ public class StockActivity extends AppCompatActivity {
             return NUM_PAGES;
         }
     }
-
-    /***
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
-     * sequence.
-     */
-    private class SerialesSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public SerialesSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return new SerialesStockSlideFragment();
-        }
-
-        @Override
-        public int getCount() {
-            return NUM_PAGES;
-        }
-    }
-
 }
 
 

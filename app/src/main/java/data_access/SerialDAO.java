@@ -58,7 +58,6 @@ public class SerialDAO extends DAO {
         }
     }
 
-
     public static List<Serial> getSerialesArticulo(Context context, String nroArt, String tipoComprobante){
         try{
             initializeDAO(context);
@@ -84,4 +83,5 @@ public class SerialDAO extends DAO {
             throw ex;
         }
     }
+
 }

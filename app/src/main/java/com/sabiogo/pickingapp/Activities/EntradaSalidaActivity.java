@@ -1,4 +1,4 @@
-package com.sabiogo.pickingapp;
+package com.sabiogo.pickingapp.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,14 +19,12 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.sabiogo.pickingapp.Adapters.EntradaSalidaAdapter;
+import com.sabiogo.pickingapp.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +35,7 @@ import data_access.SerialDAO;
 import data_access.UserConfigDAO;
 import entities.CodigoBarra;
 import entities.Comprobante;
-import entities.ItemStock;
 import helpers.*;
-import object_mapping.CodigoBarraMapper;
 import object_mapping.ComprobanteMapper;
 
 /**
@@ -100,7 +95,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         } else {
             /*Por tratarse de una peticion asincrona, no sabremos si el comprobante fue seteado en el instante, por lo que seteamos el ListView
             * tanto en la peticion al WebService (dentro del metodo setComprobante), como en el caso en el que el Comprobante se encuentre en BD local*/
-            entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row,comprobante.getItems());
+            entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_conteo_row,comprobante.getItems());
             lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
         }
 
@@ -134,7 +129,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                                         comprobante = ComprobanteMapper.mapObject(response);
                                         ComprobanteDAO.insertComprobante(getApplicationContext(), comprobante, id_usuario);
 
-                                        entradaSalidaAdapter = new EntradaSalidaAdapter(activityThis, R.layout.listview_row,comprobante.getItems());
+                                        entradaSalidaAdapter = new EntradaSalidaAdapter(activityThis, R.layout.listview_conteo_row,comprobante.getItems());
                                         lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
 
                                     } else {

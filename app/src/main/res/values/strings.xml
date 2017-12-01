@@ -12,7 +12,7 @@
     <string name="stock">Conteo de Stock</string>
     <string name="entradas_salidas">Entrada/Salida</string>
     <string name="grabar">Grabar</string>
-    <string name="salir">Salir</string>
+    <string name="salir">Cancelar</string>
     <string name="ingrese_un_codigo_de_barra">Ingrese un codigo de barra</string>
     <string name="movimiento_stock">Movimiento de Stock</string>
     <string name="mov_stock">Movimiento de Stock</string>

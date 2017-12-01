@@ -47,7 +47,8 @@
                     android:text="Descripcion Comprobante"
                     android:layout_marginBottom="10dp"
                     android:textSize="18dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:gravity="center"/>
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -59,13 +60,15 @@
                         android:layout_height="wrap_content"
                         android:text="Articulo"
                         android:layout_weight="1"
-                        android:layout_marginStart="5dp"/>
+                        android:layout_marginStart="5dp"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Saldo"
-                        android:layout_weight="5" />
+                        android:layout_weight="5"
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 
@@ -91,7 +94,8 @@
                     android:id="@+id/btn_grabarComprobante"
                     android:layout_width="188dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/grabar" />
+                    android:text="@string/grabar"
+                    android:backgroundTint="@color/colorSecondary"/>
 
                 <Button
                     android:id="@+id/btn_salir"

@@ -1,4 +1,4 @@
-package com.sabiogo.pickingapp;
+package com.sabiogo.pickingapp.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,27 +8,27 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.sabiogo.pickingapp.R;
 
-import entities.Item;
+import java.util.List;
 import entities.ItemStock;
+import entities.Serial;
 
 /**
  * Created by Federico on 28/10/2017.
  */
 
-public class EntradaSalidaAdapter extends ArrayAdapter<Item>{
+public class SerialesAdapter extends ArrayAdapter<Serial>{
 
     private Activity activity;
     private static LayoutInflater inflater = null;
-    private List<Item> listaItemsComprobante;
+    private List<Serial> listaSeriales;
 
-    public EntradaSalidaAdapter(Activity activity, int textViewResourceId,List<Item> lsItems) {
-        super(activity, textViewResourceId, lsItems);
+    public SerialesAdapter(Activity activity, int textViewResourceId,List<Serial> lsSeriales) {
+        super(activity, textViewResourceId, lsSeriales);
         try {
             this.activity = activity;
-            this.listaItemsComprobante = lsItems;
+            this.listaSeriales = lsSeriales;
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         } catch (Exception e) {
@@ -37,10 +37,10 @@ public class EntradaSalidaAdapter extends ArrayAdapter<Item>{
     }
 
     public int getCount() {
-        return listaItemsComprobante.size();
+        return listaSeriales.size();
     }
 
-    public Item getItem(Item position) {
+    public ItemStock getItem(ItemStock position) {
         return position;
     }
 
@@ -49,8 +49,7 @@ public class EntradaSalidaAdapter extends ArrayAdapter<Item>{
     }
 
     public static class ViewHolder {
-        public TextView descripcionArticulo;
-        public TextView cantidad;
+        public TextView serial;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -58,18 +57,16 @@ public class EntradaSalidaAdapter extends ArrayAdapter<Item>{
         final ViewHolder holder;
         try {
             if (convertView == null) {
-                vi = inflater.inflate(R.layout.listview_row, null);
+                vi = inflater.inflate(R.layout.listview_conteo_row, null);
                 holder = new ViewHolder();
 
-                holder.descripcionArticulo = (TextView) vi.findViewById(R.id.tv_descripcionItem);
-                holder.cantidad = (TextView) vi.findViewById(R.id.tv_cantidadItem);
+                holder.serial = (TextView) vi.findViewById(R.id.tv_descripcionItem);
 
                 vi.setTag(holder);
             } else {
                 holder = (ViewHolder) vi.getTag();
             }
-            holder.descripcionArticulo.setText(listaItemsComprobante.get(position).getDescripcion());
-            holder.cantidad.setText(Double.toString(listaItemsComprobante.get(position).getSaldo()));
+            holder.serial.setText(listaSeriales.get(position).getSerial());
         } catch (Exception e) {
             throw e;
         }

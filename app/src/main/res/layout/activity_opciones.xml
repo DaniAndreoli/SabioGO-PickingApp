@@ -36,7 +36,8 @@
                 android:elevation="4dp"
                 android:radius="10dip"
                 android:text="@string/stock"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"/>
 
             <Button
                 android:id="@+id/btn_entradaSalida"
@@ -47,7 +48,8 @@
                 android:background="#01579b"
                 android:elevation="4dp"
                 android:radius="10dp"
-                android:text="@string/entradas_salidas" />
+                android:text="@string/entradas_salidas"
+                android:textColor="@color/colorWhite"/>
 
             <Button
                 android:id="@+id/btn_sync"
@@ -57,7 +59,8 @@
                 android:layout_weight="1"
                 android:background="#004d40"
                 android:elevation="4dp"
-                android:text="@string/sync" />
+                android:text="@string/sync"
+                android:textColor="@color/colorWhite"/>
 
             <Button
                 android:id="@+id/btn_logout"
@@ -68,7 +71,8 @@
                 android:background="#a30000"
                 android:elevation="4dp"
                 android:radius="100dp"
-                android:text="@string/cerrar_sesion" />
+                android:text="@string/cerrar_sesion"
+                android:textColor="@color/colorWhite"/>
 
         </LinearLayout>
 
