@@ -307,7 +307,7 @@ public class OpcionesActivity extends AppCompatActivity {
 
         obtenerUbicacion();
         if (latitud != 0 && longitud != 0){
-            datos.setUbicacion(Double.toString(latitud)+ ", " + Double.toString(longitud));
+            datos.setUbicacion("Lat " + Double.toString(latitud)+ ", " + "Long " + Double.toString(longitud));
             mLocationManager.removeUpdates(locationListenerGPS);
         }
         return datos;
