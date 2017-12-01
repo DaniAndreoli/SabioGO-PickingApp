@@ -451,10 +451,6 @@ public class StockActivity extends AppCompatActivity {
             return NUM_PAGES;
         }
     }
-
-    @Override
-    public void onBackPressed() {
-    }
 }
 
 
