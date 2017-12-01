@@ -32,8 +32,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+<<<<<<< HEAD:app/src/main/java/com/sabiogo/pickingapp/Activities/OpcionesActivity.java
 <<<<<<< HEAD:app/src/main/java/com/sabiogo/pickingapp/OpcionesActivity.java
 import com.jaredrummler.android.device.DeviceName;
+=======
+import com.sabiogo.pickingapp.R;
+>>>>>>> 313fc4ecd5d7462665eba8d41ef639e0b40bf1c4:app/src/main/java/com/sabiogo/pickingapp/Activities/OpcionesActivity.java
 =======
 import com.sabiogo.pickingapp.R;
 >>>>>>> 313fc4ecd5d7462665eba8d41ef639e0b40bf1c4:app/src/main/java/com/sabiogo/pickingapp/Activities/OpcionesActivity.java

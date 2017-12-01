@@ -14,14 +14,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 * */
 public class dbCreationHelper extends SQLiteOpenHelper {
 
-<<<<<<< HEAD
+
     private static final int DATABASE_VERSION = 8;//DATABASE_VERSION
     private static final String DATABASE_NAME = "PICKING_APP.db";
-=======
     private static final int DATABASE_VERSION = 1;//DATABASE_VERSION
     //private static final String DATABASE_NAME = "PICKING_APP.db";
     private static final String DATABASE_NAME = "SABIO_PICKING_APP.db";
->>>>>>> 313fc4ecd5d7462665eba8d41ef639e0b40bf1c4
+    private static final int DATABASE_VERSION = 1;//DATABASE_VERSION
+    //private static final String DATABASE_NAME = "PICKING_APP.db";
+    private static final String DATABASE_NAME = "SABIO_PICKING_APP.db";
     private static final String SQL_CREATE_CODBARRA = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));";
     private static final String SQL_CREATE_COMPROBANTE =  "CREATE TABLE IF NOT EXISTS Comprobante (id_comprobante INTEGER PRIMARY KEY AUTOINCREMENT, numeroPick INTEGER, orden INTEGER, observaciones TEXT, puedeUsuario INTEGER, idUsuario TEXT);";
     private static final String SQL_CREATE_ITEM = "CREATE TABLE IF NOT EXISTS Item (id_item INTEGER PRIMARY KEY AUTOINCREMENT, codigoArticulo TEXT, descripcion TEXT, unidad INTEGER, cantidad REAL, kilos REAL, puedePickear REAL, saldo REAL, id_comprobante INTEGER, FOREIGN KEY(id_comprobante) REFERENCES Comprobante(id_comprobante));";
@@ -32,13 +33,12 @@ public class dbCreationHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ARTICULOS = "CREATE TABLE IF NOT EXISTS Articulos(codigo TEXT, descripcion TEXT);";
     private static final String SQL_CREATE_LOGS = "CREATE TABLE IF NOT EXISTS Logs(id_usuario TEXT, actividad TEXT, fecha TEXT);"; //actividad: login o logout
 
-
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS Seriales;";
 
     public dbCreationHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-<<<<<<< HEAD
-=======
+
+
 //        getWritableDatabase().execSQL(SQL_CREATE_CODBARRA);
 //        getWritableDatabase().execSQL(SQL_CREATE_COMPROBANTE);
 //        getWritableDatabase().execSQL(SQL_CREATE_ITEM);
@@ -47,7 +47,8 @@ public class dbCreationHelper extends SQLiteOpenHelper {
 //        getWritableDatabase().execSQL(SQL_CREATE_STOCK);
 //        getWritableDatabase().execSQL(SQL_CREATE_SERIALES);
 //        getWritableDatabase().execSQL(SQL_CREATE_ARTICULOS);
->>>>>>> 313fc4ecd5d7462665eba8d41ef639e0b40bf1c4
+
+
     }
 
     public void onCreate(SQLiteDatabase db) {
