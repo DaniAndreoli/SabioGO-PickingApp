@@ -3,10 +3,6 @@ package helpers;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQuery;
-import android.os.Environment;
-
-import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 /**
  * Created by Dani_ on 28/10/2017.
@@ -18,8 +14,8 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 * */
 public class dbCreationHelper extends SQLiteOpenHelper {
 
+
     private static final int DATABASE_VERSION = 1;//DATABASE_VERSION
-    //private static final String DATABASE_NAME = "PICKING_APP.db";
     private static final String DATABASE_NAME = "SABIO_PICKING_APP.db";
     private static final String SQL_CREATE_CODBARRA = "CREATE TABLE IF NOT EXISTS CodigoBarra (numero INTEGER, nombre TEXT, descripcion TEXT, largoTotal INTEGER, ubicacionCodProd INTEGER, largoCodProd INTEGER, ubicacionCantidad INTEGER, largoCantidad INTEGER, ubicacionPeso INTEGER, largoPeso INTEGER, ubicacionPrecio INTEGER, largoPrecio INTEGER, ubicacionFechaElab INTEGER, largoFechaElab INTEGER, ubicacionFechaVenc INTEGER, largoFechaVenc INTEGER, ubicacionDigitoVer INTEGER, largoDigitoVer INTEGER, ubicacionIdUsuario INTEGER, largoIdUsuario INTEGER, cantidadDecPeso INTEGER, PRIMARY KEY(numero));";
     private static final String SQL_CREATE_COMPROBANTE =  "CREATE TABLE IF NOT EXISTS Comprobante (id_comprobante INTEGER PRIMARY KEY AUTOINCREMENT, numeroPick INTEGER, orden INTEGER, observaciones TEXT, puedeUsuario INTEGER, idUsuario TEXT);";
@@ -29,19 +25,12 @@ public class dbCreationHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_STOCK = "CREATE TABLE IF NOT EXISTS Stock(codigoArticulo TEXT, cantidad REAL, unidad INTEGER, kilos REAL, PRIMARY KEY(codigoArticulo));";
     private static final String SQL_CREATE_SERIALES ="CREATE TABLE IF NOT EXISTS Seriales(codigoArticulo TEXT, serial TEXT, tipoComprobante TEXT, id_item INTEGER, FOREIGN KEY(id_item) REFERENCES Item(id_item));";
     private static final String SQL_CREATE_ARTICULOS = "CREATE TABLE IF NOT EXISTS Articulos(codigo TEXT, descripcion TEXT);";
+    private static final String SQL_CREATE_LOGS = "CREATE TABLE IF NOT EXISTS Logs(id_usuario TEXT, actividad TEXT, fecha TEXT);"; //actividad: login o logout
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS Seriales;";
 
     public dbCreationHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-//        getWritableDatabase().execSQL(SQL_CREATE_CODBARRA);
-//        getWritableDatabase().execSQL(SQL_CREATE_COMPROBANTE);
-//        getWritableDatabase().execSQL(SQL_CREATE_ITEM);
-//        getWritableDatabase().execSQL(SQL_CREATE_USERCONFIG);
-//        getWritableDatabase().execSQL(SQL_CREATE_USUARIO);
-//        getWritableDatabase().execSQL(SQL_CREATE_STOCK);
-//        getWritableDatabase().execSQL(SQL_CREATE_SERIALES);
-//        getWritableDatabase().execSQL(SQL_CREATE_ARTICULOS);
     }
 
     public void onCreate(SQLiteDatabase db) {
@@ -53,6 +42,8 @@ public class dbCreationHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_STOCK);
         db.execSQL(SQL_CREATE_SERIALES);
         db.execSQL(SQL_CREATE_ARTICULOS);
+        db.execSQL(SQL_CREATE_LOGS);
+
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -71,7 +62,7 @@ public class dbCreationHelper extends SQLiteOpenHelper {
         super.onOpen(db);
         if (!db.isReadOnly()) {
             // Enable foreign key constraints
-            db.execSQL("PRAGMA foreign_keys=ON;");
+            db.execSQL("PRAGMA foreign_keys= ON;");
         }
     }
 }
