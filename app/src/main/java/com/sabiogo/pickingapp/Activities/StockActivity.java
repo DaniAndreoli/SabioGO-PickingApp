@@ -434,11 +434,16 @@ public class StockActivity extends AppCompatActivity {
             GsonRequest request = new GsonRequest(url,comprobante,Comprobante.class,headers, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.d(TAG, response);
-                    borrarRegistros();
-                    Toast.makeText(getApplicationContext(), "Grabado correctamente", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivityForResult(intent,0);
+                    if(response.toString().equals("true")){
+                        Log.d(TAG, response);
+                        borrarRegistros();
+                        Toast.makeText(getApplicationContext(), "Grabado correctamente", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivityForResult(intent,0);
+
+                    } else {
+                        Toast.makeText(getApplicationContext(),"Error en la grabación", Toast.LENGTH_LONG).show();
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override
