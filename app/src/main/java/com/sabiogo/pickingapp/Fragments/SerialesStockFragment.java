@@ -6,12 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
 import com.sabiogo.pickingapp.Adapters.SerialesAdapter;
 import com.sabiogo.pickingapp.R;
-
 import java.util.List;
-
 import data_access.SerialDAO;
 import entities.Serial;
 

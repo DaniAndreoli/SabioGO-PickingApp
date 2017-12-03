@@ -2,7 +2,6 @@ package entities;
 
 import java.util.List;
 
-import data_access.CodigoBarraDAO;
 
 /**
  * Created by Dani_ on 24/10/2017.

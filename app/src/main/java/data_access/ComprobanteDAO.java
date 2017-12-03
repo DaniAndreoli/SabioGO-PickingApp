@@ -3,10 +3,7 @@ package data_access;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import entities.Comprobante;
 import entities.Item;
 import entities.Serial;

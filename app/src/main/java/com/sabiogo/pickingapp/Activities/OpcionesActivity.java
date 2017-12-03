@@ -24,7 +24,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,9 +35,7 @@ import com.android.volley.toolbox.Volley;
 import com.jaredrummler.android.device.DeviceName;
 import com.sabiogo.pickingapp.R;
 import org.json.JSONArray;
-
 import java.util.HashMap;
-
 import data_access.ArticuloDAO;
 import data_access.CodigoBarraDAO;
 import data_access.LogsDAO;
@@ -142,11 +139,6 @@ public class OpcionesActivity extends AppCompatActivity {
             RequestQueue queue = Volley.newRequestQueue(OpcionesActivity.this);
             String url = "http://" + UserConfigDAO.getUserConfig(OpcionesActivity.this).getApiUrl() + "/api/session/logout/" + id_usuario;
             try{
-                LogsDAO.insertarFecha(OpcionesActivity.this,id_usuario, LOGOUT);
-                SharedPreferences preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.remove(ID_USUARIO);
-                editor.commit();
                 datosLOG = obtenerDatosLOG();
                 HashMap<String, String> headers = new HashMap<String, String>();
                 helpers.GsonRequest request = new helpers.GsonRequest(url,datosLOG,DatosLOG.class,headers, new Response.Listener<String>() {
@@ -156,9 +148,10 @@ public class OpcionesActivity extends AppCompatActivity {
                                     //Obtenemos el response
                                     Log.d(TAG, "logout: usuario encontrado para desloguear.");
                                     Log.d(TAG, "logout: borrando id usuario de las preferencias.");
+                                    LogsDAO.insertarFecha(OpcionesActivity.this,id_usuario, LOGOUT);
                                     SharedPreferences preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = preferences.edit();
-                                    editor.clear();
+                                    editor.remove(ID_USUARIO);
                                     editor.commit();
 
                                 }
@@ -169,6 +162,7 @@ public class OpcionesActivity extends AppCompatActivity {
                             public void onErrorResponse(VolleyError error) {
                                 //Obtenemos un error
                                 Log.d(TAG,"logout: error.");
+                                Toast.makeText(getApplicationContext(),"Error al cerrar sesión", Toast.LENGTH_LONG).show();
                             }
                         }){ @Override
                 public String getBodyContentType(){
@@ -238,8 +232,8 @@ public class OpcionesActivity extends AppCompatActivity {
                                 btn_stock.setEnabled(false);
                                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OpcionesActivity.this);
                                 alertDialogBuilder
-                                        .setTitle("Sincronizar articulos")
-                                        .setMessage("Existen articulos que deben ser sincronizados. Por favor sincronice antes de continuar")
+                                        .setTitle("Sincronizar artículos")
+                                        .setMessage("Existen artículos que deben ser sincronizados. Por favor sincronice antes de continuar")
                                         .setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
                                             public void onClick(DialogInterface dialog, int id){
                                                 dialog.cancel();
@@ -249,14 +243,14 @@ public class OpcionesActivity extends AppCompatActivity {
                                 alertDialog.show();
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "Articulos sincronizados.", Toast.LENGTH_SHORT);
+                                Toast.makeText(getApplicationContext(), "Artículos sincronizados.", Toast.LENGTH_SHORT);
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), "Error al verificar articulos sincronizados.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Error al verificar artículos sincronizados.", Toast.LENGTH_LONG).show();
                         }
                     });
             // Add the request to the RequestQueue.
@@ -270,7 +264,7 @@ public class OpcionesActivity extends AppCompatActivity {
         try{
             final ProgressDialog progressDialog = new ProgressDialog(OpcionesActivity.this, R.style.AppTheme);
             progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Sincronizando articulos...");
+            progressDialog.setMessage("Sincronizando artículos...");
             progressDialog.show();
 
             if (UserConfigDAO.getUserConfig(getApplicationContext()) != null) {
@@ -280,7 +274,7 @@ public class OpcionesActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONArray response) {
                                 ArticuloDAO.insertArticulos(getApplicationContext(), ArticuloMapper.mapList(response));
-                                Toast.makeText(getApplicationContext(),"Articulos sincronizados con éxito.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"Artículos sincronizados con éxito.", Toast.LENGTH_LONG).show();
                                 btn_entrada_salida.setEnabled(true);
                                 btn_stock.setEnabled(true);
                                 progressDialog.dismiss();
@@ -290,7 +284,7 @@ public class OpcionesActivity extends AppCompatActivity {
 
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getApplicationContext(), "Error al sincronizar articulos.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Error al sincronizar artículos.", Toast.LENGTH_LONG).show();
                                 progressDialog.dismiss();
                             }
                         });
@@ -380,8 +374,8 @@ public class OpcionesActivity extends AppCompatActivity {
 
     private void mostrarAlerta() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Enable Location")
-                .setMessage("Su ubicación esta desactivada. Por favor active su ubicación. ")
+        dialog.setTitle("Activar GPS")
+                .setMessage("Su ubicación esta desactivada, por favor actívela. ")
                 .setPositiveButton("Configuración de ubicación", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {

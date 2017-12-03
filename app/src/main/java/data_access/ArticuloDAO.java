@@ -3,12 +3,9 @@ package data_access;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
 import java.util.List;
-
 import entities.Articulo;
 import helpers.dbOperationResponse;
-import object_mapping.ArticuloMapper;
 
 /**
  * Created by Federico on 28/11/2017.

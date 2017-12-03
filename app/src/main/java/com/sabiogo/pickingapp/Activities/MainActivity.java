@@ -3,7 +3,6 @@ package com.sabiogo.pickingapp.Activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.Manifest;
 import android.content.DialogInterface;
@@ -34,22 +33,16 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-//import com.google.android.gms.location.LocationListener;
 import android.location.LocationListener;
 import com.jaredrummler.android.device.DeviceName;
 import com.sabiogo.pickingapp.R;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-
 import data_access.LogsDAO;
 import data_access.UserConfigDAO;
 import entities.DatosLOG;
@@ -214,7 +207,7 @@ public class MainActivity extends AppCompatActivity{
                                             LogsDAO.insertarFecha(MainActivity.this, id_usuario, LOGIN);
                                         }
                                         else{
-                                            Snackbar.make(coordLayout, "Nombre de Usuario incorrecto!", Snackbar.LENGTH_LONG).show();
+                                            Snackbar.make(coordLayout, "Usuario incorrecto!", Snackbar.LENGTH_LONG).show();
                                         }
                                         progressDialog.dismiss();
                                     }
@@ -224,7 +217,7 @@ public class MainActivity extends AppCompatActivity{
                                     public void onErrorResponse(VolleyError error) {
                                         //Obtenemos un error
                                         if (error.networkResponse != null && error.networkResponse.statusCode == 400) {
-                                            Toast.makeText(getApplicationContext(), "Este usuario ya poseia una sesion abierta", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), "Este usuario ya poseía una sesion abierta", Toast.LENGTH_SHORT).show();
                                             nextActivity();
 
                                         } else {
@@ -250,24 +243,12 @@ public class MainActivity extends AppCompatActivity{
                                 }, 3000);
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "Para iniciar sesion por primera vez, es necesario configurar la aplicacion.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Para iniciar sesión por primera vez, es necesario configurar la aplicación.", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception ex) {
                     throw ex;
                 }
             }
-        } else {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-            alertDialogBuilder
-                    .setTitle("Encender GPS")
-                    .setMessage("Encienda el GPS para ingresar a su cuenta por favor.")
-                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface dialog, int id){
-                            dialog.cancel();
-                        }
-                    });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
         }
     }
 
@@ -348,19 +329,11 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private Boolean GPSEncendido() {
-       /* Boolean gpsEncendido;
-        ContentResolver contentResolver = getBaseContext().getContentResolver();
-        gpsEncendido = Settings.Secure.isLocationProviderEnabled(contentResolver,LocationManager.GPS_PROVIDER);*/
-
-        //if(!gpsEncendido){
-
-        // }
-        //return gpsEncendido;
-
         if (!localizacionActiva())
             mostrarAlerta();
         else
             obtenerUbicacion();
+
         return localizacionActiva();
     }
 
@@ -374,6 +347,7 @@ public class MainActivity extends AppCompatActivity{
             criteria.setSpeedAccuracy(Criteria.ACCURACY_HIGH);
             try{
                 mLocationManager.requestSingleUpdate(criteria, locationListenerGPS, null);
+
             } catch (Exception ex){
                 throw ex;
             }
@@ -387,8 +361,8 @@ public class MainActivity extends AppCompatActivity{
 
     private void mostrarAlerta() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Enable Location")
-                .setMessage("Su ubicación esta desactivada. Por favor active su ubicación. ")
+        dialog.setTitle("Activar GPS")
+                .setMessage("Su ubicación esta desactivada, por favor actívela. ")
                 .setPositiveButton("Configuración de ubicación", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {
@@ -419,7 +393,9 @@ public class MainActivity extends AppCompatActivity{
         public void onLocationChanged(Location location) {
             latitud = location.getLongitude();
             longitud = location.getLatitude();
-            mLocationManager.removeUpdates(locationListenerGPS);
+            if(longitud != 0)
+                mLocationManager.removeUpdates(locationListenerGPS);
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -437,5 +413,29 @@ public class MainActivity extends AppCompatActivity{
         public void onProviderDisabled(String s) {
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+        alertDialogBuilder
+                .setTitle("Salir")
+                .setMessage("¿Está seguro que desea cerrar la aplicación?")
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.addCategory(Intent.CATEGORY_HOME);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        dialog.cancel();
+                    }
+                });
+
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 }
 

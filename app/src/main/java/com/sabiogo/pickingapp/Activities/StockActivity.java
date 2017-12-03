@@ -27,28 +27,20 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.bluetooth.*;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
 import android.os.Vibrator;
 import com.android.volley.DefaultRetryPolicy;
 import com.sabiogo.pickingapp.Adapters.StockAdapter;
 import com.sabiogo.pickingapp.Fragments.ConteoStockFragment;
 import com.sabiogo.pickingapp.Fragments.SerialesStockFragment;
 import com.sabiogo.pickingapp.R;
-
 import data_access.ArticuloDAO;
 import data_access.CodigoBarraDAO;
 import data_access.SerialDAO;
@@ -59,7 +51,6 @@ import entities.Comprobante;
 import entities.Item;
 import entities.ItemStock;
 import entities.Serial;
-import helpers.ConnectThread;
 import helpers.GsonRequest;
 import helpers.WSHelper;
 
@@ -238,7 +229,7 @@ public class StockActivity extends AppCompatActivity {
         alertDialogBuilder
                 .setTitle("Salir")
                 .setMessage("¿Está seguro que desea salir?")
-                .setPositiveButton("Si", new DialogInterface.OnClickListener(){
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         borrarRegistros();
                         Log.d(TAG, "nextActivity: avanzando a la vista opciones");
@@ -356,7 +347,7 @@ public class StockActivity extends AppCompatActivity {
 
                     } else {
                         vibrar(SERIAL_INEXISTENTE);
-                        Toast.makeText(getApplicationContext(), "Producto inexistente", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Artículo inexistente", Toast.LENGTH_LONG).show();
                         result = false;
                     }
 
@@ -446,7 +437,7 @@ public class StockActivity extends AppCompatActivity {
                     Log.d(TAG, response);
                     borrarRegistros();
                     Toast.makeText(getApplicationContext(), "Grabado correctamente", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), OpcionesActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivityForResult(intent,0);
                 }
             }, new Response.ErrorListener() {

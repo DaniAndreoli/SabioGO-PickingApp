@@ -2,7 +2,6 @@ package helpers;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import android.content.Context;
 
 //Clase encargada de realizar las conexiones con la base de datos

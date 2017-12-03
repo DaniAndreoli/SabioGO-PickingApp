@@ -3,11 +3,8 @@ package data_access;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
 import java.util.List;
-
 import entities.CodigoBarra;
-
 import helpers.dbOperationResponse;
 import object_mapping.CodigoBarraMapper;
 

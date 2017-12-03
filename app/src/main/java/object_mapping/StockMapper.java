@@ -1,13 +1,9 @@
 package object_mapping;
 
 import android.database.Cursor;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import entities.Item;
 import entities.ItemStock;
-import entities.UserConfig;
 
 /**
  * Created by Dani_ on 31/10/2017.

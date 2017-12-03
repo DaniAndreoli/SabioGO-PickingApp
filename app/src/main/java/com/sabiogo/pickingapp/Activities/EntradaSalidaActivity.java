@@ -32,6 +32,7 @@ import com.sabiogo.pickingapp.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,6 +77,9 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     TextView tv_descripcionComprobante;
     private Vibrator vibrator;
 
+    int cantidadAPickear;
+    List<String> listaCodigos;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,9 +103,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
 
-        //Esta deshabilitado el boton hasta que se termine de pickear
-        btn_grabar.setEnabled(false);
-
         //En caso de que hubiera un comprobante en la bd local, lo obtenemos
         comprobante = ComprobanteDAO.getComprobanteUsuario(getApplicationContext(), id_usuario);
 
@@ -115,9 +116,15 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             if (comprobante.getItems() != null) {
                 entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row, comprobante.getItems());
                 lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
+                calcularCantidadAPickear();
+                btn_grabar.setEnabled(cantidadAPickear == 0);
             }
             setTitulo();
         }
+
+
+        listaCodigos = new ArrayList<>();
+        agregarCodigos();
 
         btn_salir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -125,12 +132,18 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             }
         });
 
+
         btn_agregarManual.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 agregarManual();
             }
         });
 
+        btn_grabar.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                grabarComprobanteEntradaSalida();
+            }
+        });
         listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
     }
 
@@ -151,13 +164,15 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                                         entradaSalidaAdapter = new EntradaSalidaAdapter(activityThis, R.layout.listview_row,comprobante.getItems());
                                         lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
 
+                                        calcularCantidadAPickear();
+                                        btn_grabar.setEnabled(cantidadAPickear == 0);
                                         setTitulo();
 
                                     } else {
                                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(EntradaSalidaActivity.this);
                                         alertDialogBuilder
-                                                .setTitle("No existen Comprobantes")
-                                                .setMessage("No se han encontrado Comprobantes de Entrada/Salida pendientes de Picking")
+                                                .setTitle("No existen comprobantes")
+                                                .setMessage("No se han encontrado comprobantes de Entrada/Salida pendientes de Picking.")
                                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener(){
                                                     public void onClick(DialogInterface dialog, int id){
                                                         dialog.cancel();
@@ -201,8 +216,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(EntradaSalidaActivity.this);
         alertDialogBuilder
                 .setTitle("Salir")
-                .setMessage("¿Esta seguro que desea salir?")
-                .setPositiveButton("Si", new DialogInterface.OnClickListener(){
+                .setMessage("¿Está seguro que desea salir?")
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){
                         borrarRegistros();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -222,7 +237,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     private void borrarRegistros() {
         //SerialDAO.borrarSeriales(getApplicationContext(), COMPROBANTE_ENTRADA_SALIDA);
         ComprobanteDAO.borrarRegistros(getApplicationContext(),comprobante);
-        //AGREGAR BORRAR ITEMS DEL COMPROBANTE
     }
 
     private void leerArticulo(String serial) {
@@ -246,21 +260,28 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                                     SerialDAO.grabarSerialItem(getApplicationContext(), items, serialnuevo);
                                     comprobante = ComprobanteDAO.getComprobanteUsuario(getApplicationContext(),id_usuario);
 
+                                    cantidadAPickear -= 1;
+
                                     entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row,comprobante.getItems());
                                     lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
 
-                                    Toast.makeText(getApplicationContext(), "Articulo leido", Toast.LENGTH_LONG).show();
+                                    vibrator.vibrate(SERIAL_AGREGADO);
+                                    Toast.makeText(getApplicationContext(), "Artículo leído", Toast.LENGTH_LONG).show();
+
+                                    if(cantidadAPickear == 0){
+                                        btn_grabar.setEnabled(true);
+                                    }
 
                                 }else {
                                     vibrar(SALDO_INSUFICIENTE);
-                                    Toast.makeText(getApplicationContext(), "Ya se han leido todos los articulos de este tipo", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Ya se han leído todos los artículos de este tipo", Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
 
                     } else {
                         vibrator.vibrate(ARTICULO_FUERA_COMPROBANTE);
-                        Toast.makeText(getApplicationContext(), "El articulo no pertenece al comprobante", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "El artículo no pertenece al comprobante", Toast.LENGTH_LONG).show();
 
                     }
 
@@ -277,7 +298,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     }
 
     private void grabarComprobanteEntradaSalida() {
-        JSONObject jsonBody;
         try {
             String url = "http://" + UserConfigDAO.getUserConfig( getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarComprobanteEntradaSalida) + id_usuario;
 
@@ -288,8 +308,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                 public void onResponse(String response) {
                     //Log.d(TAG, response);
                     borrarRegistros();
-                    Toast.makeText(getApplicationContext(), "Grabado correctamente", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), OpcionesActivity.class);
+                    Toast.makeText(getApplicationContext(), "Grabado correctamente", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivityForResult(intent,0);
                 }
             }, new Response.ErrorListener() {
@@ -355,7 +375,9 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     }
 
     private void agregarManual(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        leerArticulo(listaCodigos.get(0));
+        listaCodigos.remove(0);
+        /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         final EditText input = new EditText(getApplicationContext());
         input.setTextColor(getResources().getColor(R.color.colorBlack));
         input.setGravity(Gravity.CENTER);
@@ -377,13 +399,12 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id){
                         if(!input.getText().toString().equals("")){
                             leerArticulo(input.getText().toString());
-
                         }
                     }
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.setView(input);
-        alertDialog.show();
+        alertDialog.show();*/
     }
 
     private void setTitulo() {
@@ -393,6 +414,30 @@ public class EntradaSalidaActivity extends AppCompatActivity {
 
         } else {
             tv_descripcionComprobante.setText("Sin Comprobantes");
+        }
+    }
+
+    public void agregarCodigos(){
+        listaCodigos.add("12345670311123456789012345");
+        listaCodigos.add("12345670311123456789012312");
+        listaCodigos.add("12345670311123456789012323");
+        listaCodigos.add("12345670311123456789012334");
+        listaCodigos.add("12345670311123456789012389");
+
+        listaCodigos.add("12345670322123456789012345");
+        listaCodigos.add("12345670322123456789012389");
+
+        listaCodigos.add("12345670666123456789012345");
+        listaCodigos.add("12345670666123456789012312");
+        listaCodigos.add("12345670666123456789012323");
+
+        listaCodigos.add("12345670909123456789012345");
+        listaCodigos.add("12345670909123456789012312");
+    }
+
+    public void calcularCantidadAPickear(){
+        for(Item item: comprobante.getItems()){
+            cantidadAPickear += item.getFaltaPickear();
         }
     }
 

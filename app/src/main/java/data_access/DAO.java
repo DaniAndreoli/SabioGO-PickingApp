@@ -2,8 +2,6 @@ package data_access;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-
-
 import helpers.dbAccessHelper;
 import helpers.dbOperationResponse;
 

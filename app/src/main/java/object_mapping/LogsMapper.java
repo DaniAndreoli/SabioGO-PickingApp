@@ -2,10 +2,7 @@ package object_mapping;
 
 import android.database.Cursor;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import entities.ItemStock;
 
 /**
  * Created by Federico on 30/11/2017.

@@ -3,7 +3,6 @@ package data_access;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import helpers.dbOperationResponse;

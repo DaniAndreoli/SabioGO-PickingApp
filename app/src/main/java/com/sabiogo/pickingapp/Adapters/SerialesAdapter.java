@@ -10,18 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.sabiogo.pickingapp.Activities.StockActivity;
 import com.sabiogo.pickingapp.R;
-
 import java.util.List;
-
-import javax.xml.datatype.Duration;
-
 import data_access.SerialDAO;
 import entities.ItemStock;
 import entities.Serial;
-import object_mapping.SerialMapper;
 
 /**
  * Created by Federico on 28/10/2017.

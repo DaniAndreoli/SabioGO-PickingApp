@@ -3,9 +3,7 @@ package data_access;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
 import entities.UserConfig;
-
 import helpers.dbOperationResponse;
 import object_mapping.UserConfigMapper;
 

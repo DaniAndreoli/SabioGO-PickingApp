@@ -1,11 +1,8 @@
 package object_mapping;
 
-import android.content.Context;
 import android.database.Cursor;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import entities.Usuario;
 
 /**
