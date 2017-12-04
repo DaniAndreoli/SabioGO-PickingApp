@@ -351,6 +351,7 @@ public class StockActivity extends AppCompatActivity {
                     } else {
                         vibrar(SERIAL_INEXISTENTE);
                         Toast.makeText(getApplicationContext(), "Artículo inexistente", Toast.LENGTH_LONG).show();
+                        result = false;
                     }
                 }else {
                     vibrar(SERIAL_REPETIDO);

@@ -7,10 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,6 +63,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     public static final Integer SALDO_INSUFICIENTE = 5;
     public static final Integer ARTICULO_FUERA_COMPROBANTE = 6;
     public static final String COMPROBANTE_ENTRADASALIDA = "Entrada/Salida";
+    private Boolean waitingFlag = false;
 
     private String id_usuario;
     private Comprobante comprobante;
@@ -73,7 +77,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     EditText txt_codigo;
     TextView tv_descripcionComprobante;
     private Vibrator vibrator;
-
     int cantidadAPickear;
     List<String> listaCodigos;
 
@@ -99,6 +102,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
+
+        createTextListener();
 
         //En caso de que hubiera un comprobante en la bd local, lo obtenemos
         comprobante = ComprobanteDAO.getComprobanteUsuario(getApplicationContext(), id_usuario);
@@ -142,6 +147,39 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             }
         });
         listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
+    }
+
+    public void createTextListener(){
+        txt_codigo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (waitingFlag == false) {
+                    //pDialog = new ProgressDialog(getApplicationContext(), Th)
+                    //ProgressDialog.show(getApplicationContext(),"Leyendo...", "Aguarde un instante por favor.");
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            leerArticulo(txt_codigo.getText().toString());
+                            txt_codigo.setText("");
+                            txt_codigo.requestFocus();
+
+                            //pDialog.dismiss();
+                        }
+                    }, 4000);
+                }
+            }
+        });
     }
 
     public void setComprobante(){
@@ -236,7 +274,9 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         ComprobanteDAO.borrarRegistros(getApplicationContext(),comprobante);
     }
 
-    private void leerArticulo(String serial) {
+    private Boolean leerArticulo(String serial) {
+        Boolean result = false;
+        waitingFlag = false;
         if (!serial.equals("")) {
             if(!serialEsRepetido(serial)){
                 CodigoBarra codigoBarra = verificarCodigoBarra(serial);
@@ -264,7 +304,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
 
                                     vibrator.vibrate(SERIAL_AGREGADO);
                                     Toast.makeText(getApplicationContext(), "Artículo leído", Toast.LENGTH_LONG).show();
-
+                                    result = true;
                                     if(cantidadAPickear == 0){
                                         btn_grabar.setEnabled(true);
                                     }
@@ -272,14 +312,13 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                                 }else {
                                     vibrar(SALDO_INSUFICIENTE);
                                     Toast.makeText(getApplicationContext(), "Ya se han leído todos los artículos de este tipo", Toast.LENGTH_LONG).show();
-                                }
+                               }
                             }
                         }
 
                     } else {
                         vibrator.vibrate(ARTICULO_FUERA_COMPROBANTE);
                         Toast.makeText(getApplicationContext(), "El artículo no pertenece al comprobante", Toast.LENGTH_LONG).show();
-
                     }
 
                 } else {
@@ -292,6 +331,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_SHORT).show();
             }
         }
+        return result;
     }
 
     private void grabarComprobanteEntradaSalida() {

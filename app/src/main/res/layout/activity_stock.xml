@@ -42,7 +42,9 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="number"
-                        android:hint="@string/ingrese_un_codigo_de_barra"/>
+                        android:background="@android:color/transparent"
+                        android:textColor="@android:color/transparent"
+                        android:cursorVisible="false"/>
 
                 </LinearLayout>
 

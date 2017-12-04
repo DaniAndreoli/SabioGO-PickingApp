@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SabioGO-PickingApp.iml" filepath="$PROJECT_DIR$/SabioGO-PickingApp.iml" />
+      <module fileurl="file://C:\Users\nachh\Desktop\Merge Android\Repo final\SabioGO-PickingApp\SabioGO-PickingApp\SabioGO-PickingApp.iml" filepath="C:\Users\nachh\Desktop\Merge Android\Repo final\SabioGO-PickingApp\SabioGO-PickingApp\SabioGO-PickingApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\nachh\Desktop\Merge Android\Repo final\SabioGO-PickingApp\SabioGO-PickingApp\app\app.iml" filepath="C:\Users\nachh\Desktop\Merge Android\Repo final\SabioGO-PickingApp\SabioGO-PickingApp\app\app.iml" />
     </modules>
   </component>
 </project>
