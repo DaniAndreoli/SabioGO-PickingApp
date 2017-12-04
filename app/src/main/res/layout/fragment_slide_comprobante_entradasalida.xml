@@ -1,0 +1,73 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sabiogo.pickingapp.Activities.EntradaSalidaActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="15dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--Header-->
+            <LinearLayout
+                android:id="@+id/addItemLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textStyle="bold"-->
+                        <!--android:textSize="18sp"-->
+                        <!--android:text="Articulos Pickeados"-->
+                        <!--android:gravity="center"/>-->
+
+                <!--</LinearLayout>-->
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Articulo"
+                        android:layout_weight="1"
+                        android:layout_marginStart="5dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_cabeceraCantidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cantidad"
+                        android:layout_weight="3" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ListView
+            android:id="@+id/lv_itemsComprobante"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/addItemLayout"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

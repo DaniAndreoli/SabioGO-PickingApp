@@ -10,6 +10,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -27,6 +32,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.sabiogo.pickingapp.Adapters.EntradaSalidaAdapter;
+import com.sabiogo.pickingapp.Fragments.ComprobanteEntradaSalidaFragment;
+import com.sabiogo.pickingapp.Fragments.ConteoStockFragment;
+import com.sabiogo.pickingapp.Fragments.SerialesEntradaSalidaFragment;
+import com.sabiogo.pickingapp.Fragments.SerialesStockFragment;
 import com.sabiogo.pickingapp.R;
 
 import org.json.JSONException;
@@ -80,6 +89,22 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     int cantidadAPickear;
     List<String> listaCodigos;
 
+    //SLIDER
+    /**
+     * The number of pages (wizard steps) to show in this demo.
+     */
+    private static final int NUM_PAGES = 2;
+
+    /**
+     * The pager widget, which handles animation and allows swiping horizontally to access previous
+     * and next wizard steps.
+     */
+    private ViewPager mPager;
+
+    /**
+     * The pager adapter, which provides the pages to the view pager widget.
+     */
+    private PagerAdapter mPagerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +128,9 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
 
+        // Instantiate a ViewPager and a PagerAdapter.
+        mPager = (ViewPager) findViewById(R.id.pager);
+
         createTextListener();
 
         //En caso de que hubiera un comprobante en la bd local, lo obtenemos
@@ -116,14 +144,13 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             /*Por tratarse de una peticion asincrona, no sabremos si el comprobante fue seteado en el instante, por lo que seteamos el ListView
             * tanto en la peticion al WebService (dentro del metodo setComprobante), como en el caso en el que el Comprobante se encuentre en BD local*/
             if (comprobante.getItems() != null) {
-                entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row, comprobante.getItems());
-                lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
+//                entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row, comprobante.getItems());
+//                lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
                 calcularCantidadAPickear();
                 btn_grabar.setEnabled(cantidadAPickear == 0);
             }
             setTitulo();
         }
-
 
         listaCodigos = new ArrayList<>();
         agregarCodigos();
@@ -133,7 +160,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                 salir();
             }
         });
-
 
         btn_agregarManual.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -147,6 +173,11 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             }
         });
         listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
+
+        if (comprobante != null) {
+            mPagerAdapter = new EntradaSalidaPagerAdapter(getSupportFragmentManager());
+            mPager.setAdapter(mPagerAdapter);
+        }
     }
 
     public void createTextListener(){
@@ -196,8 +227,13 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                                         comprobante = ComprobanteMapper.mapObject(response);
                                         ComprobanteDAO.insertComprobante(getApplicationContext(), comprobante, id_usuario);
 
-                                        entradaSalidaAdapter = new EntradaSalidaAdapter(activityThis, R.layout.listview_row,comprobante.getItems());
-                                        lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
+                                        // Instantiate a ViewPager and a PagerAdapter.
+                                        mPager = (ViewPager) findViewById(R.id.pager);
+                                        mPagerAdapter = new EntradaSalidaActivity.EntradaSalidaPagerAdapter(getSupportFragmentManager());
+                                        mPager.setAdapter(mPagerAdapter);
+
+//                                        entradaSalidaAdapter = new EntradaSalidaAdapter(activityThis, R.layout.listview_row,comprobante.getItems());
+//                                        lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
 
                                         calcularCantidadAPickear();
                                         btn_grabar.setEnabled(cantidadAPickear == 0);
@@ -299,8 +335,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
 
                                     cantidadAPickear -= 1;
 
-                                    entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row,comprobante.getItems());
-                                    lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
+                                    mPagerAdapter = new EntradaSalidaPagerAdapter(getSupportFragmentManager());
+                                    mPager.setAdapter(mPagerAdapter);
 
                                     vibrator.vibrate(SERIAL_AGREGADO);
                                     Toast.makeText(getApplicationContext(), "Artículo leído", Toast.LENGTH_LONG).show();
@@ -479,8 +515,43 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     }
 
     public void calcularCantidadAPickear(){
+        cantidadAPickear = 0;
+
         for(Item item: comprobante.getItems()){
             cantidadAPickear += item.getFaltaPickear();
+        }
+    }
+
+    public void actualizarPager() {
+        comprobante = ComprobanteDAO.getComprobanteUsuario(getApplicationContext(),id_usuario);
+        calcularCantidadAPickear();
+        mPagerAdapter = new EntradaSalidaPagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+    }
+
+    /**
+     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    private class EntradaSalidaPagerAdapter extends FragmentStatePagerAdapter {
+        public EntradaSalidaPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch(position) {
+
+                case 0: return ComprobanteEntradaSalidaFragment.newInstance();
+                case 1: return SerialesEntradaSalidaFragment.newInstance();
+            }
+
+            return new ConteoStockFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
         }
     }
 

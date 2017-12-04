@@ -89,6 +89,26 @@ public class SerialDAO extends DAO {
         }
     }
 
+    public static List<Serial> getSerialesLeidos(Context context, String tipoComprobante) {
+        try {
+            //Initialize DAO for using Database (connection opened) and AccessHelper objects
+            initializeDAO(context);
+
+            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE tipoComprobante =? and serial <> 'null'", new String[]{ tipoComprobante });
+            List<Serial> seriales= SerialMapper.mapList(cursor);
+
+            //Closes the connection and makes a backup of db file
+            close();
+            return seriales;
+
+        }catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+
+
     public static List<Serial> getSerialesArticulo(Context context, String nroArt, String tipoComprobante){
         try{
             initializeDAO(context);
@@ -119,24 +139,44 @@ public class SerialDAO extends DAO {
         try{
             initializeDAO(context);
 
-            //Eliminamos el serial correspondiente
-            db.delete("Seriales","serial = ? and tipoComprobante = ?", new String[] { serial, tipoComprobante });
+            if (tipoComprobante == "Stock") {
 
-            //Verificamos la cantidad de articulos pickeados para el codigo de articulo al cual pertenece el serial
-            Cursor cursorItemStock = db.rawQuery("SELECT * FROM Stock WHERE codigoArticulo = ?", new String[] { codArticulo });
-            ItemStock itemStock = StockMapper.mapObject(cursorItemStock);
+                //Eliminamos el serial correspondiente
+                db.delete("Seriales", "serial = ? and tipoComprobante = ?", new String[]{serial, tipoComprobante});
 
-            //Si la cantidad de items que se correspondan con este serial, es mayor que 1, descontamos su cantidad en 1
-            if (itemStock.getCantidad() > 1) {
+                //Verificamos la cantidad de articulos pickeados para el codigo de articulo al cual pertenece el serial
+                Cursor cursorItemStock = db.rawQuery("SELECT * FROM Stock WHERE codigoArticulo = ?", new String[]{codArticulo});
+                ItemStock itemStock = StockMapper.mapObject(cursorItemStock);
+
+                //Si la cantidad de items que se correspondan con este serial, es mayor que 1, descontamos su cantidad en 1
+                if (itemStock.getCantidad() > 1) {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("cantidad", itemStock.getCantidad() - 1);
+
+                    db.update("Stock", contentValues, "codigoArticulo = ?", new String[]{codArticulo});
+
+                } else if (itemStock.getCantidad() == 1) {
+                    //Si la cantidad de items que es 1, eliminamos el registro
+                    db.delete("Stock", "codigoArticulo = ?", new String[]{codArticulo});
+
+                }
+
+            } else {
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("cantidad", itemStock.getCantidad() -1);
+                contentValues.put("serial", "null");
 
-                db.update("Stock",contentValues,"codigoArticulo = ?", new String[] { codArticulo });
-//                db.rawQuery("UPDATE Stock SET cantidad = ? WHERE codigoArticulo = ?", new String[] { Float.toString(itemStock.getCantidad() - 1), itemStock.getCodigoArticulo() });
+                //Eliminamos el serial correspondiente
+                db.update("Seriales", contentValues, "serial = ? and tipoComprobante = ?", new String[]{serial, tipoComprobante});
 
-            } else if (itemStock.getCantidad() == 1) {
-                //Si la cantidad de items que es 1, eliminamos el registro
-                db.delete("Stock", "codigoArticulo = ?", new String[] { codArticulo });
+                //Verificamos la cantidad de articulos pickeados para el codigo de articulo al cual pertenece el serial
+                Cursor cursorFaltaPickear = db.rawQuery("SELECT faltaPickear FROM Item WHERE codigoArticulo = ?", new String[]{codArticulo});
+                cursorFaltaPickear.moveToFirst();
+                int faltaPickear = cursorFaltaPickear.getInt(cursorFaltaPickear.getColumnIndex("faltaPickear"));
+
+                contentValues = new ContentValues();
+                contentValues.put("faltaPickear", faltaPickear + 1);
+
+                db.update("Item", contentValues, "codigoArticulo = ?", new String[]{codArticulo});
 
             }
 

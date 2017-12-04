@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sabiogo.pickingapp.Activities.EntradaSalidaActivity;
 import com.sabiogo.pickingapp.Activities.StockActivity;
 import com.sabiogo.pickingapp.R;
 import java.util.List;
@@ -86,13 +88,20 @@ public class SerialesAdapter extends ArrayAdapter<Serial>{
             holder.btnEliminarSerial.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Serial serial = listaSeriales.get(position);
-                    SerialDAO.borrarSerial(getContext(), serial.getNumero(), serial.getTipoComprobante(), serial.getCodigoArticulo());
-                    listaSeriales = SerialDAO.getSerialList(getContext(), "Stock");
+
+                    if (serial.getTipoComprobante() == "Stock") {
+                        SerialDAO.borrarSerial(getContext(), serial.getNumero(), serial.getTipoComprobante(), serial.getCodigoArticulo());
+                        listaSeriales = SerialDAO.getSerialList(getContext(), "Stock");
+                        ((StockActivity) activity).actualizarPager();
+
+                    } else {
+                        SerialDAO.borrarSerial(getContext(), serial.getNumero(), serial.getTipoComprobante(), serial.getCodigoArticulo());
+                        listaSeriales = SerialDAO.getSerialList(getContext(), "Entrada/Salida");
+                        ((EntradaSalidaActivity) activity).actualizarPager();
+
+                    }
 
                     Toast.makeText(getContext(), "Producto Eliminado!", Toast.LENGTH_LONG).show();
-
-                    //notifyDataSetChanged();
-                    ((StockActivity) activity).actualizarPager();
                 }
             });
 

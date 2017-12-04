@@ -39,6 +39,7 @@ import android.os.Vibrator;
 import com.android.volley.DefaultRetryPolicy;
 import com.sabiogo.pickingapp.Adapters.StockAdapter;
 import com.sabiogo.pickingapp.Fragments.ConteoStockFragment;
+import com.sabiogo.pickingapp.Fragments.SerialesEntradaSalidaFragment;
 import com.sabiogo.pickingapp.Fragments.SerialesStockFragment;
 import com.sabiogo.pickingapp.R;
 import data_access.ArticuloDAO;
@@ -528,7 +529,7 @@ public class StockActivity extends AppCompatActivity {
             switch(position) {
 
                 case 0: return ConteoStockFragment.newInstance();
-                case 1: return SerialesStockFragment.newInstance();
+                case 1: return SerialesEntradaSalidaFragment.newInstance();
             }
 
             return new ConteoStockFragment();
