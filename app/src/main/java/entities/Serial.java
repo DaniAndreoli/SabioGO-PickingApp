@@ -6,9 +6,9 @@ package entities;
 
 public class Serial {
 
-    private int id_serial;
+    private int id_serial, idSerial;
     private String codigoArticulo;
-    private String serial;
+    private String numero;
     private String tipoComprobante;//Stock o Entrada/Salida
     private int idItem;
 
@@ -16,10 +16,11 @@ public class Serial {
 
     }
 
-    public Serial(String codigoArt, String nroSerie, String tipoComprobante) {
+    public Serial(String codigoArt, String nroSerial, String tipoComprobante) {
         this.codigoArticulo = codigoArt;
-        this.serial = nroSerie;
+        this.numero = nroSerial;
         this.tipoComprobante = tipoComprobante;
+        this.idSerial = 0;
     }
 
     public String getCodigoArticulo() {
@@ -30,12 +31,12 @@ public class Serial {
         this.codigoArticulo = codigoArticulo;
     }
 
-    public String getSerial() {
-        return serial;
+    public String getNumero() {
+        return numero;
     }
 
-    public void setSerial(String serial) {
-        this.serial = serial;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
     public String getTipoComprobante() {

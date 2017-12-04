@@ -80,13 +80,13 @@ public class SerialesAdapter extends ArrayAdapter<Serial>{
             } else {
                 holder = (ViewHolder) vi.getTag();
             }
-            holder.serial.setText(listaSeriales.get(position).getSerial());
+            holder.serial.setText(listaSeriales.get(position).getNumero());
             holder.btnEliminarSerial.setVisibility(View.VISIBLE);
 
             holder.btnEliminarSerial.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Serial serial = listaSeriales.get(position);
-                    SerialDAO.borrarSerial(getContext(), serial.getSerial(), serial.getTipoComprobante(), serial.getCodigoArticulo());
+                    SerialDAO.borrarSerial(getContext(), serial.getNumero(), serial.getTipoComprobante(), serial.getCodigoArticulo());
                     listaSeriales = SerialDAO.getSerialList(getContext(), "Stock");
 
                     Toast.makeText(getContext(), "Producto Eliminado!", Toast.LENGTH_LONG).show();

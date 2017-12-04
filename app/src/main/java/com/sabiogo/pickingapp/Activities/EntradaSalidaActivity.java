@@ -11,12 +11,9 @@ import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -373,7 +370,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         Boolean esRepetido = false;
         List<Serial> listadoSeriales = SerialDAO.getSerialList(getApplicationContext(), COMPROBANTE_ENTRADASALIDA);
         for(Serial seriales : listadoSeriales){
-            if(seriales.getSerial().equals(serial)){
+            if(seriales.getNumero().equals(serial)){
                 esRepetido = true;
             }
         }

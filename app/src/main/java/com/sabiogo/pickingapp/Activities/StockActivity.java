@@ -334,32 +334,33 @@ public class StockActivity extends AppCompatActivity {
                         listadoItemStock = StockDAO.leerItemStock(getApplicationContext(),item);
 
                         //Inserttamos el objeto Serial en la bd Sqlite
-                        Serial serialNuevo = new Serial(item.getCodigoArticulo(), serial, "Stock");
-                        SerialDAO.grabarSerial(getApplicationContext(), serialNuevo);
+                        Serial serialNuevo = new Serial(item.getCodigoArticulo(), serial, COMPROBANTE_STOCK);
+                        if (SerialDAO.grabarSerial(getApplicationContext(), serialNuevo, COMPROBANTE_STOCK)){
+                            mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
+                            mPager.setAdapter(mPagerAdapter);
 
-                        //Creamos el adapter
-                        mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
-                        mPager.setAdapter(mPagerAdapter);
+                            vibrar(SERIAL_AGREGADO);
+                            Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_LONG).show();
+                            result = true;
 
-                        vibrar(SERIAL_AGREGADO);
-                        Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_LONG).show();
-                        result = true;
-
+                        } else {
+                        vibrar(SERIAL_INEXISTENTE);
+                        Toast.makeText(getApplicationContext(), "Serial repetido", Toast.LENGTH_LONG).show();
+                        result = false;
+                        }
                     } else {
                         vibrar(SERIAL_INEXISTENTE);
                         Toast.makeText(getApplicationContext(), "Artículo inexistente", Toast.LENGTH_LONG).show();
-                        result = false;
                     }
-
                 }else {
                     vibrar(SERIAL_REPETIDO);
-                    Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_LONG).show();
                     result = false;
                 }
             }
             else {
                 vibrar(SERIAL_INCORRECTO);
-                Toast.makeText(getBaseContext(), R.string.serial_invalido, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), R.string.serial_invalido, Toast.LENGTH_LONG).show();
                 result =  false;
             }
         }
@@ -380,7 +381,7 @@ public class StockActivity extends AppCompatActivity {
         Boolean esRepetido = false;
         List<Serial> listadoSeriales = SerialDAO.getSerialList(getApplicationContext(), COMPROBANTE_STOCK);
         for(Serial seriales : listadoSeriales){
-            if(seriales.getSerial().equals(serial)){
+            if(seriales.getNumero().equals(serial)){
                 esRepetido = true;
             }
         }

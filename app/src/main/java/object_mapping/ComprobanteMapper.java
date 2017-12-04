@@ -112,7 +112,7 @@ public abstract class ComprobanteMapper implements List<Comprobante> {
                                     Serial serial = new Serial();
 
                                     if (serialJson != null && serialJson.length() != 0) {
-                                        serial.setSerial(serialJson.getString("numero"));
+                                        serial.setNumero(serialJson.getString("numero"));
                                     }
 
                                     //Agregamos el serial al listado de seriales del item

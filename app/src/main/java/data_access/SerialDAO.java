@@ -16,12 +16,12 @@ import object_mapping.StockMapper;
 
 public class SerialDAO extends DAO {
 
-    public static boolean grabarSerial(Context context, Serial serial) {
+    public static boolean grabarSerial(Context context, Serial serial, String tipoComprobante) {
 
         try {
             initializeDAO(context);
             //Realizamos la busqueda en la base de datos por codigo de articulo
-            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE serial=?", new String[]{serial.getSerial()});
+            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE serial=? AND tipoComprobante = ?", new String[]{serial.getNumero(), tipoComprobante});
 
             //Si el cursor trae datos quiere decir que el serial ya existe en el listado
             if (cursor.getCount() != 0) {
@@ -30,7 +30,7 @@ public class SerialDAO extends DAO {
                 //Si el cursor no trae datos significa que el serial no fue cargado en la tabla Seriales, por lo tanto lo insertamos
                 ContentValues content = new ContentValues();
                 content.put("codigoArticulo", serial.getCodigoArticulo());
-                content.put("serial", serial.getSerial());
+                content.put("serial", serial.getNumero());
                 content.put("tipoComprobante", serial.getTipoComprobante());
 
                 db.insert("Seriales", null, content);
@@ -52,9 +52,9 @@ public class SerialDAO extends DAO {
 
             if (lsSerialesItem != null && lsSerialesItem.size() != 0) {
                 Serial primerSerialNulo = lsSerialesItem.get(0);
-                primerSerialNulo.setSerial(serial.getSerial());
+                primerSerialNulo.setNumero(serial.getNumero());
 
-                content.put("serial", primerSerialNulo.getSerial());
+                content.put("serial", primerSerialNulo.getNumero());
 
                 db.update("Seriales", content, "id_serial = ?", new String[] { Integer.toString(primerSerialNulo.getId_serial()) });
             }
