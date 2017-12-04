@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PickingApp</string>
+    <string name="app_name">Sabio Go</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_config">Configuraciones</string>
 

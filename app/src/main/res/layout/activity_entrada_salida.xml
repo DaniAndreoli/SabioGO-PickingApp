@@ -33,11 +33,14 @@
                 <EditText
                     android:id="@+id/txt_codigoArticulo"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:inputType="number"
-                    android:hint="@string/ingrese_un_codigo_de_barra" />
+                    android:background="@android:color/transparent"
+                    android:textColor="@android:color/transparent"
+                    android:cursorVisible="false"
+                    />
 
                 <TextView
                     android:id="@+id/tv_descripcionComprobante"
