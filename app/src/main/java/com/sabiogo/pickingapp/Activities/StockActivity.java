@@ -34,13 +34,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import android.os.Vibrator;
 import com.android.volley.DefaultRetryPolicy;
-import com.sabiogo.pickingapp.Adapters.StockAdapter;
 import com.sabiogo.pickingapp.Fragments.ConteoStockFragment;
 import com.sabiogo.pickingapp.Fragments.SerialesEntradaSalidaFragment;
-import com.sabiogo.pickingapp.Fragments.SerialesStockFragment;
 import com.sabiogo.pickingapp.R;
 import data_access.ArticuloDAO;
 import data_access.CodigoBarraDAO;
@@ -65,7 +62,6 @@ public class StockActivity extends AppCompatActivity {
     private static final String TAG = "StockActivity";
     public static final String PREFS_NAME = "mPrefs";
     public static final String COMPROBANTE_STOCK = "Stock";
-    private static final UUID MY_UUID = UUID.fromString("0000110E-0000-1000-8000-00805F9B34FB");
     private String id_usuario;
     private List<ItemStock> listadoItemStock;
     private List<CodigoBarra> listadoCodBarra;
@@ -81,14 +77,11 @@ public class StockActivity extends AppCompatActivity {
     private final String DefaultID = "";
     private final float UNO = 1;
 
-    //public MyItemStockRecyclerViewAdapter adapter;
-
     //Declaracion de Controles Visuales
-    private Button btn_salir, btn_grabar, btn_agregarProducto;
+    private Button btn_salir, btn_grabar;
     private FloatingActionButton btn_agregarManual;
     private ListView lv_articulos;
     private EditText txt_codigo;
-    private StockAdapter stockAdapter;
     private Vibrator vibrator;
 
     //SLIDER
@@ -181,48 +174,7 @@ public class StockActivity extends AppCompatActivity {
             }
         });*/
         listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
-        //txt_codigo.setVisibility(View.INVISIBLE);
         txt_codigo.requestFocus();
-
-        
-        /*BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
-        BluetoothDevice device = bluetooth.getRemoteDevice( bluetooth.getAddress());
-
-        ConnectThread hilo = new ConnectThread();
-        hilo.run();*/
-//        if(bluetooth != null)
-//        {
-//
-//            String status;
-//            if (bluetooth.isEnabled()) {
-//                BluetoothDevice device = bluetooth.getRemoteDevice( bluetooth.getAddress());
-//
-//                    BluetoothSocket mSocket = null;
-//                    //Log.d(TAG,device.getName());
-//                    //BluetoothSocket mSocket=null;
-//                    try {
-//                        mSocket = device.createInsecureRfcommSocketToServiceRecord(MY_UUID);
-//                    } catch (IOException e1) {
-//                        // TODO Auto-generated catch block
-//                        Log.d(TAG,"socket not created");
-//                        e1.printStackTrace();
-//                    }
-//                    try{
-//                        mSocket.connect();
-//                    }
-//                    catch(IOException e){
-//                        try {
-//                            mSocket.close();
-//                            Log.d(TAG,"Cannot connect");
-//                        } catch (IOException e1) {
-//                            Log.d(TAG,"Socket not closed");
-//                            e1.printStackTrace();
-//                        }
-//            }
-//
-//        }
-//
-//    }
     }
 
     private void salir(){
@@ -295,9 +247,6 @@ public class StockActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (waitingFlag == false) {
-                    //pDialog = new ProgressDialog(getApplicationContext(), Th)
-                    //ProgressDialog.show(getApplicationContext(),"Leyendo...", "Aguarde un instante por favor.");
-
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
@@ -306,7 +255,6 @@ public class StockActivity extends AppCompatActivity {
                             txt_codigo.setText("");
                             txt_codigo.requestFocus();
 
-                            //pDialog.dismiss();
                         }
                     }, 2000);
                 }
@@ -314,8 +262,7 @@ public class StockActivity extends AppCompatActivity {
         });
     }
 
-    public Boolean agregarArticulo(String serial){
-        boolean result = false;
+    public void agregarArticulo(String serial){
         Float kilos;
         if (!serial.equals("")){
             if(!serialEsRepetido(serial)){
@@ -334,40 +281,36 @@ public class StockActivity extends AppCompatActivity {
                     para aumentar su cantidad, o crearlo de lo contrario, y luego devuelve el listado actualizado*/
                         listadoItemStock = StockDAO.leerItemStock(getApplicationContext(),item);
 
-                        //Inserttamos el objeto Serial en la bd Sqlite
+                        //Insertamos el objeto Serial en la bd Sqlite
                         Serial serialNuevo = new Serial(item.getCodigoArticulo(), serial, COMPROBANTE_STOCK);
                         if (SerialDAO.grabarSerial(getApplicationContext(), serialNuevo, COMPROBANTE_STOCK)){
                             mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
                             mPager.setAdapter(mPagerAdapter);
 
                             vibrar(SERIAL_AGREGADO);
-                            Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_LONG).show();
-                            result = true;
+                            Toast.makeText(getBaseContext(), R.string.producto_agregado, Toast.LENGTH_SHORT).show();
 
                         } else {
-                        vibrar(SERIAL_INEXISTENTE);
+                        vibrar(SERIAL_REPETIDO);
                         Toast.makeText(getApplicationContext(), "Serial repetido", Toast.LENGTH_LONG).show();
-                        result = false;
+
                         }
                     } else {
                         vibrar(SERIAL_INEXISTENTE);
                         Toast.makeText(getApplicationContext(), "Artículo inexistente", Toast.LENGTH_LONG).show();
-                        result = false;
+
                     }
-                }else {
-                    vibrar(SERIAL_REPETIDO);
-                    Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_LONG).show();
-                    result = false;
+                } else {
+                    vibrar(SERIAL_INCORRECTO);
+                    Toast.makeText(getBaseContext(),"Serial incorrecto",Toast.LENGTH_LONG).show();
+
                 }
-            }
-            else {
-                vibrar(SERIAL_INCORRECTO);
-                Toast.makeText(getBaseContext(), R.string.serial_invalido, Toast.LENGTH_LONG).show();
-                result =  false;
+            } else {
+                vibrar(SERIAL_REPETIDO);
+                Toast.makeText(getBaseContext(), "Serial repetido", Toast.LENGTH_LONG).show();
+
             }
         }
-        waitingFlag = false;
-        return result;
     }
 
     public CodigoBarra verificarCodigoBarra(String serial){
@@ -428,12 +371,10 @@ public class StockActivity extends AppCompatActivity {
     }
 
     public void grabarComprobanteStock(final Comprobante comprobante){
-        JSONObject jsonBody;
         try {
             String url = "http://" + UserConfigDAO.getUserConfig( getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarStock) + id_usuario;
 
             HashMap<String, String> headers = new HashMap<String, String>();
-            //headers.put("Content-Type","application/json");
             GsonRequest request = new GsonRequest(url,comprobante,Comprobante.class,headers, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -485,7 +426,8 @@ public class StockActivity extends AppCompatActivity {
             vibrator.vibrate(600);
 
         } else if (codigoVibracion.equals(SERIAL_INEXISTENTE)) {
-            vibrator.vibrate(600);
+            long[] pattern = {0, 50, 50, 150, 50, 150};
+            vibrator.vibrate(pattern,-1);
         }
     }
 
@@ -493,27 +435,6 @@ public class StockActivity extends AppCompatActivity {
         mPagerAdapter = new StockPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
     }
-
-
-
-//    public void receiveData(BluetoothSocketWrapper socket) throws IOException {
-//        InputStream socketInputStream = socket.getInputStream();
-//        byte[] buffer = new byte[256];
-//        int bytes;
-//
-//        // Keep looping to listen for received messages
-//        while (true) {
-//            try {
-//                bytes = socketInputStream.read(buffer);            //read bytes from input buffer
-//                String readMessage = new String(buffer, 0, bytes);
-//                // Send the obtained bytes to the UI Activity via handler
-//                Log.i("logging", readMessage + "");
-//            } catch (IOException e) {
-//                break;
-//            }
-//        }
-//
-//    }
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in

@@ -13,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,7 +57,6 @@ public class MainActivity extends AppCompatActivity{
     private static final String TAG = "LoginActivity";
     private static final String LOGOUT = "logout";
     private static final String LOGIN = "login";
-
 
     EditText txtUserID;
     Button btnLogin;
@@ -112,9 +110,6 @@ public class MainActivity extends AppCompatActivity{
                 login();
             }
         });
-
-        //Hardcodeamos el user por defecto para pruebas
-        this.txtUserID.setText("pistola");
     }
 
     @Override
@@ -146,7 +141,6 @@ public class MainActivity extends AppCompatActivity{
         switch (requestCode) {
             case CODIGO_ACTIVITY_CONFIG:
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri dato = data.getData();
                     this.userConfig = (UserConfig) data.getSerializableExtra("userConfig");
                 }
                 break;
@@ -305,7 +299,7 @@ public class MainActivity extends AppCompatActivity{
 
         obtenerUbicacion();
         if (latitud != 0 && longitud != 0){
-            datos.setUbicacion("Lat " + Double.toString(latitud)+ ", " + "Long " + Double.toString(longitud));
+            datos.setUbicacion(Double.toString(latitud)+ ", " + Double.toString(longitud));
             mLocationManager.removeUpdates(locationListenerGPS);
         }
         return datos;
@@ -342,9 +336,9 @@ public class MainActivity extends AppCompatActivity{
             Criteria criteria = new Criteria();
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
             criteria.setBearingRequired(true);
-            criteria.setBearingAccuracy(Criteria.ACCURACY_HIGH);
+            criteria.setBearingAccuracy(Criteria.ACCURACY_FINE);
             criteria.setSpeedRequired(true);
-            criteria.setSpeedAccuracy(Criteria.ACCURACY_HIGH);
+            criteria.setSpeedAccuracy(Criteria.ACCURACY_FINE);
             try{
                 mLocationManager.requestSingleUpdate(criteria, locationListenerGPS, null);
 

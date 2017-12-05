@@ -1,6 +1,5 @@
 package com.sabiogo.pickingapp.Activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,14 +17,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -35,16 +36,12 @@ import com.sabiogo.pickingapp.Adapters.EntradaSalidaAdapter;
 import com.sabiogo.pickingapp.Fragments.ComprobanteEntradaSalidaFragment;
 import com.sabiogo.pickingapp.Fragments.ConteoStockFragment;
 import com.sabiogo.pickingapp.Fragments.SerialesEntradaSalidaFragment;
-import com.sabiogo.pickingapp.Fragments.SerialesStockFragment;
 import com.sabiogo.pickingapp.R;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import data_access.CodigoBarraDAO;
 import data_access.ComprobanteDAO;
 import data_access.SerialDAO;
@@ -78,9 +75,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     private Comprobante comprobante;
     private EntradaSalidaAdapter entradaSalidaAdapter;
     private List<CodigoBarra> listadoCodBarra;
-    private Activity activityThis = this;
 
-    Button btn_salir, btn_grabar, btn_agregarProducto;
+    Button btn_salir, btn_grabar;
     FloatingActionButton btn_agregarManual;
     ListView lv_articulosComprobante;
     EditText txt_codigo;
@@ -118,7 +114,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         //Definimos los objetos de UI
         btn_grabar = (Button)findViewById(R.id.btn_grabarComprobante);
         btn_salir  = (Button)findViewById(R.id.btn_salirEntradaSalida);
-        //btn_agregarProducto = (Button)findViewById(R.id.btn_agregarProductoStock);
         btn_agregarManual = (FloatingActionButton)findViewById(R.id.fab_agregarCodBarManualEntradaSalida);
         lv_articulosComprobante = (ListView)findViewById(R.id.lv_itemsComprobante);
         txt_codigo = (EditText)findViewById(R.id.txt_codigoArticulo);
@@ -144,16 +139,14 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             /*Por tratarse de una peticion asincrona, no sabremos si el comprobante fue seteado en el instante, por lo que seteamos el ListView
             * tanto en la peticion al WebService (dentro del metodo setComprobante), como en el caso en el que el Comprobante se encuentre en BD local*/
             if (comprobante.getItems() != null) {
-//                entradaSalidaAdapter = new EntradaSalidaAdapter(this, R.layout.listview_row, comprobante.getItems());
-//                lv_articulosComprobante.setAdapter(entradaSalidaAdapter);
                 calcularCantidadAPickear();
                 btn_grabar.setEnabled(cantidadAPickear == 0);
             }
             setTitulo();
         }
 
-        listaCodigos = new ArrayList<>();
-        agregarCodigos();
+        //listaCodigos = new ArrayList<>();
+        //agregarCodigos();
 
         btn_salir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -279,6 +272,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                 WSHelper.getInstance(this).addToRequestQueue(jsObjRequest);
             }
         } catch (Exception e) {
+            e.printStackTrace();
 
         }
     }
@@ -306,13 +300,10 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     }
 
     private void borrarRegistros() {
-        //SerialDAO.borrarSeriales(getApplicationContext(), COMPROBANTE_ENTRADA_SALIDA);
         ComprobanteDAO.borrarRegistros(getApplicationContext(),comprobante);
     }
 
-    private Boolean leerArticulo(String serial) {
-        Boolean result = false;
-        waitingFlag = false;
+    private void leerArticulo(String serial) {
         if (!serial.equals("")) {
             if(!serialEsRepetido(serial)){
                 CodigoBarra codigoBarra = verificarCodigoBarra(serial);
@@ -340,7 +331,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
 
                                     vibrator.vibrate(SERIAL_AGREGADO);
                                     Toast.makeText(getApplicationContext(), "Artículo leído", Toast.LENGTH_LONG).show();
-                                    result = true;
                                     if(cantidadAPickear == 0){
                                         btn_grabar.setEnabled(true);
                                     }
@@ -367,7 +357,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(),"Serial repetido",Toast.LENGTH_SHORT).show();
             }
         }
-        return result;
     }
 
     private void grabarComprobanteEntradaSalida() {
@@ -375,12 +364,10 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             String url = "http://" + UserConfigDAO.getUserConfig( getApplicationContext()).getApiUrl() + getString(R.string.api_ingresarComprobanteEntradaSalida) + id_usuario;
 
             HashMap<String, String> headers = new HashMap<String, String>();
-            //headers.put("Content-Type","application/json");
             helpers.GsonRequest request = new helpers.GsonRequest(url,comprobante,Comprobante.class,headers, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     if(response.toString().equals("true")){
-                        //Log.d(TAG, response);
                         borrarRegistros();
                         Toast.makeText(getApplicationContext(), "Grabado correctamente", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -394,7 +381,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    //VolleyLog.d(TAG, "Error: " + error.getMessage());
                     Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
                 }
             }){ @Override
@@ -432,13 +418,16 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             vibrator.vibrate(600);
 
         } else if (codigoVibracion.equals(SERIAL_INEXISTENTE)) {
-            vibrator.vibrate(600);
+            long[] pattern = {0, 50, 50, 150, 50, 150};
+            vibrator.vibrate(pattern,-1);
 
         } else if (codigoVibracion.equals(SALDO_INSUFICIENTE)){
-            vibrator.vibrate(800);
+            long[] pattern = {0, 100, 50, 100};
+            vibrator.vibrate(pattern,-1);
 
         }else if (codigoVibracion.equals(ARTICULO_FUERA_COMPROBANTE)){
             vibrator.vibrate(600);
+
         }
     }
 
@@ -454,9 +443,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     }
 
     private void agregarManual(){
-        leerArticulo(listaCodigos.get(0));
-        listaCodigos.remove(0);
-        /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         final EditText input = new EditText(getApplicationContext());
         input.setTextColor(getResources().getColor(R.color.colorBlack));
         input.setGravity(Gravity.CENTER);
@@ -483,7 +470,7 @@ public class EntradaSalidaActivity extends AppCompatActivity {
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.setView(input);
-        alertDialog.show();*/
+        alertDialog.show();
     }
 
     private void setTitulo() {
@@ -497,6 +484,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     }
 
     public void agregarCodigos(){
+
+        //Listado de codigos para probar la app sin leer los codigos de barra necesarios para poder cerrar el comprobante.
         listaCodigos.add("12345670311123456789012345");
         listaCodigos.add("12345670311123456789012312");
         listaCodigos.add("12345670311123456789012323");
