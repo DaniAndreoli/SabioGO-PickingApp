@@ -315,7 +315,7 @@ public class OpcionesActivity extends AppCompatActivity {
 
         obtenerUbicacion();
         if (latitud != 0 && longitud != 0){
-            datos.setUbicacion("Lat " + Double.toString(latitud)+ ", " + "Long " + Double.toString(longitud));
+            datos.setUbicacion(Double.toString(latitud)+ ", " + Double.toString(longitud));
             mLocationManager.removeUpdates(locationListenerGPS);
         }
         return datos;
@@ -333,15 +333,6 @@ public class OpcionesActivity extends AppCompatActivity {
     }
 
     private Boolean GPSEncendido() {
-       /* Boolean gpsEncendido;
-        ContentResolver contentResolver = getBaseContext().getContentResolver();
-        gpsEncendido = Settings.Secure.isLocationProviderEnabled(contentResolver,LocationManager.GPS_PROVIDER);*/
-
-        //if(!gpsEncendido){
-
-        // }
-        //return gpsEncendido;
-
         if (!localizacionActiva())
             mostrarAlerta();
         else
