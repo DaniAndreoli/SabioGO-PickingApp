@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -16,9 +15,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -71,7 +68,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     public static final Integer SALDO_INSUFICIENTE = 5;
     public static final Integer ARTICULO_FUERA_COMPROBANTE = 6;
     public static final String COMPROBANTE_ENTRADASALIDA = "Entrada/Salida";
-    private Boolean waitingFlag = false;
 
     private String id_usuario;
     private Comprobante comprobante;
@@ -160,8 +156,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             setTitulo();
         }
 
-//        listaCodigos = new ArrayList<>();
-//        agregarCodigos();
+        //listaCodigos = new ArrayList<>();
+        //agregarCodigos();
 
         btn_salir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

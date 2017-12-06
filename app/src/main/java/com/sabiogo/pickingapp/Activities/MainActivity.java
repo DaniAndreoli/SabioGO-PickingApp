@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -88,12 +89,15 @@ public class MainActivity extends AppCompatActivity{
         //Configuramos el comportamiento del teclado
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        chequearLogs();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        id_usuario = settings.getString(ID_USUARIO, DefaultID);
 
-        if (!id_usuario.isEmpty())
-            nextActivity();
-        else{
-            prepararLogueo();
+        if (!id_usuario.isEmpty()){
+            if(!chequearLogs(id_usuario)){
+                nextActivity();
+            }else{
+                prepararLogueo();
+            }
         }
 
         this.btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +145,7 @@ public class MainActivity extends AppCompatActivity{
         switch (requestCode) {
             case CODIGO_ACTIVITY_CONFIG:
                 if (resultCode == Activity.RESULT_OK) {
+                    Uri dato = data.getData();
                     this.userConfig = (UserConfig) data.getSerializableExtra("userConfig");
                 }
                 break;
@@ -150,26 +155,10 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    //VER SI onPause y onResume HACE FALTA EN LA MAIN ACTIVITY O EN LAS SIGUIENTES!
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: se minimiza la aplicación.");
-        savePreferences();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: se maximiza la aplicación.");
-        loadPreferences();
-    }
-
     public void login() {
-
         if (GPSEncendido()) {
             //Obtenemos los datos de inicio de sesion
-            id_usuario = txtUserID.getText().toString();
+            id_usuario = txtUserID.getText().toString().replaceAll("\\s+","");
             this.userConfig = UserConfigDAO.getUserConfig(getApplicationContext());
 
             if (id_usuario.isEmpty()){
@@ -196,7 +185,10 @@ public class MainActivity extends AppCompatActivity{
                                         //Obtenemos el response
                                         if(response.toString().equals("true")){
                                             Toast.makeText(getApplicationContext(), "Bienvenido!", Toast.LENGTH_SHORT).show();
-                                            savePreferences();
+                                            SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = settings.edit();
+                                            editor.putString(ID_USUARIO, id_usuario);
+                                            editor.commit();
                                             nextActivity();
                                             LogsDAO.insertarFecha(MainActivity.this, id_usuario, LOGIN);
                                         }
@@ -246,11 +238,11 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    public void chequearLogs() {
+    public Boolean chequearLogs(String usuario) {
+        Boolean reloguear = false;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        id_usuario = usuario;
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        id_usuario = settings.getString(ID_USUARIO, DefaultID);
         try {
             Date fechaLogout = sdf.parse(LogsDAO.obtenerFechaUltimoLog(MainActivity.this, id_usuario));
             Date fechaActual = sdf.parse(sdf.format(new Date()));
@@ -262,26 +254,15 @@ public class MainActivity extends AppCompatActivity{
                 editor.remove(ID_USUARIO);
                 editor.commit();
                 id_usuario = "";
+                reloguear = true;
+
             }
         } catch (ParseException ex){
             ex.printStackTrace();
         }
-    }
-
-    private void savePreferences(){
-        Log.d(TAG,"savePreferences: se almacena el id del usuario como 'variable de sesion'.");
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-
-        id_usuario = txtUserID.getText().toString();
-        editor.putString(ID_USUARIO, id_usuario);
-        editor.commit();
-    }
-
-    private void loadPreferences(){
-        Log.d(TAG,"loadPreferences: se leen el id del usuario si existe como 'variable de sesion'.");
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        id_usuario = settings.getString(ID_USUARIO, DefaultID);
+        finally {
+            return reloguear;
+        }
     }
 
     public void nextActivity(){

@@ -128,10 +128,13 @@ public abstract class ComprobanteDAO extends DAO {
             //db.delete("Seriales", "tipoComprobante = ?", new String[] { "Entrada/Salida" });
 
             //Eliminamos todos los items del comprobante
-            db.delete("Item", "id_comprobante = ?", new String[] { Integer.toString(comprobante.getId_comprobante()) });
+            db.execSQL("DELETE FROM Item WHERE id_comprobante = ?", new String[] { Integer.toString(comprobante.getId_comprobante()) });
+            //db.delete("Item", "id_comprobante = ?", new String[] { Integer.toString(comprobante.getId_comprobante()) });
 
             //Eliminamos el comprobante
-            db.delete("Comprobante", "id_comprobante = ?", new String[] { Integer.toString(comprobante.getId_comprobante()) });
+            //db.delete("Comprobante", "id_comprobante = ?", new String[] { Integer.toString(comprobante.getId_comprobante()) });
+            db.execSQL("DELETE FROM Comprobante WHERE id_comprobante = ?", new String[] { Integer.toString(comprobante.getId_comprobante()) });
+
 
             db.close();
 

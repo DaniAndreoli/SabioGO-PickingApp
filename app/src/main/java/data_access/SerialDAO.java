@@ -94,7 +94,8 @@ public class SerialDAO extends DAO {
             //Initialize DAO for using Database (connection opened) and AccessHelper objects
             initializeDAO(context);
 
-            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE tipoComprobante =? and serial is not 'null'", new String[]{ tipoComprobante });
+            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE tipoComprobante =? and serial <> 'null' ", new String[]{ tipoComprobante });
+
             List<Serial> seriales = SerialMapper.mapList(cursor);
 
             //Closes the connection and makes a backup of db file
@@ -139,7 +140,7 @@ public class SerialDAO extends DAO {
         try{
             initializeDAO(context);
 
-            if (tipoComprobante == "Stock") {
+            if (tipoComprobante.equals("Stock")) {
 
                 //Eliminamos el serial correspondiente
                 db.delete("Seriales", "serial = ? and tipoComprobante = ?", new String[]{serial, tipoComprobante});

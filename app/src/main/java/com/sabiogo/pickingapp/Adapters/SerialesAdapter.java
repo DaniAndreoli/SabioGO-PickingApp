@@ -89,7 +89,7 @@ public class SerialesAdapter extends ArrayAdapter<Serial>{
                 public void onClick(View v) {
                     Serial serial = listaSeriales.get(position);
 
-                    if (serial.getTipoComprobante() == "Stock") {
+                    if (serial.getTipoComprobante().equals("Stock")) {
                         SerialDAO.borrarSerial(getContext(), serial.getNumero(), serial.getTipoComprobante(), serial.getCodigoArticulo());
                         listaSeriales = SerialDAO.getSerialList(getContext(), "Stock");
                         ((StockActivity) activity).actualizarPager();
