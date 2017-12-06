@@ -94,8 +94,8 @@ public class SerialDAO extends DAO {
             //Initialize DAO for using Database (connection opened) and AccessHelper objects
             initializeDAO(context);
 
-            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE tipoComprobante =? and serial <> 'null'", new String[]{ tipoComprobante });
-            List<Serial> seriales= SerialMapper.mapList(cursor);
+            Cursor cursor = db.rawQuery("SELECT * FROM Seriales WHERE tipoComprobante =? and serial is not 'null'", new String[]{ tipoComprobante });
+            List<Serial> seriales = SerialMapper.mapList(cursor);
 
             //Closes the connection and makes a backup of db file
             close();

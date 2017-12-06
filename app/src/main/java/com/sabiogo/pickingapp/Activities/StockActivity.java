@@ -21,16 +21,21 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import org.json.JSONObject;
+
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +43,7 @@ import android.os.Vibrator;
 import com.android.volley.DefaultRetryPolicy;
 import com.sabiogo.pickingapp.Fragments.ConteoStockFragment;
 import com.sabiogo.pickingapp.Fragments.SerialesEntradaSalidaFragment;
+import com.sabiogo.pickingapp.Fragments.SerialesStockFragment;
 import com.sabiogo.pickingapp.R;
 import data_access.ArticuloDAO;
 import data_access.CodigoBarraDAO;
@@ -121,8 +127,6 @@ public class StockActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         id_usuario = settings.getString(ID_USUARIO, DefaultID);
 
-        createTextListener();
-
         btn_salir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 salir();
@@ -173,6 +177,24 @@ public class StockActivity extends AppCompatActivity {
 
             }
         });*/
+
+        TextView.OnEditorActionListener exampleListener = new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_NULL
+                        && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    agregarArticulo(txt_codigo.getText().toString());
+                    txt_codigo.setText("");
+                    txt_codigo.requestFocus();
+                }
+                return true;
+            }
+        };
+
+        txt_codigo.setOnEditorActionListener(exampleListener);
+
+
+
         listadoCodBarra = CodigoBarraDAO.getCodigosBarra(getApplicationContext());
         txt_codigo.requestFocus();
     }
@@ -230,36 +252,6 @@ public class StockActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.setView(input);
         alertDialog.show();
-    }
-
-    public void createTextListener(){
-        txt_codigo.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (waitingFlag == false) {
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            agregarArticulo(txt_codigo.getText().toString());
-                            waitingFlag = true;
-                            txt_codigo.setText("");
-                            txt_codigo.requestFocus();
-
-                        }
-                    }, 2000);
-                }
-            }
-        });
     }
 
     public void agregarArticulo(String serial){
@@ -450,7 +442,7 @@ public class StockActivity extends AppCompatActivity {
             switch(position) {
 
                 case 0: return ConteoStockFragment.newInstance();
-                case 1: return SerialesEntradaSalidaFragment.newInstance();
+                case 1: return SerialesStockFragment.newInstance();
             }
 
             return new ConteoStockFragment();

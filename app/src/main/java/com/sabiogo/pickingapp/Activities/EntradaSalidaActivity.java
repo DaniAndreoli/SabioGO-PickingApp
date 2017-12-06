@@ -20,7 +20,9 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -126,7 +128,20 @@ public class EntradaSalidaActivity extends AppCompatActivity {
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
 
-        createTextListener();
+        TextView.OnEditorActionListener exampleListener = new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_NULL
+                        && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    leerArticulo(txt_codigo.getText().toString());
+                    txt_codigo.setText("");
+                    txt_codigo.requestFocus();
+                }
+                return true;
+            }
+        };
+
+        txt_codigo.setOnEditorActionListener(exampleListener);
 
         //En caso de que hubiera un comprobante en la bd local, lo obtenemos
         comprobante = ComprobanteDAO.getComprobanteUsuario(getApplicationContext(), id_usuario);
@@ -145,8 +160,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             setTitulo();
         }
 
-        //listaCodigos = new ArrayList<>();
-        //agregarCodigos();
+//        listaCodigos = new ArrayList<>();
+//        agregarCodigos();
 
         btn_salir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -171,39 +186,6 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             mPagerAdapter = new EntradaSalidaPagerAdapter(getSupportFragmentManager());
             mPager.setAdapter(mPagerAdapter);
         }
-    }
-
-    public void createTextListener(){
-        txt_codigo.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (waitingFlag == false) {
-                    //pDialog = new ProgressDialog(getApplicationContext(), Th)
-                    //ProgressDialog.show(getApplicationContext(),"Leyendo...", "Aguarde un instante por favor.");
-
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            leerArticulo(txt_codigo.getText().toString());
-                            txt_codigo.setText("");
-                            txt_codigo.requestFocus();
-
-                            //pDialog.dismiss();
-                        }
-                    }, 4000);
-                }
-            }
-        });
     }
 
     public void setComprobante(){
@@ -300,7 +282,10 @@ public class EntradaSalidaActivity extends AppCompatActivity {
     }
 
     private void borrarRegistros() {
-        ComprobanteDAO.borrarRegistros(getApplicationContext(),comprobante);
+        if (comprobante != null) {
+            ComprobanteDAO.borrarRegistros(getApplicationContext(),comprobante);
+
+        }
     }
 
     private void leerArticulo(String serial) {
@@ -426,7 +411,8 @@ public class EntradaSalidaActivity extends AppCompatActivity {
             vibrator.vibrate(pattern,-1);
 
         }else if (codigoVibracion.equals(ARTICULO_FUERA_COMPROBANTE)){
-            vibrator.vibrate(600);
+            long[] pattern = {0, 50, 50, 150, 50, 150};
+            vibrator.vibrate(pattern,-1);
 
         }
     }
